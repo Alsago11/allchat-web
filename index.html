@@ -38,7 +38,16 @@
   }
 
   /* ---------- héroe ---------- */
-  .heroe { text-align: center; padding: 72px 0 48px; }
+  .heroe { text-align: center; padding: 56px 0 48px; }
+  .logo-heroe {
+    width: 112px; height: 112px; margin: 0 auto 26px; display: block;
+    filter: drop-shadow(0 12px 32px rgba(75, 225, 195, .28));
+    animation: flotar 4.5s ease-in-out infinite;
+  }
+  @keyframes flotar {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-9px); }
+  }
   .heroe h1 {
     font-size: clamp(2.2rem, 6vw, 3.6rem); line-height: 1.15;
     letter-spacing: -.02em;
@@ -64,7 +73,8 @@
 
   /* ---------- lista de espera ---------- */
   .lista { margin: 40px auto 0; max-width: 460px; }
-  .lista form { display: flex; gap: 10px; }
+  .lista form { display: flex; gap: 10px; flex-wrap: wrap; }
+  .lista input#nombre { flex: 1 1 100%; }
   .lista input {
     flex: 1; padding: 13px 16px; border-radius: 10px;
     border: 1px solid var(--borde); background: var(--panel2);
@@ -133,6 +143,16 @@
   </header>
 
   <section class="heroe">
+    <svg class="logo-heroe" viewBox="0 0 256 256" aria-label="Logo de AllChat">
+      <rect x="8" y="8" width="240" height="240" rx="56" fill="#4be1c3"/>
+      <path d="M136,156 L172,156 A28,28 0 0 0 200,128 L200,96 A28,28 0 0 0 172,68
+               L84,68 A28,28 0 0 0 56,96 L56,128 A28,28 0 0 0 84,156 L84,208 Z"
+            fill="none" stroke="#10141d" stroke-width="20"
+            stroke-linejoin="round" stroke-linecap="round"/>
+      <text x="128" y="126" text-anchor="middle"
+            font-family="Consolas, 'Courier New', monospace" font-weight="bold"
+            font-size="44" fill="#10141d">[ALL]</text>
+    </svg>
     <h1>Tu chat, en <span class="brillo">todos los idiomas</span>.<br>Sin salir del juego.</h1>
     <p class="sub">AllChat corrige y traduce lo que escribes en cualquier app de
     Windows — Discord, el navegador o el chat de tu juego. Escribe en tu idioma;
@@ -146,6 +166,7 @@
 
     <div class="lista">
       <form id="form-espera">
+        <input id="nombre" type="text" placeholder="Tu nombre (o tu nick)" required minlength="2" maxlength="80">
         <input id="correo" type="email" placeholder="tu@correo.com" required>
         <button class="boton" id="boton-espera" type="submit">Quiero probarlo</button>
       </form>
@@ -157,18 +178,20 @@
         const boton = document.getElementById("boton-espera");
         const nota = document.getElementById("nota-espera");
         const correo = document.getElementById("correo").value.trim();
+        const nombre = document.getElementById("nombre").value.trim();
         boton.disabled = true;
         boton.textContent = "Enviando…";
         try {
           const r = await fetch("https://api.allchat.es/suscribir", {
             method: "POST",
             headers: { "content-type": "application/json" },
-            body: JSON.stringify({ correo }),
+            body: JSON.stringify({ nombre, correo }),
           });
           if (r.ok) {
             boton.textContent = "¡Estás dentro! ✓";
             nota.textContent = "Te avisaremos en cuanto haya sitio. ¡GL & HF!";
             document.getElementById("correo").disabled = true;
+            document.getElementById("nombre").disabled = true;
           } else {
             const datos = await r.json().catch(() => ({}));
             boton.disabled = false;
