@@ -145,12 +145,45 @@
     </div>
 
     <div class="lista">
-      <form action="mailto:alvarojavatoo@gmail.com" method="get" onsubmit="this.action='mailto:alvarojavatoo@gmail.com?subject=Lista de espera AllChat&body=Quiero probar AllChat. Mi correo: '+encodeURIComponent(document.getElementById('correo').value);">
+      <form id="form-espera">
         <input id="correo" type="email" placeholder="tu@correo.com" required>
-        <button class="boton" type="submit">Quiero probarlo</button>
+        <button class="boton" id="boton-espera" type="submit">Quiero probarlo</button>
       </form>
-      <p class="nota">Beta gratuita para Windows. Sin spam: solo te avisaremos cuando haya sitio.</p>
+      <p class="nota" id="nota-espera">Beta gratuita para Windows. Sin spam: solo te avisaremos cuando haya sitio.</p>
     </div>
+    <script>
+      document.getElementById("form-espera").addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const boton = document.getElementById("boton-espera");
+        const nota = document.getElementById("nota-espera");
+        const correo = document.getElementById("correo").value.trim();
+        boton.disabled = true;
+        boton.textContent = "Enviando…";
+        try {
+          const r = await fetch("https://api.allchat.es/suscribir", {
+            method: "POST",
+            headers: { "content-type": "application/json" },
+            body: JSON.stringify({ correo }),
+          });
+          if (r.ok) {
+            boton.textContent = "¡Estás dentro! ✓";
+            nota.textContent = "Te avisaremos en cuanto haya sitio. ¡GL & HF!";
+            document.getElementById("correo").disabled = true;
+          } else {
+            const datos = await r.json().catch(() => ({}));
+            boton.disabled = false;
+            boton.textContent = "Quiero probarlo";
+            nota.textContent = datos.error === "correo inválido"
+              ? "Ese correo no parece válido, revísalo."
+              : "No se pudo enviar. Prueba de nuevo en un momento.";
+          }
+        } catch {
+          boton.disabled = false;
+          boton.textContent = "Quiero probarlo";
+          nota.textContent = "Sin conexión con el servidor. Prueba en un momento.";
+        }
+      });
+    </script>
   </section>
 
   <section class="seccion">
