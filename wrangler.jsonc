@@ -1,0 +1,9 @@
+{
+  // Configuración de despliegue en Cloudflare: web estática de AllChat
+  "name": "allchat-web",
+  "compatibility_date": "2026-01-01",
+  "assets": {
+    "directory": "./",
+    "not_found_handling": "single-page-application"
+  }
+}
