@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>AllChat — habla con todo el mundo</title>
 <meta name="description" content="AllChat corrige y traduce lo que escribes en cualquier juego o app de Windows. Escribe en tu idioma, sale en el suyo.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Crect x='8' y='8' width='240' height='240' rx='56' fill='%234be1c3'/%3E%3Cpath d='M136,156 L172,156 A28,28 0 0 0 200,128 L200,96 A28,28 0 0 0 172,68 L84,68 A28,28 0 0 0 56,96 L56,128 A28,28 0 0 0 84,156 L84,208 Z' fill='none' stroke='%2310141d' stroke-width='20' stroke-linejoin='round' stroke-linecap='round'/%3E%3C/svg%3E">
 <style>
   :root {
     --fondo: #0c1017;
@@ -39,15 +40,26 @@
 
   /* ---------- héroe ---------- */
   .heroe { text-align: center; padding: 56px 0 48px; }
+  .lockup {
+    display: flex; align-items: center; justify-content: center;
+    gap: 34px; margin-bottom: 40px; flex-wrap: wrap;
+  }
   .logo-heroe {
-    width: 112px; height: 112px; margin: 0 auto 26px; display: block;
-    filter: drop-shadow(0 12px 32px rgba(75, 225, 195, .28));
+    width: 170px; flex-shrink: 0;
+    filter: drop-shadow(0 14px 36px rgba(75, 225, 195, .25));
     animation: flotar 4.5s ease-in-out infinite;
   }
   @keyframes flotar {
     0%, 100% { transform: translateY(0); }
     50% { transform: translateY(-9px); }
   }
+  .lockup-texto { text-align: left; }
+  .lockup-nombre {
+    font-size: clamp(3.2rem, 9vw, 4.6rem); font-weight: 700;
+    letter-spacing: -.02em; line-height: 1.05;
+  }
+  .lockup-nombre .all { color: var(--teal); }
+  .lockup-tag { color: var(--atenuado); font-size: 1.08rem; margin-top: 8px; }
   .heroe h1 {
     font-size: clamp(2.2rem, 6vw, 3.6rem); line-height: 1.15;
     letter-spacing: -.02em;
@@ -130,11 +142,10 @@
 <div class="contenedor">
   <header>
     <div class="marca">
-      <svg width="30" height="30" viewBox="0 0 256 256" aria-hidden="true">
-        <rect x="8" y="8" width="240" height="240" rx="56" fill="#4be1c3"/>
-        <path d="M136,156 L172,156 A28,28 0 0 0 200,128 L200,96 A28,28 0 0 0 172,68
-                 L84,68 A28,28 0 0 0 56,96 L56,128 A28,28 0 0 0 84,156 L84,208 Z"
-              fill="none" stroke="#10141d" stroke-width="20"
+      <svg width="32" height="27" viewBox="0 0 260 216" aria-hidden="true">
+        <path d="M116,158 L210,158 A34,34 0 0 0 244,124 L244,50 A34,34 0 0 0 210,16
+                 L50,16 A34,34 0 0 0 16,50 L16,124 A34,34 0 0 0 50,158 L50,204 Z"
+              fill="none" stroke="#4be1c3" stroke-width="18"
               stroke-linejoin="round" stroke-linecap="round"/>
       </svg>
       <span><span class="all">All</span>Chat</span>
@@ -143,16 +154,21 @@
   </header>
 
   <section class="heroe">
-    <svg class="logo-heroe" viewBox="0 0 256 256" aria-label="Logo de AllChat">
-      <rect x="8" y="8" width="240" height="240" rx="56" fill="#4be1c3"/>
-      <path d="M136,156 L172,156 A28,28 0 0 0 200,128 L200,96 A28,28 0 0 0 172,68
-               L84,68 A28,28 0 0 0 56,96 L56,128 A28,28 0 0 0 84,156 L84,208 Z"
-            fill="none" stroke="#10141d" stroke-width="20"
-            stroke-linejoin="round" stroke-linecap="round"/>
-      <text x="128" y="126" text-anchor="middle"
-            font-family="Consolas, 'Courier New', monospace" font-weight="bold"
-            font-size="44" fill="#10141d">[ALL]</text>
-    </svg>
+    <div class="lockup">
+      <svg class="logo-heroe" viewBox="0 0 260 216" aria-label="Logo de AllChat">
+        <path d="M116,158 L210,158 A34,34 0 0 0 244,124 L244,50 A34,34 0 0 0 210,16
+                 L50,16 A34,34 0 0 0 16,50 L16,124 A34,34 0 0 0 50,158 L50,204 Z"
+              fill="none" stroke="#4be1c3" stroke-width="9"
+              stroke-linejoin="round" stroke-linecap="round"/>
+        <text x="130" y="105" text-anchor="middle"
+              font-family="Consolas, 'Courier New', monospace" font-weight="bold"
+              font-size="52" fill="#4be1c3">[ALL]</text>
+      </svg>
+      <div class="lockup-texto">
+        <div class="lockup-nombre"><span class="all">All</span>Chat</div>
+        <div class="lockup-tag">habla con todo el mundo</div>
+      </div>
+    </div>
     <h1>Tu chat, en <span class="brillo">todos los idiomas</span>.<br>Sin salir del juego.</h1>
     <p class="sub">AllChat corrige y traduce lo que escribes en cualquier app de
     Windows — Discord, el navegador o el chat de tu juego. Escribe en tu idioma;
