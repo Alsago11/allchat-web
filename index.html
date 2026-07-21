@@ -21,7 +21,11 @@
   * { margin: 0; padding: 0; box-sizing: border-box; }
   html { scroll-behavior: smooth; }
   body {
-    background: var(--fondo); color: var(--texto);
+    background:
+      radial-gradient(ellipse 900px 560px at 32% 240px, rgba(75,225,195,.13), transparent 70%),
+      radial-gradient(ellipse 900px 560px at 72% 160px, rgba(167,139,250,.12), transparent 70%),
+      var(--fondo);
+    color: var(--texto);
     font-family: "Segoe UI", system-ui, sans-serif; line-height: 1.6;
   }
   .contenedor { max-width: 1040px; margin: 0 auto; padding: 0 24px; }
@@ -40,13 +44,7 @@
   nav .enlaces a:hover { color: var(--teal); }
 
   /* ---------- héroe ---------- */
-  .heroe { text-align: center; padding: 80px 0 64px; position: relative; overflow: hidden; }
-  .heroe::before {
-    content: ""; position: absolute; inset: -40% -20% auto;
-    height: 130%; z-index: -1;
-    background: radial-gradient(ellipse at 30% 20%, rgba(75,225,195,.13), transparent 55%),
-                radial-gradient(ellipse at 75% 10%, rgba(167,139,250,.12), transparent 55%);
-  }
+  .heroe { text-align: center; padding: 80px 0 64px; }
   .lockup {
     display: flex; align-items: center; justify-content: center;
     gap: 34px; margin-bottom: 40px; flex-wrap: wrap;
@@ -453,8 +451,9 @@
       <h2>Ves la palabra <span class="tealino">antes de acabarla.</span></h2>
       <p>Desde la segunda letra, AllChat te enseña las palabras que encajan,
       justo donde escribes. Elige la tuya con Tab y sigue: vas más rápido
-      y te aseguras de que va bien escrita, sin pensar en la ortografía.</p>
-      <p>Y si escribir te cuesta, porque vas despacio, con un dedo o
+      y cada palabra queda escrita correctamente, sin pensar en la
+      ortografía.</p>
+      <p>Y si escribir te cuesta porque vas despacio, con un dedo o
       las letras se te bailan, AllChat la termina por ti. En casa lo van
       a querer hasta los que "no son de ordenadores".</p>
       <span class="atajo">200.000 palabras por idioma · Tab para completar</span>
@@ -509,7 +508,7 @@
       <h2>¿Te escriben raro? <span class="tealino">Léelo en tu idioma.</span></h2>
       <p>Selecciona cualquier texto, o recorta la zona de pantalla si el juego
       no te deja seleccionar, y AllChat te lo traduce al instante en un
-      recuadro flotante. Coreano, ruso, japonés: da igual.</p>
+      recuadro flotante. Coreano, ruso, japonés, da igual.</p>
       <span class="atajo">seleccionar ⟶ traducción al vuelo</span>
     </div>
     <div class="demo-visual">
@@ -547,7 +546,7 @@
         <input id="correo" type="email" placeholder="tu@correo.com" required>
         <button class="boton" id="boton-espera" type="submit">Quiero probarlo</button>
       </form>
-      <p class="nota" id="nota-espera">Sin spam: solo te avisaremos cuando haya sitio.</p>
+      <p class="nota" id="nota-espera">Sin spam: recibirás un único aviso cuando haya una plaza disponible.</p>
     </div>
   </section>
 
