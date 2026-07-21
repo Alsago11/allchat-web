@@ -3,15 +3,17 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>AllChat — habla con todo el mundo</title>
+<title>AllChat — el idioma ya no te frena</title>
 <meta name="description" content="AllChat corrige y traduce lo que escribes en cualquier juego o app de Windows. Escribe en tu idioma, sale en el suyo.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Crect x='8' y='8' width='240' height='240' rx='56' fill='%2310141d'/%3E%3Cpath d='M136,156 L172,156 A28,28 0 0 0 200,128 L200,96 A28,28 0 0 0 172,68 L84,68 A28,28 0 0 0 56,96 L56,128 A28,28 0 0 0 84,156 L84,208 Z' fill='none' stroke='%234be1c3' stroke-width='20' stroke-linejoin='round' stroke-linecap='round'/%3E%3Ctext x='128' y='126' text-anchor='middle' font-family='Consolas,monospace' font-weight='bold' font-size='44' fill='%234be1c3'%3E%5BALL%5D%3C/text%3E%3C/svg%3E">
 <style>
   :root {
-    --fondo: #0c1017;
+    --fondo: #0a0d14;
     --panel: #10141d;
     --panel2: #161c28;
     --teal: #4be1c3;
+    --violeta: #a78bfa;
+    --naranja: #f5a35c;
     --texto: #e8edf4;
     --atenuado: #8b98a5;
     --borde: #232c3b;
@@ -19,33 +21,38 @@
   * { margin: 0; padding: 0; box-sizing: border-box; }
   html { scroll-behavior: smooth; }
   body {
-    background: var(--fondo);
-    color: var(--texto);
-    font-family: "Segoe UI", system-ui, sans-serif;
-    line-height: 1.6;
+    background: var(--fondo); color: var(--texto);
+    font-family: "Segoe UI", system-ui, sans-serif; line-height: 1.6;
   }
-  .contenedor { max-width: 960px; margin: 0 auto; padding: 0 24px; }
+  .contenedor { max-width: 1040px; margin: 0 auto; padding: 0 24px; }
 
-  /* ---------- cabecera ---------- */
-  header {
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 18px 0;
+  /* ---------- nav pegajosa ---------- */
+  nav {
+    position: sticky; top: 0; z-index: 50;
+    background: rgba(10,13,20,.85); backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--borde);
   }
-  .marca { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 1.25rem; }
+  nav .contenedor { display: flex; align-items: center; justify-content: space-between; padding-top: 10px; padding-bottom: 10px; gap: 12px; }
+  .marca { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 1.15rem; white-space: nowrap; }
   .marca .all { color: var(--teal); }
-  .etiqueta-beta {
-    font-size: .72rem; color: var(--teal); border: 1px solid var(--teal);
-    border-radius: 999px; padding: 2px 10px; letter-spacing: .06em;
-  }
+  nav .enlaces { display: flex; gap: 16px; font-size: .85rem; flex-wrap: wrap; justify-content: flex-end; }
+  nav .enlaces a { color: var(--atenuado); text-decoration: none; white-space: nowrap; }
+  nav .enlaces a:hover { color: var(--teal); }
 
   /* ---------- héroe ---------- */
-  .heroe { text-align: center; padding: 56px 0 48px; }
+  .heroe { text-align: center; padding: 80px 0 64px; position: relative; overflow: hidden; }
+  .heroe::before {
+    content: ""; position: absolute; inset: -40% -20% auto;
+    height: 130%; z-index: -1;
+    background: radial-gradient(ellipse at 30% 20%, rgba(75,225,195,.13), transparent 55%),
+                radial-gradient(ellipse at 75% 10%, rgba(167,139,250,.12), transparent 55%);
+  }
   .lockup {
     display: flex; align-items: center; justify-content: center;
     gap: 34px; margin-bottom: 40px; flex-wrap: wrap;
   }
   .logo-heroe {
-    width: 170px; flex-shrink: 0;
+    width: clamp(120px, 18vw, 170px); flex-shrink: 0;
     filter: drop-shadow(0 14px 36px rgba(75, 225, 195, .25));
     animation: flotar 4.5s ease-in-out infinite;
   }
@@ -61,30 +68,224 @@
   .lockup-nombre .all { color: var(--teal); }
   .lockup-tag { color: var(--atenuado); font-size: 1.08rem; margin-top: 8px; }
   .heroe h1 {
-    font-size: clamp(2.2rem, 6vw, 3.6rem); line-height: 1.15;
-    letter-spacing: -.02em;
+    font-size: clamp(2.6rem, 7vw, 4.2rem); line-height: 1.1; letter-spacing: -.025em;
   }
-  .heroe h1 .brillo { color: var(--teal); }
+  .heroe h1 .grad {
+    background: linear-gradient(90deg, var(--teal), var(--violeta));
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
   .heroe p.sub {
-    margin: 20px auto 0; max-width: 560px;
-    color: var(--atenuado); font-size: 1.15rem;
+    margin: 22px auto 0; max-width: 620px; color: var(--atenuado); font-size: 1.18rem;
   }
+  .heroe p.sub strong { color: var(--texto); }
+  .cta {
+    display: inline-block; margin-top: 32px; background: var(--teal); color: #0c1017;
+    font-weight: 700; border-radius: 12px; padding: 14px 30px; font-size: 1.05rem;
+    text-decoration: none; box-shadow: 0 10px 34px rgba(75,225,195,.3);
+  }
+  .cta:hover { filter: brightness(1.08); }
 
-  /* demo de chat */
-  .demo {
-    margin: 44px auto 0; max-width: 520px; text-align: left;
+  /* ---------- secciones de demo ---------- */
+  .demo-seccion {
+    display: flex; gap: 48px; align-items: center; padding: 68px 0;
+    border-top: 1px solid var(--borde); flex-wrap: wrap;
+  }
+  .demo-seccion:nth-of-type(even) { flex-direction: row-reverse; }
+  .demo-texto { flex: 1 1 320px; }
+  .demo-texto .num {
+    color: var(--violeta); font-family: Consolas, monospace; font-size: .9rem;
+    letter-spacing: .1em;
+  }
+  .demo-texto h2 { font-size: 1.9rem; margin: 8px 0 12px; letter-spacing: -.01em; }
+  .demo-texto h2 .tealino { color: var(--teal); }
+  .demo-texto p { color: var(--atenuado); font-size: 1.02rem; }
+  .demo-texto p + p { margin-top: 10px; }
+  .demo-texto .atajo {
+    display: inline-block; margin-top: 14px; font-family: Consolas, monospace;
+    border: 1px solid var(--borde); border-radius: 8px; padding: 4px 12px;
+    font-size: .85rem; color: var(--teal); background: var(--panel);
+  }
+  .demo-visual { flex: 1 1 420px; min-width: 0; }
+
+  /* ---------- ventanas falsas ---------- */
+  .ventana {
+    background: #313338; border-radius: 12px; overflow: hidden;
+    box-shadow: 0 22px 60px rgba(0,0,0,.55); font-size: .92rem;
+  }
+  .ventana .titulo {
+    background: #1e1f22; padding: 8px 14px; font-size: .78rem; color: #b5bac1;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .puntos { display: flex; gap: 5px; }
+  .puntos span { width: 10px; height: 10px; border-radius: 50%; background: #4b4d52; }
+  .chat { padding: 14px 16px 6px; min-height: 120px; }
+  .msj { margin-bottom: 10px; display: flex; gap: 10px; }
+  .avatar { width: 32px; height: 32px; border-radius: 50%; flex-shrink: 0;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 700; font-size: .75rem; color: #fff; }
+  .msj .autor { font-weight: 600; font-size: .88rem; }
+  .msj .texto { color: #dbdee1; }
+  .zona-entrada { position: relative; padding: 10px 16px 16px; }
+  .entrada {
+    background: #383a40; border-radius: 8px; padding: 10px 14px;
+    color: #dbdee1; min-height: 42px; font-size: .93rem;
+  }
+  .cursor {
+    display: inline-block; width: 2px; height: 1.1em; background: #dbdee1;
+    vertical-align: text-bottom; animation: parpadeo 1s steps(1) infinite;
+  }
+  @keyframes parpadeo { 50% { opacity: 0; } }
+  .tarjeta-flotante {
+    position: absolute; left: 16px; right: 16px; bottom: 66px;
+    background: var(--panel); border: 1px solid var(--teal);
+    border-radius: 10px; padding: 10px 14px;
+    box-shadow: 0 10px 30px rgba(75,225,195,.18);
+    opacity: 0; transform: translateY(8px); transition: all .35s ease;
+  }
+  .tarjeta-flotante.visible { opacity: 1; transform: translateY(0); }
+  .tarjeta-flotante .resultado { color: var(--teal); font-weight: 600; }
+  .tarjeta-flotante .pista { font-size: .74rem; color: var(--atenuado); margin-top: 3px; }
+  .chip-estado {
+    position: absolute; right: 22px; bottom: 24px; font-size: .72rem;
+    color: var(--atenuado); background: #2b2d31; border-radius: 999px;
+    padding: 2px 10px; opacity: 0; transition: opacity .3s;
+  }
+  .chip-estado.visible { opacity: 1; }
+
+  /* ventana de juego */
+  .ventana-juego {
+    background: #0d1117 url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="60" height="60"%3E%3Crect width="60" height="60" fill="%230d1117"/%3E%3Cpath d="M0 30h60M30 0v60" stroke="%23151b26" stroke-width="1"/%3E%3C/svg%3E');
+    border: 1px solid #1c2534; border-radius: 12px; overflow: hidden;
+    box-shadow: 0 22px 60px rgba(0,0,0,.55);
+    font-family: Consolas, monospace; font-size: .88rem;
+  }
+  .ventana-juego .hud {
+    display: flex; justify-content: space-between; padding: 8px 14px;
+    font-size: .72rem; color: #5c6b82; border-bottom: 1px solid #1c2534;
+  }
+  .ventana-juego .log { padding: 12px 16px; min-height: 96px; }
+  .ventana-juego .log div { margin-bottom: 5px; }
+  .ventana-juego .all { color: #f0c674; }
+  .ventana-juego .aliado { color: #7fb3f5; }
+  .ventana-juego .entrada-juego {
+    margin: 6px 14px 14px; border: 1px solid #2a3547; border-radius: 6px;
+    padding: 8px 12px; color: #dbe4f0; background: rgba(13,17,23,.85);
+    position: relative;
+  }
+  .teclas-flotantes {
+    position: absolute; right: 10px; top: -38px; display: flex; gap: 4px;
+    opacity: 0; transition: opacity .3s;
+  }
+  .teclas-flotantes.visible { opacity: 1; }
+  .tecla {
+    border: 1px solid #5c6b82; border-radius: 5px; padding: 1px 8px;
+    font-size: .72rem; background: #1c2230; box-shadow: 0 2px 0 #000;
+  }
+  .tecla.pulsada { background: var(--teal); color: #0c1017; box-shadow: none; transform: translateY(2px); }
+
+  /* ventana clara (WhatsApp Web, corrección) */
+  .ventana-clara {
+    background: #eae2d7; border-radius: 12px; overflow: hidden;
+    box-shadow: 0 22px 60px rgba(0,0,0,.55); font-size: .92rem; color: #2c2a26;
+  }
+  .ventana-clara .titulo-clara {
+    background: #075e54; color: #e7f6f2; padding: 9px 14px; font-size: .82rem;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .ventana-clara .avatar-mini {
+    width: 24px; height: 24px; border-radius: 50%; background: #c56a4a;
+    display: flex; align-items: center; justify-content: center;
+    font-size: .7rem; font-weight: 700; color: #fff;
+  }
+  .ventana-clara .conversacion { padding: 14px 16px 6px; min-height: 96px; }
+  .burbuja {
+    max-width: 78%; border-radius: 10px; padding: 7px 12px; margin-bottom: 8px;
+    font-size: .9rem; box-shadow: 0 1px 1px rgba(0,0,0,.12);
+  }
+  .burbuja.suya { background: #ffffff; }
+  .burbuja.tuya { background: #d9fdd3; margin-left: auto; }
+  .ventana-clara .zona-entrada { padding: 8px 12px 14px; }
+  .ventana-clara .entrada {
+    background: #ffffff; color: #2c2a26; border-radius: 999px; padding: 9px 16px;
+  }
+  .ventana-clara .cursor { background: #2c2a26; }
+  .ventana-clara .tarjeta-flotante { bottom: 62px; background: var(--panel); }
+  .ventana-clara .chip-estado { background: #d7cfc2; color: #6b675e; }
+
+  /* ventana predicción */
+  .chips-caret {
+    position: absolute; left: 16px; bottom: 66px;
     background: var(--panel); border: 1px solid var(--borde);
-    border-radius: 14px; padding: 18px 20px;
-    font-family: Consolas, monospace; font-size: .95rem;
+    border-radius: 10px; padding: 8px 12px;
+    display: flex; gap: 8px; align-items: center;
+    box-shadow: 0 10px 30px rgba(0,0,0,.4);
+    opacity: 0; transform: translateY(8px); transition: all .3s ease;
+    font-size: .85rem;
   }
-  .demo .linea { margin: 6px 0; }
-  .demo .canal { color: var(--teal); }
-  .demo .tachado { color: var(--atenuado); text-decoration: line-through; }
-  .demo .flecha { color: var(--atenuado); }
-  .demo .resultado { color: var(--teal); }
+  .chips-caret.visible { opacity: 1; transform: translateY(0); }
+  .chips-caret span { color: var(--atenuado); transition: all .2s; }
+  .chips-caret span.elegida { color: var(--teal); font-weight: 700; }
+  .chips-caret .pista-tab {
+    font-size: .7rem; color: var(--atenuado); border: 1px solid var(--borde);
+    border-radius: 5px; padding: 0 6px; font-family: Consolas, monospace;
+  }
 
-  /* ---------- lista de espera ---------- */
-  .lista { margin: 40px auto 0; max-width: 460px; }
+  /* ventana personalización */
+  .escenario-estilos {
+    background: #313338; border-radius: 12px; overflow: hidden;
+    box-shadow: 0 22px 60px rgba(0,0,0,.55); padding: 26px 22px 22px;
+    min-height: 220px; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; gap: 16px;
+  }
+  .muestra-tarjeta {
+    border-radius: 10px; padding: 12px 18px; max-width: 90%;
+    transition: all .5s ease; text-align: left;
+  }
+  .muestra-tarjeta .titulin { font-size: .72rem; letter-spacing: .06em; margin-bottom: 3px; opacity: .8; }
+  .muestra-tarjeta .frase { font-weight: 600; font-size: 1rem; }
+  .muestra-tarjeta.estilo-tarjeta { background: var(--panel); border: 1px solid var(--acento, var(--teal)); box-shadow: 0 10px 30px rgba(0,0,0,.35); }
+  .muestra-tarjeta.estilo-tarjeta .titulin { color: var(--acento, var(--teal)); }
+  .muestra-tarjeta.estilo-tarjeta .frase { color: var(--texto); }
+  .muestra-tarjeta.estilo-minimo { background: rgba(10,13,20,.92); border-radius: 999px; padding: 8px 18px; }
+  .muestra-tarjeta.estilo-minimo .titulin { display: none; }
+  .muestra-tarjeta.estilo-minimo .frase { color: var(--acento, var(--teal)); font-size: .95rem; }
+  .etiqueta-estilo { font-size: .8rem; color: #b5bac1; font-family: Consolas, monospace; }
+  .paleta { display: flex; gap: 8px; }
+  .paleta span {
+    width: 18px; height: 18px; border-radius: 50%; border: 2px solid transparent;
+    transition: border .3s;
+  }
+  .paleta span.activa { border-color: #fff; }
+
+  /* selección + globo (leer chats) */
+  .seleccion { background: rgba(75,225,195,.25); border-radius: 3px; }
+  .globo-trad {
+    position: absolute; left: 20px; top: -14px; transform: translateY(-100%);
+    background: var(--panel); border: 1px solid var(--teal); border-radius: 10px;
+    padding: 8px 14px; color: var(--teal); font-weight: 600; font-size: .88rem;
+    opacity: 0; transition: opacity .35s; box-shadow: 0 10px 30px rgba(75,225,195,.18);
+    font-family: "Segoe UI", sans-serif; white-space: nowrap;
+  }
+  .globo-trad.visible { opacity: 1; }
+
+  /* ---------- privacidad ---------- */
+  .privacidad {
+    margin-top: 8px; background: var(--panel);
+    border: 1px solid var(--borde); border-left: 4px solid var(--teal);
+    border-radius: 14px; padding: 26px 28px;
+  }
+  .privacidad h2 { font-size: 1.25rem; margin-bottom: 6px; }
+  .privacidad p { color: var(--atenuado); font-size: .95rem; }
+
+  /* ---------- cierre / lista de espera ---------- */
+  .cierre { text-align: center; padding: 76px 0 30px; }
+  .cierre h2 { font-size: 2rem; letter-spacing: -.01em; }
+  .cierre h2 .grad {
+    background: linear-gradient(90deg, var(--teal), var(--violeta));
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .cierre p.intro { color: var(--atenuado); margin: 14px auto 0; max-width: 540px; }
+  .lista { margin: 30px auto 0; max-width: 460px; }
   .lista form { display: flex; gap: 10px; flex-wrap: wrap; }
   .lista input#nombre { flex: 1 1 100%; }
   .lista input {
@@ -101,48 +302,23 @@
   .boton:hover { filter: brightness(1.1); }
   .lista .nota { margin-top: 10px; font-size: .82rem; color: var(--atenuado); text-align: center; }
 
-  /* ---------- características ---------- */
-  .seccion { padding: 64px 0 12px; }
-  .seccion h2 { font-size: 1.6rem; margin-bottom: 8px; }
-  .seccion p.intro { color: var(--atenuado); max-width: 620px; }
-  .tarjetas {
-    display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 16px; margin-top: 28px;
-  }
-  .tarjeta {
-    background: var(--panel); border: 1px solid var(--borde);
-    border-radius: 14px; padding: 22px;
-  }
-  .tarjeta .icono { font-size: 1.6rem; }
-  .tarjeta h3 { margin: 10px 0 6px; font-size: 1.05rem; }
-  .tarjeta h3 .destello { color: var(--teal); }
-  .tarjeta p { color: var(--atenuado); font-size: .92rem; }
-
-  /* ---------- privacidad ---------- */
-  .privacidad {
-    margin-top: 64px; background: var(--panel);
-    border: 1px solid var(--borde); border-left: 4px solid var(--teal);
-    border-radius: 14px; padding: 26px 28px;
-  }
-  .privacidad h2 { font-size: 1.25rem; margin-bottom: 6px; }
-  .privacidad p { color: var(--atenuado); font-size: .95rem; }
-
   /* ---------- pie ---------- */
   footer {
-    margin-top: 72px; padding: 26px 0 34px;
+    margin-top: 64px; padding: 26px 0 34px;
     border-top: 1px solid var(--borde);
     color: var(--atenuado); font-size: .85rem;
     display: flex; flex-wrap: wrap; gap: 8px 24px;
     align-items: center; justify-content: space-between;
   }
+  footer a { color: var(--teal); text-decoration: none; }
 </style>
 </head>
 <body>
 
-<div class="contenedor">
-  <header>
+<nav>
+  <div class="contenedor">
     <div class="marca">
-      <svg width="40" height="33" viewBox="0 0 260 216" aria-hidden="true">
+      <svg width="34" height="28" viewBox="0 0 260 216" aria-hidden="true">
         <path d="M116,158 L210,158 A34,34 0 0 0 244,124 L244,50 A34,34 0 0 0 210,16
                  L50,16 A34,34 0 0 0 16,50 L16,124 A34,34 0 0 0 50,158 L50,204 Z"
               fill="none" stroke="#4be1c3" stroke-width="16"
@@ -153,9 +329,18 @@
       </svg>
       <span><span class="all">All</span>Chat</span>
     </div>
-    <span class="etiqueta-beta">BETA PRIVADA</span>
-  </header>
+    <div class="enlaces">
+      <a href="#frase">Frase traductora</a>
+      <a href="#atajo">Ctrl+Alt+A</a>
+      <a href="#correccion">Corrección</a>
+      <a href="#prediccion">Predicción</a>
+      <a href="#estilos">A tu gusto</a>
+      <a href="#contacto">Contacto</a>
+    </div>
+  </div>
+</nav>
 
+<div class="contenedor">
   <section class="heroe">
     <div class="lockup">
       <svg class="logo-heroe" viewBox="0 0 260 216" aria-label="Logo de AllChat">
@@ -172,105 +357,398 @@
         <div class="lockup-tag">habla con todo el mundo</div>
       </div>
     </div>
-    <h1>Tu chat, en <span class="brillo">todos los idiomas</span>.<br>Sin salir del juego.</h1>
-    <p class="sub">AllChat corrige y traduce lo que escribes en cualquier app de
-    Windows: Discord, el navegador o el chat de tu juego. Escribe en tu idioma;
-    tu equipo lo lee en el suyo.</p>
+    <h1>El idioma <span class="grad">ya no te frena</span>.</h1>
+    <p class="sub">Escribe en tu idioma en Discord, en tu juego o en tu foro
+    favorito. AllChat lo corrige y lo traduce sin que salgas de la ventana.
+    Míralo en acción: <strong>esto es lo que verás en tu pantalla.</strong></p>
+    <a class="cta" href="#frase">Ver cómo funciona ↓</a>
+  </section>
 
-    <div class="demo" aria-label="Ejemplo de AllChat en un chat de juego">
-      <div class="linea"><span class="canal">[ALL]</span> tú escribes: <span class="tachado">ola ke tal alguien ranked?</span></div>
-      <div class="linea"><span class="flecha">AllChat, 1,5 segundos después ⟶</span></div>
-      <div class="linea"><span class="canal">[ALL]</span> ellos leen: <span class="resultado">Hi! Anyone up for ranked?</span></div>
+  <section class="demo-seccion" id="frase">
+    <div class="demo-texto">
+      <div class="num">01 · LA ESTRELLA</div>
+      <h2>Escribe. Respira. <span class="tealino">Ya está traducido.</span></h2>
+      <p>Teclea tu frase como te salga y para un segundo y medio. AllChat te la
+      enseña corregida y traducida en una tarjeta flotante. ¿Te gusta?
+      Enter y enviada. ¿No? Sigue escribiendo y desaparece.</p>
+      <span class="atajo">pausa de 1,5 s ⟶ tarjeta ⟶ Enter</span>
     </div>
+    <div class="demo-visual">
+      <div class="ventana">
+        <div class="titulo"><span class="puntos"><span></span><span></span><span></span></span> # general — tu servidor de Discord</div>
+        <div class="chat" id="chat-frase">
+          <div class="msj"><div class="avatar" style="background:#5865f2">K</div>
+            <div><div class="autor" style="color:#8ab4f8">KimSeo</div>
+            <div class="texto">anyone for ranked? need one more</div></div></div>
+        </div>
+        <div class="zona-entrada">
+          <div class="tarjeta-flotante" id="tarjeta-frase">
+            <div class="resultado" id="tarjeta-texto-frase"></div>
+            <div class="pista">corregido y traducido · Enter para aplicar</div>
+          </div>
+          <div class="entrada"><span id="entrada-frase"></span><span class="cursor"></span></div>
+          <div class="chip-estado" id="chip-frase">pausa de 1,5 s…</div>
+        </div>
+      </div>
+    </div>
+  </section>
 
+  <section class="demo-seccion" id="atajo">
+    <div class="demo-texto">
+      <div class="num">02 · EL ATAJO</div>
+      <h2>¿Frase ya escrita? <span class="tealino">Ctrl+Alt+A.</span></h2>
+      <p>En mitad de la partida no hay tiempo para pausas. Escribe, pulsa el
+      atajo y tu mensaje entero se corrige y se traduce ahí mismo, dentro
+      del chat del juego. Funciona hasta en pantalla completa.</p>
+      <span class="atajo">Ctrl + Alt + A</span>
+    </div>
+    <div class="demo-visual">
+      <div class="ventana-juego">
+        <div class="hud"><span>ALIADOS 12 · 8 ENEMIGOS</span><span>24:31</span></div>
+        <div class="log">
+          <div><span class="all">[ALL]</span> <span class="aliado">Faker2007:</span> gg ez mid diff</div>
+          <div><span class="all">[ALL]</span> <span class="aliado">xXDarkLordXx:</span> report jungle pls</div>
+        </div>
+        <div class="entrada-juego">
+          <div class="teclas-flotantes" id="teclas-atajo">
+            <span class="tecla" id="tecla-ctrl">Ctrl</span><span class="tecla" id="tecla-alt">Alt</span><span class="tecla" id="tecla-a">A</span>
+          </div>
+          <span id="texto-atajo">tranquilos vamos bien aun podemos ganar</span><span class="cursor"></span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="demo-seccion" id="correccion">
+    <div class="demo-texto">
+      <div class="num">03 · SIN TRADUCIR</div>
+      <h2>¿Mismo idioma? <span class="tealino">Corrige y ya.</span></h2>
+      <p>El modo de siempre: escribe, para un momento, y tu frase aparece
+      corregida en tu idioma: acentos, mayúsculas y las interrogaciones
+      que faltan (¿cómo no?). Entiende la jerga: tus «jajaja» y tus nicks
+      son sagrados.</p>
+      <span class="atajo">corrección con motor local · sin internet</span>
+    </div>
+    <div class="demo-visual">
+      <div class="ventana-clara">
+        <div class="titulo-clara"><span class="avatar-mini">M</span> Mamá — WhatsApp Web</div>
+        <div class="conversacion" id="conversacion-corr">
+          <div class="burbuja suya">¿Vienes el domingo a comer?</div>
+        </div>
+        <div class="zona-entrada">
+          <div class="tarjeta-flotante" id="tarjeta-corr">
+            <div class="resultado" id="tarjeta-texto-corr"></div>
+            <div class="pista">corregido · Enter para aplicar</div>
+          </div>
+          <div class="entrada"><span id="entrada-corr"></span><span class="cursor"></span></div>
+          <div class="chip-estado" id="chip-corr">pausa de 1,5 s…</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="demo-seccion" id="prediccion">
+    <div class="demo-texto">
+      <div class="num">04 · MIENTRAS TECLEAS</div>
+      <h2>Ves la palabra <span class="tealino">antes de acabarla.</span></h2>
+      <p>Desde la segunda letra, AllChat te enseña las palabras que encajan,
+      justo donde escribes. Elige la tuya con Tab y sigue: vas más rápido
+      y te aseguras de que va bien escrita, sin pensar en la ortografía.</p>
+      <p>Y si escribir te cuesta, porque vas despacio, con un dedo o
+      las letras se te bailan, AllChat la termina por ti. En casa lo van
+      a querer hasta los que "no son de ordenadores".</p>
+      <span class="atajo">200.000 palabras por idioma · Tab para completar</span>
+    </div>
+    <div class="demo-visual">
+      <div class="ventana">
+        <div class="titulo"><span class="puntos"><span></span><span></span><span></span></span> # equipo — tu servidor de Discord</div>
+        <div class="chat" style="min-height:84px">
+          <div class="msj"><div class="avatar" style="background:#23a559">L</div>
+            <div><div class="autor" style="color:#7fd8a5">Lucas_88</div>
+            <div class="texto">y si vamos todos juntos por mid?</div></div></div>
+        </div>
+        <div class="zona-entrada">
+          <div class="chips-caret" id="chips-pred">
+            <span>estrategia</span><span>estrella</span><span>estrecho</span>
+            <span class="pista-tab">Tab</span>
+          </div>
+          <div class="entrada"><span id="entrada-pred"></span><span class="cursor"></span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="demo-seccion" id="estilos">
+    <div class="demo-texto">
+      <div class="num">05 · A TU GUSTO</div>
+      <h2>Tus tarjetas, <span class="tealino">tu estilo.</span></h2>
+      <p>Los recuadros flotantes se adaptan a ti: estilo tarjeta completa
+      o modo mínimo discreto, con el color que tú elijas. Que AllChat
+      pegue con tu escritorio, no al revés.</p>
+      <span class="atajo">Ajustes ⟶ Recuadros flotantes</span>
+    </div>
+    <div class="demo-visual">
+      <div class="escenario-estilos">
+        <div class="muestra-tarjeta estilo-tarjeta" id="muestra-tarjeta">
+          <div class="titulin">ALLCHAT · CORREGIDO</div>
+          <div class="frase">Hi! Anyone up for ranked?</div>
+        </div>
+        <div class="etiqueta-estilo" id="etiqueta-estilo">estilo: tarjeta</div>
+        <div class="paleta" id="paleta">
+          <span style="background:#4be1c3" class="activa"></span>
+          <span style="background:#a78bfa"></span>
+          <span style="background:#f5a35c"></span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="demo-seccion" id="leer">
+    <div class="demo-texto">
+      <div class="num">06 · EN LA OTRA DIRECCIÓN</div>
+      <h2>¿Te escriben raro? <span class="tealino">Léelo en tu idioma.</span></h2>
+      <p>Selecciona cualquier texto, o recorta la zona de pantalla si el juego
+      no te deja seleccionar, y AllChat te lo traduce al instante en un
+      recuadro flotante. Coreano, ruso, japonés: da igual.</p>
+      <span class="atajo">seleccionar ⟶ traducción al vuelo</span>
+    </div>
+    <div class="demo-visual">
+      <div class="ventana">
+        <div class="titulo"><span class="puntos"><span></span><span></span><span></span></span> # equipo — chat internacional</div>
+        <div class="chat" style="min-height:100px">
+          <div class="msj"><div class="avatar" style="background:#e0707a">P</div>
+            <div><div class="autor" style="color:#f0a5ab">Park_MinSu</div>
+            <div class="texto" style="position:relative">
+              <span id="texto-sel">우리 팀 정글 어디 있어?</span>
+              <span class="globo-trad" id="globo-leer">¿Dónde está nuestro jungla?</span>
+            </div></div></div>
+          <div class="msj"><div class="avatar" style="background:#5865f2">K</div>
+            <div><div class="autor" style="color:#8ab4f8">KimSeo</div>
+            <div class="texto">ㅋㅋㅋㅋㅋ</div></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="privacidad">
+    <h2>🔒 Tu texto no sale de tu PC</h2>
+    <p>La corrección funciona con un motor local instalado en tu ordenador:
+    lo que escribes no viaja a ningún servidor para corregirse. Solo la
+    traducción usa internet, como cualquier traductor.</p>
+  </div>
+
+  <section class="cierre" id="probar">
+    <h2>Habla con <span class="grad">todo el mundo</span>.</h2>
+    <p class="intro">Beta gratuita para Windows. Apúntate con tu nick y te
+    avisamos cuando haya sitio.</p>
     <div class="lista">
       <form id="form-espera">
-        <input id="nombre" type="text" placeholder="Tu nombre (o tu nick)" required minlength="2" maxlength="80">
+        <input id="nombre" type="text" placeholder="Tu nick (o tu nombre)" required minlength="2" maxlength="80">
         <input id="correo" type="email" placeholder="tu@correo.com" required>
         <button class="boton" id="boton-espera" type="submit">Quiero probarlo</button>
       </form>
-      <p class="nota" id="nota-espera">Beta gratuita para Windows. Sin spam: solo te avisaremos cuando haya sitio.</p>
-    </div>
-    <script>
-      document.getElementById("form-espera").addEventListener("submit", async (e) => {
-        e.preventDefault();
-        const boton = document.getElementById("boton-espera");
-        const nota = document.getElementById("nota-espera");
-        const correo = document.getElementById("correo").value.trim();
-        const nombre = document.getElementById("nombre").value.trim();
-        boton.disabled = true;
-        boton.textContent = "Enviando…";
-        try {
-          const r = await fetch("https://api.allchat.es/suscribir", {
-            method: "POST",
-            headers: { "content-type": "application/json" },
-            body: JSON.stringify({ nombre, correo }),
-          });
-          if (r.ok) {
-            boton.textContent = "¡Estás dentro! ✓";
-            nota.textContent = "Te avisaremos en cuanto haya sitio. ¡GL & HF!";
-            document.getElementById("correo").disabled = true;
-            document.getElementById("nombre").disabled = true;
-          } else {
-            const datos = await r.json().catch(() => ({}));
-            boton.disabled = false;
-            boton.textContent = "Quiero probarlo";
-            nota.textContent = datos.error === "correo inválido"
-              ? "Ese correo no parece válido, revísalo."
-              : "No se pudo enviar. Prueba de nuevo en un momento.";
-          }
-        } catch {
-          boton.disabled = false;
-          boton.textContent = "Quiero probarlo";
-          nota.textContent = "Sin conexión con el servidor. Prueba en un momento.";
-        }
-      });
-    </script>
-  </section>
-
-  <section class="seccion">
-    <h2>Lo que hace mientras tecleas</h2>
-    <p class="intro">Sin copiar y pegar, sin cambiar de ventana, sin salir de la partida.</p>
-    <div class="tarjetas">
-      <div class="tarjeta">
-        <div class="icono">⚡</div>
-        <h3>Frase traductora <span class="destello">· la estrella</span></h3>
-        <p>Escribe tu frase, para un segundo y medio, y aparece corregida y
-        traducida al idioma que elijas. Enter y enviada.</p>
-      </div>
-      <div class="tarjeta">
-        <div class="icono">✍️</div>
-        <h3>Corrección con contexto</h3>
-        <p>Ortografía, acentos y las interrogaciones que faltan (¿cómo no?).
-        Entiende la jerga: tus «jajaja» y tus nicks son sagrados.</p>
-      </div>
-      <div class="tarjeta">
-        <div class="icono">👁️</div>
-        <h3>Lee cualquier chat</h3>
-        <p>¿Te escriben en coreano? Selecciónalo — o recorta la zona de pantalla
-        si el juego no deja — y léelo en tu idioma al instante.</p>
-      </div>
-      <div class="tarjeta">
-        <div class="icono">⌨️</div>
-        <h3>Predicción de palabras</h3>
-        <p>Candidatas en vivo desde la segunda letra, con 200.000 palabras por
-        idioma. Tab y sigues escribiendo.</p>
-      </div>
-    </div>
-
-    <div class="privacidad">
-      <h2>🔒 Tu texto no sale de tu PC</h2>
-      <p>La corrección funciona con un motor local instalado en tu ordenador:
-      lo que escribes no viaja a ningún servidor para corregirse. Solo la
-      traducción usa internet — como cualquier traductor.</p>
+      <p class="nota" id="nota-espera">Sin spam: solo te avisaremos cuando haya sitio.</p>
     </div>
   </section>
 
-  <footer>
-    <span>© 2026 AllChat — beta privada</span>
+  <footer id="contacto">
+    <span>© 2026 AllChat · beta privada</span>
+    <span>¿Dudas o ideas? <a href="mailto:hola@allchat.es">hola@allchat.es</a></span>
     <span>Hecho en España para gamers de todo el mundo 🎮</span>
   </footer>
 </div>
 
+<script>
+  /* ---------- lista de espera (real) ---------- */
+  document.getElementById("form-espera").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const boton = document.getElementById("boton-espera");
+    const nota = document.getElementById("nota-espera");
+    const correo = document.getElementById("correo").value.trim();
+    const nombre = document.getElementById("nombre").value.trim();
+    boton.disabled = true;
+    boton.textContent = "Enviando…";
+    try {
+      const r = await fetch("https://api.allchat.es/suscribir", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ nombre, correo }),
+      });
+      if (r.ok) {
+        boton.textContent = "¡Estás dentro! ✓";
+        nota.textContent = "Te avisaremos en cuanto haya sitio. ¡GL & HF!";
+        document.getElementById("correo").disabled = true;
+        document.getElementById("nombre").disabled = true;
+      } else {
+        const datos = await r.json().catch(() => ({}));
+        boton.disabled = false;
+        boton.textContent = "Quiero probarlo";
+        nota.textContent = datos.error === "correo inválido"
+          ? "Ese correo no parece válido, revísalo."
+          : "No se pudo enviar. Prueba de nuevo en un momento.";
+      }
+    } catch {
+      boton.disabled = false;
+      boton.textContent = "Quiero probarlo";
+      nota.textContent = "Sin conexión con el servidor. Prueba en un momento.";
+    }
+  });
+
+  /* ---------- demos animadas ---------- */
+  function escribir(el, texto, ms, cb) {
+    let i = 0;
+    const t = setInterval(() => {
+      el.textContent = texto.slice(0, ++i);
+      if (i >= texto.length) { clearInterval(t); cb && cb(); }
+    }, ms);
+  }
+  function espera(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+  /* 01: frase traductora en Discord */
+  async function demoFrase() {
+    const entrada = document.getElementById("entrada-frase");
+    const tarjeta = document.getElementById("tarjeta-frase");
+    const tarjetaTexto = document.getElementById("tarjeta-texto-frase");
+    const chip = document.getElementById("chip-frase");
+    const chat = document.getElementById("chat-frase");
+    while (true) {
+      entrada.textContent = ""; tarjeta.classList.remove("visible"); chip.classList.remove("visible");
+      await espera(900);
+      await new Promise(fin => escribir(entrada, "ola ke tal voy ranked algien se apunta?", 55, fin));
+      chip.classList.add("visible");
+      await espera(1500);
+      chip.classList.remove("visible");
+      tarjetaTexto.textContent = "Hi! I'm going ranked, anyone up for it?";
+      tarjeta.classList.add("visible");
+      await espera(2200);
+      tarjeta.classList.remove("visible");
+      entrada.textContent = "";
+      const msj = document.createElement("div");
+      msj.className = "msj";
+      msj.innerHTML = '<div class="avatar" style="background:#23a559">T</div>' +
+        '<div><div class="autor" style="color:#4be1c3">Tú</div>' +
+        '<div class="texto">Hi! I\'m going ranked, anyone up for it?</div></div>';
+      chat.appendChild(msj);
+      await espera(2600);
+      if (chat.children.length > 1) chat.removeChild(chat.lastChild);
+    }
+  }
+
+  /* 02: Ctrl+Alt+A en el juego */
+  async function demoAtajo() {
+    const teclas = document.getElementById("teclas-atajo");
+    const t = [document.getElementById("tecla-ctrl"), document.getElementById("tecla-alt"), document.getElementById("tecla-a")];
+    const texto = document.getElementById("texto-atajo");
+    while (true) {
+      texto.textContent = ""; teclas.classList.remove("visible");
+      t.forEach(x => x.classList.remove("pulsada"));
+      await espera(700);
+      await new Promise(fin => escribir(texto, "tranquilos vamos bien aun podemos ganar", 50, fin));
+      await espera(800);
+      teclas.classList.add("visible");
+      for (const x of t) { x.classList.add("pulsada"); await espera(200); }
+      await espera(300);
+      texto.textContent = "Relax, we're doing fine, we can still win!";
+      texto.style.color = "#4be1c3";
+      await espera(2600);
+      texto.style.color = "";
+    }
+  }
+
+  /* 03: corrección sin traducir (WhatsApp) */
+  async function demoCorreccion() {
+    const entrada = document.getElementById("entrada-corr");
+    const tarjeta = document.getElementById("tarjeta-corr");
+    const tarjetaTexto = document.getElementById("tarjeta-texto-corr");
+    const chip = document.getElementById("chip-corr");
+    const conversacion = document.getElementById("conversacion-corr");
+    while (true) {
+      entrada.textContent = ""; tarjeta.classList.remove("visible"); chip.classList.remove("visible");
+      await espera(1100);
+      await new Promise(fin => escribir(entrada, "si mama alli estare komo no", 65, fin));
+      chip.classList.add("visible");
+      await espera(1500);
+      chip.classList.remove("visible");
+      tarjetaTexto.textContent = "Sí, mamá, allí estaré. ¡Cómo no!";
+      tarjeta.classList.add("visible");
+      await espera(2200);
+      tarjeta.classList.remove("visible");
+      entrada.textContent = "";
+      const burbuja = document.createElement("div");
+      burbuja.className = "burbuja tuya";
+      burbuja.textContent = "Sí, mamá, allí estaré. ¡Cómo no!";
+      conversacion.appendChild(burbuja);
+      await espera(2600);
+      if (conversacion.children.length > 1) conversacion.removeChild(conversacion.lastChild);
+    }
+  }
+
+  /* 04: predicción junto al caret */
+  async function demoPrediccion() {
+    const entrada = document.getElementById("entrada-pred");
+    const chips = document.getElementById("chips-pred");
+    const opciones = chips.querySelectorAll("span:not(.pista-tab)");
+    while (true) {
+      entrada.textContent = ""; chips.classList.remove("visible");
+      opciones.forEach(x => x.classList.remove("elegida"));
+      await espera(800);
+      await new Promise(fin => escribir(entrada, "vale, pero con estr", 70, fin));
+      chips.classList.add("visible");
+      await espera(1000);
+      opciones[0].classList.add("elegida");
+      await espera(900);
+      chips.classList.remove("visible");
+      const base = "vale, pero con estrategia ";
+      entrada.textContent = base;
+      await espera(900);
+      const resto = "y sin morir";
+      await new Promise(fin => {
+        let i = 0;
+        const t = setInterval(() => {
+          entrada.textContent = base + resto.slice(0, ++i);
+          if (i >= resto.length) { clearInterval(t); fin(); }
+        }, 45);
+      });
+      entrada.textContent = base + resto + " 😅";
+      await espera(2600);
+    }
+  }
+
+  /* 05: estilos de tarjeta y colores */
+  async function demoEstilos() {
+    const muestra = document.getElementById("muestra-tarjeta");
+    const etiqueta = document.getElementById("etiqueta-estilo");
+    const colores = document.getElementById("paleta").children;
+    const acentos = ["#4be1c3", "#a78bfa", "#f5a35c"];
+    let paso = 0;
+    while (true) {
+      const color = paso % 3;
+      const minimo = (Math.floor(paso / 3) % 2) === 1;
+      [...colores].forEach((c, i) => c.classList.toggle("activa", i === color));
+      muestra.style.setProperty("--acento", acentos[color]);
+      muestra.classList.toggle("estilo-minimo", minimo);
+      muestra.classList.toggle("estilo-tarjeta", !minimo);
+      etiqueta.textContent = "estilo: " + (minimo ? "mínimo" : "tarjeta");
+      paso++;
+      await espera(1700);
+    }
+  }
+
+  /* 06: leer chats seleccionando */
+  async function demoLeer() {
+    const sel = document.getElementById("texto-sel");
+    const globo = document.getElementById("globo-leer");
+    while (true) {
+      sel.classList.remove("seleccion"); globo.classList.remove("visible");
+      await espera(1500);
+      sel.classList.add("seleccion");
+      await espera(700);
+      globo.classList.add("visible");
+      await espera(3000);
+    }
+  }
+
+  demoFrase(); demoAtajo(); demoCorreccion(); demoPrediccion(); demoEstilos(); demoLeer();
+</script>
 </body>
 </html>
