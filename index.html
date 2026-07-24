@@ -133,6 +133,31 @@
     vertical-align: text-bottom; animation: parpadeo 1s steps(1) infinite;
   }
   @keyframes parpadeo { 50% { opacity: 0; } }
+  /* 05: la pastilla del susurro con lo aprendido de ti */
+  .pastilla-aprende {
+    position: absolute; bottom: 64px; left: 16px;
+    background: #1e1f24; border: 1px solid #3a3d46; border-radius: 999px;
+    padding: 5px 12px; font-size: .85rem;
+    display: inline-flex; gap: 8px; align-items: center;
+    opacity: 0; transform: translateY(4px);
+    transition: opacity .25s ease, transform .25s ease;
+  }
+  .pastilla-aprende.visible { opacity: 1; transform: translateY(0); }
+  .pastilla-aprende .palabra { color: var(--teal); font-weight: 600; }
+  .pastilla-aprende .tab {
+    color: var(--atenuado); font-family: Consolas, monospace;
+    font-size: .72rem; border: 1px solid #3a3d46; border-radius: 4px;
+    padding: 0 5px; transition: all .15s;
+  }
+  .pastilla-aprende .tab.pulsada { background: var(--teal); color: #08201c;
+                                   border-color: var(--teal); }
+  .sello-aprendido {
+    position: absolute; bottom: 100px; left: 22px;
+    color: var(--violeta); font-size: .74rem;
+    font-family: Consolas, monospace;
+    opacity: 0; transition: opacity .3s;
+  }
+  .sello-aprendido.visible { opacity: .95; }
   .tarjeta-flotante {
     position: absolute; left: 16px; right: 16px; bottom: 66px;
     background: var(--panel); border: 1px solid var(--teal);
@@ -332,6 +357,7 @@
       <a href="#atajo">Ctrl+Alt+A</a>
       <a href="#correccion">Corrección</a>
       <a href="#prediccion">Predicción</a>
+      <a href="#aprende">Aprende de ti</a>
       <a href="#estilos">A tu gusto</a>
       <a href="#contacto">Contacto</a>
     </div>
@@ -477,9 +503,41 @@
     </div>
   </section>
 
+  <section class="demo-seccion" id="aprende">
+    <div class="demo-texto">
+      <div class="num">05 · SE VUELVE TUYO</div>
+      <h2>Cuanto más escribes, <span class="tealino">más te entiende.</span></h2>
+      <p>AllChat aprende de tus frases: tus nombres, tus muletillas, tu
+      forma de hablar. Cada día te las predice antes. <strong>Y todo se
+      queda en tu PC</strong>: lo aprendido vive en un archivito dentro de
+      tu ordenador, jamás en un servidor.</p>
+      <p>Con su interruptor en Ajustes y su botón de borrar para empezar
+      de cero cuando quieras. Tú mandas.</p>
+      <span class="atajo">100% en tu PC · bórralo cuando quieras</span>
+    </div>
+    <div class="demo-visual">
+      <div class="ventana">
+        <div class="titulo"><span class="puntos"><span></span><span></span><span></span></span> # general — tu servidor de Discord</div>
+        <div class="chat" style="min-height:84px">
+          <div class="msj"><div class="avatar" style="background:#e0707a">B</div>
+            <div><div class="autor" style="color:#f0a5ab">Bea</div>
+            <div class="texto">holaaa ya estoy aquí</div></div></div>
+        </div>
+        <div class="zona-entrada">
+          <div class="sello-aprendido" id="sello-aprende">aprendido de ti ✓</div>
+          <div class="pastilla-aprende" id="pastilla-aprende">
+            <span class="palabra">Bea</span>
+            <span class="tab" id="tab-aprende">Tab</span>
+          </div>
+          <div class="entrada"><span id="entrada-aprende"></span><span class="cursor"></span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <section class="demo-seccion" id="estilos">
     <div class="demo-texto">
-      <div class="num">05 · A TU GUSTO</div>
+      <div class="num">06 · A TU GUSTO</div>
       <h2>Tus tarjetas, <span class="tealino">tu estilo.</span></h2>
       <p>Los recuadros flotantes se adaptan a ti: estilo tarjeta completa
       o modo mínimo discreto, con el color que tú elijas. Que AllChat
@@ -504,7 +562,7 @@
 
   <section class="demo-seccion" id="leer">
     <div class="demo-texto">
-      <div class="num">06 · EN LA OTRA DIRECCIÓN</div>
+      <div class="num">07 · EN LA OTRA DIRECCIÓN</div>
       <h2>¿Te escriben raro? <span class="tealino">Léelo en tu idioma.</span></h2>
       <p>Selecciona cualquier texto, o recorta la zona de pantalla si el juego
       no te deja seleccionar, y AllChat te lo traduce al instante en un
@@ -532,8 +590,10 @@
   <div class="privacidad">
     <h2>🔒 Tu texto no sale de tu PC</h2>
     <p>La corrección funciona con un motor local instalado en tu ordenador:
-    lo que escribes no viaja a ningún servidor para corregirse. Solo la
-    traducción usa internet, como cualquier traductor.</p>
+    lo que escribes no viaja a ningún servidor para corregirse. Y lo que
+    AllChat aprende de ti también se queda: vive en un archivo de tu PC
+    que puedes borrar cuando quieras. Solo la traducción usa internet,
+    como cualquier traductor.</p>
   </div>
 
   <section class="cierre" id="probar">
@@ -733,7 +793,43 @@
     }
   }
 
-  /* 06: leer chats seleccionando */
+  /* 05: aprende de ti (el susurro sopla lo aprendido) */
+  async function demoAprende() {
+    const entrada = document.getElementById("entrada-aprende");
+    const pastilla = document.getElementById("pastilla-aprende");
+    const sello = document.getElementById("sello-aprende");
+    const tab = document.getElementById("tab-aprende");
+    while (true) {
+      entrada.textContent = "";
+      pastilla.classList.remove("visible");
+      sello.classList.remove("visible");
+      tab.classList.remove("pulsada");
+      await espera(900);
+      await new Promise(fin => escribir(entrada, "hola ", 95, fin));
+      await espera(300);
+      pastilla.classList.add("visible");
+      sello.classList.add("visible");
+      await espera(1500);
+      tab.classList.add("pulsada");
+      await espera(240);
+      pastilla.classList.remove("visible");
+      sello.classList.remove("visible");
+      const base = "hola Bea ";
+      entrada.textContent = base;
+      await espera(450);
+      await new Promise(fin => {
+        const resto = "que tal el finde?";
+        let i = 0;
+        const t = setInterval(() => {
+          entrada.textContent = base + resto.slice(0, ++i);
+          if (i >= resto.length) { clearInterval(t); fin(); }
+        }, 60);
+      });
+      await espera(3000);
+    }
+  }
+
+  /* 07: leer chats seleccionando */
   async function demoLeer() {
     const sel = document.getElementById("texto-sel");
     const globo = document.getElementById("globo-leer");
@@ -747,7 +843,8 @@
     }
   }
 
-  demoFrase(); demoAtajo(); demoCorreccion(); demoPrediccion(); demoEstilos(); demoLeer();
+  demoFrase(); demoAtajo(); demoCorreccion(); demoPrediccion();
+  demoAprende(); demoEstilos(); demoLeer();
 </script>
 </body>
 </html>
