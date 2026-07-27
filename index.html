@@ -73,14 +73,22 @@
     display: flex; align-items: center; justify-content: center;
     gap: 34px; margin-bottom: 40px; flex-wrap: wrap;
   }
-  .logo-heroe {
-    width: clamp(120px, 18vw, 170px); flex-shrink: 0;
-    filter: drop-shadow(0 14px 36px rgba(75, 225, 195, .25));
+  /* El movimiento va en el envoltorio y la sombra en el svg: si los dos
+     viven en el mismo elemento, el navegador redibuja la sombra en cada
+     fotograma y el flotar se ve a saltos (cazado por Alvaro 27/07). */
+  .logo-flota {
+    flex-shrink: 0; line-height: 0;
     animation: flotar 4.5s ease-in-out infinite;
+    will-change: transform; transform: translate3d(0, 0, 0);
+    backface-visibility: hidden;
+  }
+  .logo-heroe {
+    width: clamp(120px, 18vw, 170px); display: block;
+    filter: drop-shadow(0 14px 36px rgba(75, 225, 195, .25));
   }
   @keyframes flotar {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-9px); }
+    0%, 100% { transform: translate3d(0, 0, 0); }
+    50% { transform: translate3d(0, -9px, 0); }
   }
   .lockup-texto { text-align: left; }
   .lockup-nombre {
@@ -391,15 +399,17 @@
 <div class="contenedor">
   <section class="heroe">
     <div class="lockup">
-      <svg class="logo-heroe" viewBox="0 0 260 216" aria-label="Logo de AllChat">
-        <path d="M116,158 L210,158 A34,34 0 0 0 244,124 L244,50 A34,34 0 0 0 210,16
-                 L50,16 A34,34 0 0 0 16,50 L16,124 A34,34 0 0 0 50,158 L50,204 Z"
-              fill="none" stroke="#4be1c3" stroke-width="9"
-              stroke-linejoin="round" stroke-linecap="round"/>
-        <text x="130" y="105" text-anchor="middle"
-              font-family="Consolas, 'Courier New', monospace" font-weight="bold"
-              font-size="52" fill="#4be1c3">[ALL]</text>
-      </svg>
+      <div class="logo-flota">
+        <svg class="logo-heroe" viewBox="0 0 260 216" aria-label="Logo de AllChat">
+          <path d="M116,158 L210,158 A34,34 0 0 0 244,124 L244,50 A34,34 0 0 0 210,16
+                   L50,16 A34,34 0 0 0 16,50 L16,124 A34,34 0 0 0 50,158 L50,204 Z"
+                fill="none" stroke="#4be1c3" stroke-width="9"
+                stroke-linejoin="round" stroke-linecap="round"/>
+          <text x="130" y="105" text-anchor="middle"
+                font-family="Consolas, 'Courier New', monospace" font-weight="bold"
+                font-size="52" fill="#4be1c3">[ALL]</text>
+        </svg>
+      </div>
       <div class="lockup-texto">
         <div class="lockup-nombre"><span class="all">All</span>Chat</div>
         <div class="lockup-tag">habla con todo el mundo</div>
