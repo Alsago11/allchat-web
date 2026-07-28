@@ -97,7 +97,16 @@
     border-bottom: 1px solid var(--borde);
   }
   nav .contenedor { display: flex; align-items: center; justify-content: space-between; padding-top: 10px; padding-bottom: 10px; gap: 12px; }
-  .marca { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 1.15rem; white-space: nowrap; }
+  /* el logo lleva arriba del todo de un clic: lo hace todo el mundo sin
+     pensarlo (pedido de Álvaro 29/07) */
+  .marca {
+    display: flex; align-items: center; gap: 10px; font-weight: 700;
+    font-size: 1.15rem; white-space: nowrap;
+    color: var(--texto); text-decoration: none;
+    transition: transform .18s ease, filter .18s ease;
+  }
+  .marca:hover { transform: translateY(-1px); filter: brightness(1.12); }
+  .marca:active { transform: translateY(0); }
   .marca .all { color: var(--teal); }
   nav .enlaces { display: flex; gap: 16px; font-size: .85rem; flex-wrap: wrap; justify-content: flex-end; }
   nav .enlaces a { color: var(--atenuado); text-decoration: none; white-space: nowrap; }
@@ -137,6 +146,10 @@
   }
   .puntos-progreso button:hover { border-color: var(--teal); }
   .puntos-progreso button.activo { background: var(--teal); border-color: var(--teal); transform: scale(1.35); }
+  /* mientras el scroll va suelto, los puntos se apagan: que se vea que
+     la página está en otro modo y no parezca que hace cosas raras */
+  .puntos-progreso.suelto button { opacity: .3; }
+  .puntos-progreso.suelto button.activo { transform: scale(1); }
 
   /* ---------- héroe ---------- */
   .heroe { text-align: center; width: 100%; }
@@ -571,7 +584,7 @@
 
 <nav>
   <div class="contenedor">
-    <div class="marca">
+    <a class="marca" href="#portada" id="ir-arriba" title="Volver arriba">
       <svg width="34" height="28" viewBox="0 0 260 216" aria-hidden="true">
         <path d="M116,158 L210,158 A34,34 0 0 0 244,124 L244,50 A34,34 0 0 0 210,16
                  L50,16 A34,34 0 0 0 16,50 L16,124 A34,34 0 0 0 50,158 L50,204 Z"
@@ -582,7 +595,7 @@
               font-size="58" fill="#4be1c3">[ALL]</text>
       </svg>
       <span><span class="all">All</span>Chat</span>
-    </div>
+    </a>
     <div class="enlaces">
       <a href="#frase">Frase traductora</a>
       <a href="#atajo">Ctrl+Alt+A</a>
@@ -1019,12 +1032,64 @@
     marcarPunto();
   }
 
+  /* ---------- la salida de emergencia del carrusel ----------
+     Si alguien insiste con la rueda mientras el carrusel está ocupado,
+     es que quiere ir más rápido de lo que le dejamos: se suelta el
+     freno y el scroll vuelve a ser suyo. A los 10 segundos sin tocar
+     nada, vuelve el carrusel.
+     Se mide la INSISTENCIA, no la velocidad: un trackpad manda ráfagas
+     de eventos diminutos con solo deslizar el dedo, así que midiendo
+     "cuánto llega" se soltaría el freno a todo el mundo. Solo cuentan
+     los golpes que llegan cuando ya hemos dicho que no, con 90 ms de
+     separación entre ellos para que una ráfaga no cuente como veinte. */
+  const GOLPES_PARA_SOLTAR = 3;
+  const SEPARACION_MINIMA = 90;      // ms entre golpes que cuentan
+  const OLVIDA_INSISTENCIA = 1500;   // ms sin insistir y se reinicia
+  const VUELTA_AL_CARRUSEL = 10000;  // ms parado antes de recuperarlo
+  let suelto = false, insistencias = 0, ultimoGolpe = 0, relojVuelta = null;
+
+  function soltarFreno() {
+    if (suelto) return;
+    suelto = true;
+    insistencias = 0;
+    // sin esto, al parar la rueda el imán recoloca la sección y la
+    // sensación de scroll libre se rompe
+    document.documentElement.style.scrollSnapType = "none";
+    zonaPuntos.classList.add("suelto");
+    programarVuelta();
+  }
+  function programarVuelta() {
+    clearTimeout(relojVuelta);
+    relojVuelta = setTimeout(() => {
+      suelto = false;
+      document.documentElement.style.scrollSnapType = "";
+      zonaPuntos.classList.remove("suelto");
+      // LA PÁGINA NO SE MUEVE AL VOLVER, a propósito: recolocar solo
+      // donde estabas leyendo es lo que hace que una web parezca que
+      // tiene vida propia. El siguiente golpe de rueda ya lleva a la
+      // sección siguiente.
+    }, VUELTA_AL_CARRUSEL);
+  }
+  // arrastrar la barra del navegador también cuenta como estar usándola
+  window.addEventListener("scroll", () => { if (suelto) programarVuelta(); },
+                          { passive: true });
+
   window.addEventListener("wheel", e => {
     // en el móvil manda el dedo, siempre; y con animaciones reducidas,
     // el scroll de toda la vida
     if (enMovil() || menosMovimiento || e.ctrlKey) return;
+    if (suelto) { programarVuelta(); return; }   // sin freno: scroll normal
     e.preventDefault();
-    if (bloqueado) return;
+    if (bloqueado) {
+      const ahora = Date.now();
+      if (ahora - ultimoGolpe > OLVIDA_INSISTENCIA) insistencias = 0;
+      if (ahora - ultimoGolpe >= SEPARACION_MINIMA) {
+        ultimoGolpe = ahora;
+        if (++insistencias >= GOLPES_PARA_SOLTAR) soltarFreno();
+      }
+      return;
+    }
+    insistencias = 0;   // un golpe que avanza limpio no es insistir
     const direccion = e.deltaY > 0 ? 1 : -1;
     const caja = bloques[indice].getBoundingClientRect();
     const pantalla = window.innerHeight;
@@ -1047,11 +1112,21 @@
   }, { passive: false });
 
   window.addEventListener("keydown", e => {
-    if (enMovil() || menosMovimiento) return;
+    if (enMovil() || menosMovimiento || suelto) return;
     const escribiendo = /^(INPUT|TEXTAREA)$/.test(document.activeElement.tagName);
     if (escribiendo) return;
     if (["ArrowDown", "PageDown"].includes(e.key)) { e.preventDefault(); irA(indice + 1); }
     if (["ArrowUp", "PageUp"].includes(e.key)) { e.preventDefault(); irA(indice - 1); }
+  });
+
+  /* el logo, arriba del todo. Es un enlace de verdad (funciona sin
+     JavaScript y con el clic del medio abre pestaña), pero cuando el JS
+     va lo llevamos por irA para que el carrusel no se quede creyendo
+     que sigue en la sección de antes. */
+  document.getElementById("ir-arriba").addEventListener("click", e => {
+    if (enMovil() || menosMovimiento || suelto) return;   // scroll normal
+    e.preventDefault();
+    irA(0);
   });
 
   /* ---------- puntos de progreso ---------- */
