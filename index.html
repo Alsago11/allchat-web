@@ -51,6 +51,11 @@
 <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192.png">
 <link rel="icon" type="image/png" sizes="512x512" href="/favicon-512.png">
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<!-- Marca de que el JavaScript va: las entradas animadas empiezan
+     invisibles, y sin esta clase alguien con el JS caído se quedaría
+     mirando una web en blanco. Va aquí arriba a propósito, antes de
+     pintar nada. -->
+<script>document.documentElement.className += " js";</script>
 <style>
   :root {
     --fondo: #0a0d14;
@@ -62,9 +67,19 @@
     --texto: #e8edf4;
     --atenuado: #8b98a5;
     --borde: #232c3b;
+    --alto-nav: 56px;
   }
   * { margin: 0; padding: 0; box-sizing: border-box; }
-  html { scroll-behavior: smooth; }
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: var(--alto-nav);
+    /* EL CARRUSEL (elegido por Álvaro 28/07): cada punto ocupa su
+       pantalla y la rueda avanza de uno en uno. El imán va en
+       "proximity" y no en "mandatory" a propósito: con mandatory, una
+       sección más alta que la pantalla se vuelve inalcanzable por
+       abajo (el navegador te devuelve al principio). */
+    scroll-snap-type: y proximity;
+  }
   body {
     background:
       radial-gradient(ellipse 900px 560px at 32% 240px, rgba(75,225,195,.13), transparent 70%),
@@ -88,8 +103,43 @@
   nav .enlaces a { color: var(--atenuado); text-decoration: none; white-space: nowrap; }
   nav .enlaces a:hover { color: var(--teal); }
 
+  /* ---------- el ritmo: una sección, una pantalla ---------- */
+  .bloque {
+    min-height: calc(100vh - var(--alto-nav));
+    min-height: calc(100dvh - var(--alto-nav));
+    padding: 68px 0; display: flex; align-items: center;
+    scroll-snap-align: start;
+  }
+  .bloque > .contenedor { width: 100%; }
+  /* "Sobre nosotros" es el que más texto lleva y el último junta
+     formulario, candado y pie: medidos los dos, con el aire normal se
+     salían de la pantalla en una ventana de 700 de alto. */
+  .bloque.compacto { padding: 32px 0; }
+  .bloque:last-of-type { padding: 42px 0; }
+
+  /* entradas animadas: cada punto entra al llegar */
+  .js .anima {
+    opacity: 0; transform: translateY(30px);
+    transition: opacity .7s cubic-bezier(.2,.7,.2,1), transform .7s cubic-bezier(.2,.7,.2,1);
+  }
+  .bloque.visto .anima { opacity: 1; transform: translateY(0); }
+  .bloque.visto .anima.tarde { transition-delay: .14s; }
+  .bloque.visto .anima.mas-tarde { transition-delay: .26s; }
+
+  /* ---------- puntos de progreso ---------- */
+  .puntos-progreso {
+    position: fixed; right: 18px; top: 50%; transform: translateY(-50%);
+    z-index: 60; display: flex; flex-direction: column; gap: 10px;
+  }
+  .puntos-progreso button {
+    width: 9px; height: 9px; padding: 0; border-radius: 50%; cursor: pointer;
+    border: 1px solid #3a465b; background: transparent; transition: all .25s;
+  }
+  .puntos-progreso button:hover { border-color: var(--teal); }
+  .puntos-progreso button.activo { background: var(--teal); border-color: var(--teal); transform: scale(1.35); }
+
   /* ---------- héroe ---------- */
-  .heroe { text-align: center; padding: 80px 0 64px; }
+  .heroe { text-align: center; width: 100%; }
   .lockup {
     display: flex; align-items: center; justify-content: center;
     gap: 34px; margin-bottom: 40px; flex-wrap: wrap;
@@ -129,19 +179,23 @@
     margin: 22px auto 0; max-width: 620px; color: var(--atenuado); font-size: 1.18rem;
   }
   .heroe p.sub strong { color: var(--texto); }
+  .botones-heroe { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; margin-top: 32px; }
   .cta {
-    display: inline-block; margin-top: 32px; background: var(--teal); color: #0c1017;
+    display: inline-block; background: var(--teal); color: #0c1017;
     font-weight: 700; border-radius: 12px; padding: 14px 30px; font-size: 1.05rem;
     text-decoration: none; box-shadow: 0 10px 34px rgba(75,225,195,.3);
+    transition: transform .18s ease, box-shadow .25s ease, filter .18s ease;
   }
-  .cta:hover { filter: brightness(1.08); }
+  .cta:hover { filter: brightness(1.08); transform: translateY(-3px); box-shadow: 0 16px 42px rgba(75,225,195,.4); }
+  .cta.secundaria {
+    background: transparent; color: var(--teal);
+    border: 1px solid rgba(75,225,195,.55); box-shadow: none;
+  }
+  .cta.secundaria:hover { background: rgba(75,225,195,.1); filter: none; }
 
   /* ---------- secciones de demo ---------- */
-  .demo-seccion {
-    display: flex; gap: 48px; align-items: center; padding: 68px 0;
-    border-top: 1px solid var(--borde); flex-wrap: wrap;
-  }
-  .demo-seccion:nth-of-type(even) { flex-direction: row-reverse; }
+  .demo-seccion { display: flex; gap: 48px; align-items: center; flex-wrap: wrap; }
+  .demo-seccion.invertida { flex-direction: row-reverse; }
   .demo-texto { flex: 1 1 320px; }
   .demo-texto .num {
     color: var(--violeta); font-family: Consolas, monospace; font-size: .9rem;
@@ -157,6 +211,79 @@
     font-size: .85rem; color: var(--teal); background: var(--panel);
   }
   .demo-visual { flex: 1 1 420px; min-width: 0; }
+
+  /* ================================================================
+     EL MOVIMIENTO: las tarjetas y los textos siguen al ratón.
+     Lo de dentro viaja MÁS que el fondo y con un pelín de retraso: eso
+     es lo que hace que la frase parezca que flota de verdad. Se hace
+     en 2D a propósito, porque las ventanas llevan overflow:hidden y
+     eso aplana el 3D de verdad. El JS solo escribe --px y --py en la
+     pieza de fuera; los de dentro las heredan.
+     ================================================================ */
+  .baila { position: relative; }
+  .js .baila { transition: transform .16s ease-out, box-shadow .3s ease; will-change: transform; }
+  .js .baila.tocada { box-shadow: 0 34px 80px rgba(0,0,0,.6); }
+  .js .baila-texto.tocada { box-shadow: none; }
+
+  .js .tarjeta-flotante {
+    transform: translate(calc(var(--px, 0px) * 1.8), calc(8px + var(--py, 0px) * 1.8));
+    transition: opacity .35s ease, transform .24s ease-out;
+  }
+  .js .tarjeta-flotante.visible {
+    transform: translate(calc(var(--px, 0px) * 1.8), calc(var(--py, 0px) * 1.8));
+  }
+  .js .muestra-tarjeta {
+    transform: translate(calc(var(--px, 0px) * 2), calc(var(--py, 0px) * 2));
+    transition: background .5s ease, border-radius .5s ease, padding .5s ease,
+                color .5s ease, transform .24s ease-out;
+  }
+  .js .chips-caret {
+    transform: translate(calc(var(--px, 0px) * 1.5), calc(8px + var(--py, 0px) * 1.5));
+    transition: opacity .3s ease, transform .24s ease-out;
+  }
+  .js .chips-caret.visible {
+    transform: translate(calc(var(--px, 0px) * 1.5), calc(var(--py, 0px) * 1.5));
+  }
+  .js .pastilla-aprende {
+    transform: translate(calc(var(--px, 0px) * 1.6), calc(4px + var(--py, 0px) * 1.6));
+    transition: opacity .25s ease, transform .24s ease-out;
+  }
+  .js .pastilla-aprende.visible {
+    transform: translate(calc(var(--px, 0px) * 1.6), calc(var(--py, 0px) * 1.6));
+  }
+  .js .teclas-flotantes, .js .sello-aprendido, .js .chip-estado {
+    transform: translate(calc(var(--px, 0px) * 1.3), calc(var(--py, 0px) * 1.3));
+    transition: opacity .3s ease, transform .24s ease-out;
+  }
+  .js .globo-trad {
+    transform: translateY(-100%) translate(calc(var(--px, 0px) * 1.9), calc(var(--py, 0px) * 1.9));
+    transition: opacity .35s ease, transform .24s ease-out;
+  }
+  .js .burbuja.tuya, .js .tarjeta-taller .cifra {
+    transform: translate(calc(var(--px, 0px) * 1.2), calc(var(--py, 0px) * 1.2));
+    transition: transform .26s ease-out;
+  }
+  /* la columna de texto también se mueve, y por capas */
+  .js .baila-texto .num {
+    display: inline-block;
+    transform: translate(calc(var(--px, 0px) * .55), calc(var(--py, 0px) * .55));
+    transition: transform .26s ease-out;
+  }
+  .js .baila-texto h2 {
+    transform: translate(calc(var(--px, 0px) * 1.2), calc(var(--py, 0px) * 1.2));
+    transition: transform .24s ease-out;
+  }
+  .js .baila-texto p {
+    transform: translate(calc(var(--px, 0px) * .85), calc(var(--py, 0px) * .85));
+    transition: transform .26s ease-out;
+  }
+  .js .baila-texto .atajo, .js .baila-texto .chip-firma {
+    transform: translate(calc(var(--px, 0px) * 1.6), calc(var(--py, 0px) * 1.6));
+    transition: transform .22s ease-out, border-color .2s ease, box-shadow .2s ease;
+  }
+  .js .baila-texto:hover .atajo {
+    border-color: rgba(75,225,195,.5); box-shadow: 0 8px 22px rgba(75,225,195,.14);
+  }
 
   /* ---------- ventanas falsas ---------- */
   .ventana {
@@ -186,7 +313,6 @@
     vertical-align: text-bottom; animation: parpadeo 1s steps(1) infinite;
   }
   @keyframes parpadeo { 50% { opacity: 0; } }
-  /* 05: la pastilla del susurro con lo aprendido de ti */
   .pastilla-aprende {
     position: absolute; bottom: 64px; left: 16px;
     background: #1e1f24; border: 1px solid #3a3d46; border-radius: 999px;
@@ -344,17 +470,40 @@
   }
   .globo-trad.visible { opacity: 1; }
 
-  /* ---------- privacidad ---------- */
-  .privacidad {
-    margin-top: 8px; background: var(--panel);
-    border: 1px solid var(--borde); border-left: 4px solid var(--teal);
-    border-radius: 14px; padding: 26px 28px;
+  /* ---------- sobre nosotros ---------- */
+  .sobre { width: 100%; display: flex; gap: 48px; align-items: center; flex-wrap: wrap; }
+  .sobre .lado-texto { flex: 1 1 380px; }
+  .sobre .num { color: var(--violeta); font-family: Consolas, monospace; font-size: .9rem; letter-spacing: .1em; }
+  .sobre h2 { font-size: 1.9rem; margin: 8px 0 14px; letter-spacing: -.01em; }
+  .sobre h2 .tealino { color: var(--teal); }
+  .sobre p { color: var(--atenuado); font-size: 1.02rem; }
+  .sobre p + p { margin-top: 12px; }
+  .sobre .firma { margin-top: 18px; display: flex; gap: 10px; flex-wrap: wrap; }
+  .sobre .chip-firma {
+    font-size: .8rem; color: var(--teal); background: var(--panel);
+    border: 1px solid var(--borde); border-radius: 999px; padding: 5px 14px;
   }
-  .privacidad h2 { font-size: 1.25rem; margin-bottom: 6px; }
-  .privacidad p { color: var(--atenuado); font-size: .95rem; }
+  .sobre .lado-visual { flex: 1 1 340px; min-width: 0; }
+  .tarjeta-taller {
+    background: var(--panel); border: 1px solid var(--borde); border-radius: 16px;
+    padding: 24px; box-shadow: 0 22px 60px rgba(0,0,0,.45);
+  }
+  .tarjeta-taller .fila-dato { display: flex; align-items: baseline; gap: 14px; padding: 12px 0; border-bottom: 1px solid var(--borde); }
+  .tarjeta-taller .fila-dato:last-child { border-bottom: none; }
+  .tarjeta-taller .cifra { font-size: 1.8rem; font-weight: 700; color: var(--teal); font-variant-numeric: tabular-nums; min-width: 92px; }
+  .tarjeta-taller .que { color: var(--atenuado); font-size: .93rem; }
+
+  /* ---------- privacidad, pegada al formulario ---------- */
+  .privacidad {
+    margin-top: 34px; background: var(--panel);
+    border: 1px solid var(--borde); border-left: 4px solid var(--teal);
+    border-radius: 14px; padding: 18px 24px;
+  }
+  .privacidad h2 { font-size: 1.08rem; margin-bottom: 6px; }
+  .privacidad p { color: var(--atenuado); font-size: .89rem; }
 
   /* ---------- cierre / lista de espera ---------- */
-  .cierre { text-align: center; padding: 76px 0 30px; }
+  .cierre { text-align: center; }
   .cierre h2 { font-size: 2rem; letter-spacing: -.01em; }
   .cierre h2 .grad {
     background: linear-gradient(90deg, var(--teal), var(--violeta));
@@ -380,13 +529,41 @@
 
   /* ---------- pie ---------- */
   footer {
-    margin-top: 64px; padding: 26px 0 34px;
+    margin-top: 30px; padding: 22px 0 0;
     border-top: 1px solid var(--borde);
     color: var(--atenuado); font-size: .85rem;
     display: flex; flex-wrap: wrap; gap: 8px 24px;
     align-items: center; justify-content: space-between;
   }
   footer a { color: var(--teal); text-decoration: none; }
+
+  /* ---------- móvil: aquí NO se secuestra nada ---------- */
+  @media (max-width: 760px) {
+    /* con las dos columnas una encima de otra, obligar a que cada punto
+       mida una pantalla dejaría secciones cortadas: en el móvil el
+       ritmo se hace con aire y con las entradas animadas, y el dedo
+       manda siempre */
+    .bloque { min-height: 78vh; padding: 56px 0; }
+    .bloque.compacto, .bloque:last-of-type { padding: 48px 0; }
+    html { scroll-snap-type: none; }
+    .puntos-progreso { display: none; }
+    /* los enlaces en UNA línea que se arrastra con el dedo: envueltos
+       ocupaban cuatro líneas de barra pegajosa y se comían la pantalla */
+    nav .contenedor { gap: 14px; }
+    nav .enlaces {
+      flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none;
+      -webkit-overflow-scrolling: touch; justify-content: flex-start;
+    }
+    nav .enlaces::-webkit-scrollbar { display: none; }
+  }
+
+  /* quien pide menos animación, menos animación */
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; scroll-snap-type: none; }
+    .js .anima { opacity: 1; transform: none; transition: none; }
+    .js .baila { transform: none !important; transition: none; }
+    .logo-flota { animation: none; }
+  }
 </style>
 </head>
 <body>
@@ -411,266 +588,364 @@
       <a href="#correccion">Corrección</a>
       <a href="#prediccion">Predicción</a>
       <a href="#aprende">Aprende de ti</a>
-      <a href="#estilos">A tu gusto</a>
+      <a href="#nosotros">Sobre nosotros</a>
       <a href="#contacto">Contacto</a>
     </div>
   </div>
 </nav>
 
-<div class="contenedor">
-  <section class="heroe">
-    <div class="lockup">
-      <div class="logo-flota">
-        <svg class="logo-heroe" viewBox="0 0 260 216" aria-label="Logo de AllChat">
-          <path d="M116,158 L210,158 A34,34 0 0 0 244,124 L244,50 A34,34 0 0 0 210,16
-                   L50,16 A34,34 0 0 0 16,50 L16,124 A34,34 0 0 0 50,158 L50,204 Z"
-                fill="none" stroke="#4be1c3" stroke-width="9"
-                stroke-linejoin="round" stroke-linecap="round"/>
-          <text x="130" y="105" text-anchor="middle"
-                font-family="Consolas, 'Courier New', monospace" font-weight="bold"
-                font-size="52" fill="#4be1c3">[ALL]</text>
-        </svg>
-      </div>
-      <div class="lockup-texto">
-        <div class="lockup-nombre"><span class="all">All</span>Chat</div>
-        <div class="lockup-tag">habla con todo el mundo</div>
-      </div>
-    </div>
-    <h1>El idioma <span class="grad">ya no te frena</span>.</h1>
-    <p class="sub">Escribe en tu idioma en Discord, en tu juego o en tu foro
-    favorito. AllChat lo corrige y lo traduce sin que salgas de la ventana.
-    Míralo en acción: <strong>esto es lo que verás en tu pantalla.</strong></p>
-    <a class="cta" href="#frase">Ver cómo funciona ↓</a>
-  </section>
-
-  <section class="demo-seccion" id="frase">
-    <div class="demo-texto">
-      <div class="num">01 · LA ESTRELLA</div>
-      <h2>Escribe. Respira. <span class="tealino">Ya está traducido.</span></h2>
-      <p>Teclea tu frase como te salga y para un segundo y medio. AllChat te la
-      enseña corregida y traducida en una tarjeta flotante. ¿Te gusta?
-      Enter y enviada. ¿No? Sigue escribiendo y desaparece.</p>
-      <span class="atajo">pausa de 1,5 s ⟶ tarjeta ⟶ Enter</span>
-    </div>
-    <div class="demo-visual">
-      <div class="ventana">
-        <div class="titulo"><span class="puntos"><span></span><span></span><span></span></span> # general — tu servidor de Discord</div>
-        <div class="chat" id="chat-frase">
-          <div class="msj"><div class="avatar" style="background:#5865f2">K</div>
-            <div><div class="autor" style="color:#8ab4f8">KimSeo</div>
-            <div class="texto">anyone for ranked? need one more</div></div></div>
+<!-- 0 · PORTADA -->
+<section class="bloque" id="portada">
+  <div class="contenedor">
+    <div class="heroe">
+      <div class="lockup anima">
+        <div class="logo-flota">
+          <svg class="logo-heroe" viewBox="0 0 260 216" aria-label="Logo de AllChat">
+            <path d="M116,158 L210,158 A34,34 0 0 0 244,124 L244,50 A34,34 0 0 0 210,16
+                     L50,16 A34,34 0 0 0 16,50 L16,124 A34,34 0 0 0 50,158 L50,204 Z"
+                  fill="none" stroke="#4be1c3" stroke-width="9"
+                  stroke-linejoin="round" stroke-linecap="round"/>
+            <text x="130" y="105" text-anchor="middle"
+                  font-family="Consolas, 'Courier New', monospace" font-weight="bold"
+                  font-size="52" fill="#4be1c3">[ALL]</text>
+          </svg>
         </div>
-        <div class="zona-entrada">
-          <div class="tarjeta-flotante" id="tarjeta-frase">
-            <div class="resultado" id="tarjeta-texto-frase"></div>
-            <div class="pista">corregido y traducido · Enter para aplicar</div>
-          </div>
-          <div class="entrada"><span id="entrada-frase"></span><span class="cursor"></span></div>
-          <div class="chip-estado" id="chip-frase">pausa de 1,5 s…</div>
+        <div class="lockup-texto">
+          <div class="lockup-nombre"><span class="all">All</span>Chat</div>
+          <div class="lockup-tag">habla con todo el mundo</div>
         </div>
       </div>
-    </div>
-  </section>
-
-  <section class="demo-seccion" id="atajo">
-    <div class="demo-texto">
-      <div class="num">02 · EL ATAJO</div>
-      <h2>¿Frase ya escrita? <span class="tealino">Ctrl+Alt+A.</span></h2>
-      <p>En mitad de la partida no hay tiempo para pausas. Escribe, pulsa el
-      atajo y tu mensaje entero se corrige y se traduce ahí mismo, dentro
-      del chat del juego. Funciona hasta en pantalla completa.</p>
-      <span class="atajo">Ctrl + Alt + A</span>
-    </div>
-    <div class="demo-visual">
-      <div class="ventana-juego">
-        <div class="hud"><span>ALIADOS 12 · 8 ENEMIGOS</span><span>24:31</span></div>
-        <div class="log">
-          <div><span class="all">[ALL]</span> <span class="aliado">Faker2007:</span> gg ez mid diff</div>
-          <div><span class="all">[ALL]</span> <span class="aliado">xXDarkLordXx:</span> report jungle pls</div>
-        </div>
-        <div class="entrada-juego">
-          <div class="teclas-flotantes" id="teclas-atajo">
-            <span class="tecla" id="tecla-ctrl">Ctrl</span><span class="tecla" id="tecla-alt">Alt</span><span class="tecla" id="tecla-a">A</span>
-          </div>
-          <span id="texto-atajo">tranquilos vamos bien aun podemos ganar</span><span class="cursor"></span>
-        </div>
+      <h1 class="anima tarde">El idioma <span class="grad">ya no te frena</span>.</h1>
+      <p class="sub anima mas-tarde">Escribe en tu idioma en Discord, en tu juego o en tu foro
+      favorito. AllChat lo corrige y lo traduce sin que salgas de la ventana.
+      Míralo en acción: <strong>esto es lo que verás en tu pantalla.</strong></p>
+      <div class="botones-heroe anima mas-tarde">
+        <a class="cta" href="#frase">Ver cómo funciona ↓</a>
+        <a class="cta secundaria" href="#probar">¡Apúntate aquí!</a>
       </div>
     </div>
-  </section>
-
-  <section class="demo-seccion" id="correccion">
-    <div class="demo-texto">
-      <div class="num">03 · SIN TRADUCIR</div>
-      <h2>¿Mismo idioma? <span class="tealino">Corrige y ya.</span></h2>
-      <p>El modo de siempre: escribe, para un momento, y tu frase aparece
-      corregida en tu idioma: acentos, mayúsculas y las interrogaciones
-      que faltan (¿cómo no?). Entiende la jerga: tus «jajaja» y tus nicks
-      son sagrados.</p>
-      <span class="atajo">corrección con motor local · sin internet</span>
-    </div>
-    <div class="demo-visual">
-      <div class="ventana-clara">
-        <div class="titulo-clara"><span class="avatar-mini">M</span> Mamá — WhatsApp Web</div>
-        <div class="conversacion" id="conversacion-corr">
-          <div class="burbuja suya">¿Vienes el domingo a comer?</div>
-        </div>
-        <div class="zona-entrada">
-          <div class="tarjeta-flotante" id="tarjeta-corr">
-            <div class="resultado" id="tarjeta-texto-corr"></div>
-            <div class="pista">corregido · Enter para aplicar</div>
-          </div>
-          <div class="entrada"><span id="entrada-corr"></span><span class="cursor"></span></div>
-          <div class="chip-estado" id="chip-corr">pausa de 1,5 s…</div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="demo-seccion" id="prediccion">
-    <div class="demo-texto">
-      <div class="num">04 · MIENTRAS TECLEAS</div>
-      <h2>Ves la palabra <span class="tealino">antes de acabarla.</span></h2>
-      <p>Desde la segunda letra, AllChat te enseña las palabras que encajan,
-      justo donde escribes. Elige la tuya con Tab y sigue: vas más rápido
-      y cada palabra queda escrita correctamente, sin pensar en la
-      ortografía.</p>
-      <p>Y si escribir te cuesta porque vas despacio, con un dedo o
-      las letras se te bailan, AllChat la termina por ti. En casa lo van
-      a querer hasta los que "no son de ordenadores".</p>
-      <span class="atajo">200.000 palabras por idioma · Tab para completar</span>
-    </div>
-    <div class="demo-visual">
-      <div class="ventana">
-        <div class="titulo"><span class="puntos"><span></span><span></span><span></span></span> # equipo — tu servidor de Discord</div>
-        <div class="chat" style="min-height:84px">
-          <div class="msj"><div class="avatar" style="background:#23a559">L</div>
-            <div><div class="autor" style="color:#7fd8a5">Lucas_88</div>
-            <div class="texto">y si vamos todos juntos por mid?</div></div></div>
-        </div>
-        <div class="zona-entrada">
-          <div class="chips-caret" id="chips-pred">
-            <span>estrategia</span><span>estrella</span><span>estrecho</span>
-            <span class="pista-tab">Tab</span>
-          </div>
-          <div class="entrada"><span id="entrada-pred"></span><span class="cursor"></span></div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="demo-seccion" id="aprende">
-    <div class="demo-texto">
-      <div class="num">05 · SE VUELVE TUYO</div>
-      <h2>Cuanto más escribes, <span class="tealino">más te entiende.</span></h2>
-      <p>AllChat aprende de tus frases: tus nombres, tus muletillas, tu
-      forma de hablar. Cada día te las predice antes. <strong>Y todo se
-      queda en tu PC</strong>: lo aprendido vive en un archivito dentro de
-      tu ordenador, jamás en un servidor.</p>
-      <p>Con su interruptor en Ajustes y su botón de borrar para empezar
-      de cero cuando quieras. Tú mandas.</p>
-      <span class="atajo">100% en tu PC · bórralo cuando quieras</span>
-    </div>
-    <div class="demo-visual">
-      <div class="ventana">
-        <div class="titulo"><span class="puntos"><span></span><span></span><span></span></span> # general — tu servidor de Discord</div>
-        <div class="chat" style="min-height:84px">
-          <div class="msj"><div class="avatar" style="background:#e0707a">B</div>
-            <div><div class="autor" style="color:#f0a5ab">Bea</div>
-            <div class="texto">holaaa ya estoy aquí</div></div></div>
-        </div>
-        <div class="zona-entrada">
-          <div class="sello-aprendido" id="sello-aprende">aprendido de ti ✓</div>
-          <div class="pastilla-aprende" id="pastilla-aprende">
-            <span class="palabra">Bea</span>
-            <span class="tab" id="tab-aprende">Tab</span>
-          </div>
-          <div class="entrada"><span id="entrada-aprende"></span><span class="cursor"></span></div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="demo-seccion" id="estilos">
-    <div class="demo-texto">
-      <div class="num">06 · A TU GUSTO</div>
-      <h2>Tus tarjetas, <span class="tealino">tu estilo.</span></h2>
-      <p>Los recuadros flotantes se adaptan a ti: estilo tarjeta completa
-      o modo mínimo discreto, con el color que tú elijas. Que AllChat
-      pegue con tu escritorio, no al revés.</p>
-      <span class="atajo">Ajustes ⟶ Recuadros flotantes</span>
-    </div>
-    <div class="demo-visual">
-      <div class="escenario-estilos">
-        <div class="muestra-tarjeta estilo-tarjeta" id="muestra-tarjeta">
-          <div class="titulin">ALLCHAT · CORREGIDO</div>
-          <div class="frase">Hi! Anyone up for ranked?</div>
-        </div>
-        <div class="etiqueta-estilo" id="etiqueta-estilo">estilo: tarjeta</div>
-        <div class="paleta" id="paleta">
-          <span style="background:#4be1c3" class="activa"></span>
-          <span style="background:#a78bfa"></span>
-          <span style="background:#f5a35c"></span>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="demo-seccion" id="leer">
-    <div class="demo-texto">
-      <div class="num">07 · EN LA OTRA DIRECCIÓN</div>
-      <h2>¿Te escriben raro? <span class="tealino">Léelo en tu idioma.</span></h2>
-      <p>Selecciona cualquier texto, o recorta la zona de pantalla si el juego
-      no te deja seleccionar, y AllChat te lo traduce al instante en un
-      recuadro flotante. Coreano, ruso, japonés, da igual.</p>
-      <span class="atajo">seleccionar ⟶ traducción al vuelo</span>
-    </div>
-    <div class="demo-visual">
-      <div class="ventana">
-        <div class="titulo"><span class="puntos"><span></span><span></span><span></span></span> # equipo — chat internacional</div>
-        <div class="chat" style="min-height:100px">
-          <div class="msj"><div class="avatar" style="background:#e0707a">P</div>
-            <div><div class="autor" style="color:#f0a5ab">Park_MinSu</div>
-            <div class="texto" style="position:relative">
-              <span id="texto-sel">우리 팀 정글 어디 있어?</span>
-              <span class="globo-trad" id="globo-leer">¿Dónde está nuestro jungla?</span>
-            </div></div></div>
-          <div class="msj"><div class="avatar" style="background:#5865f2">K</div>
-            <div><div class="autor" style="color:#8ab4f8">KimSeo</div>
-            <div class="texto">ㅋㅋㅋㅋㅋ</div></div></div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <div class="privacidad">
-    <h2>🔒 Tu texto no sale de tu PC</h2>
-    <p>La corrección funciona con un motor local instalado en tu ordenador:
-    lo que escribes no viaja a ningún servidor para corregirse. Y lo que
-    AllChat aprende de ti también se queda: vive en un archivo de tu PC
-    que puedes borrar cuando quieras. Solo la traducción usa internet,
-    como cualquier traductor.</p>
   </div>
+</section>
 
-  <section class="cierre" id="probar">
-    <h2>Habla con <span class="grad">todo el mundo</span>.</h2>
-    <p class="intro">Beta gratuita para Windows. Apúntate con tu nick y te
-    avisamos cuando haya una plaza disponible.</p>
-    <div class="lista">
-      <form id="form-espera">
-        <input id="nombre" type="text" placeholder="Tu nick (o tu nombre)" required minlength="2" maxlength="80">
-        <input id="correo" type="email" placeholder="tu@correo.com" required>
-        <button class="boton" id="boton-espera" type="submit">Quiero probarlo</button>
-      </form>
-      <p class="nota" id="nota-espera">Sin spam: recibirás un único aviso cuando haya una plaza disponible.</p>
+<!-- 1 · FRASE TRADUCTORA -->
+<section class="bloque" id="frase">
+  <div class="contenedor">
+    <div class="demo-seccion">
+      <div class="demo-texto anima">
+        <div class="num">01 · LA ESTRELLA</div>
+        <h2>Escribe. Respira. <span class="tealino">Ya está traducido.</span></h2>
+        <p>Teclea tu frase como te salga y para un segundo y medio. AllChat te la
+        enseña corregida y traducida en una tarjeta flotante. ¿Te gusta?
+        Enter y enviada. ¿No? Sigue escribiendo y desaparece.</p>
+        <span class="atajo">pausa de 1,5 s ⟶ tarjeta ⟶ Enter</span>
+      </div>
+      <div class="demo-visual anima tarde">
+        <div class="ventana">
+          <div class="titulo"><span class="puntos"><span></span><span></span><span></span></span> # general · tu servidor de Discord</div>
+          <div class="chat" id="chat-frase">
+            <div class="msj"><div class="avatar" style="background:#5865f2">K</div>
+              <div><div class="autor" style="color:#8ab4f8">KimSeo</div>
+              <div class="texto">anyone for ranked? need one more</div></div></div>
+          </div>
+          <div class="zona-entrada">
+            <div class="tarjeta-flotante" id="tarjeta-frase">
+              <div class="resultado" id="tarjeta-texto-frase"></div>
+              <div class="pista">corregido y traducido · Enter para aplicar</div>
+            </div>
+            <div class="entrada"><span id="entrada-frase"></span><span class="cursor"></span></div>
+            <div class="chip-estado" id="chip-frase">pausa de 1,5 s…</div>
+          </div>
+        </div>
+      </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <footer id="contacto">
-    <span>© 2026 AllChat · beta privada</span>
-    <span>¿Dudas o ideas? <a href="mailto:hola@allchat.es">hola@allchat.es</a></span>
-    <span>Hecho en España para gamers de todo el mundo 🎮</span>
-  </footer>
-</div>
+<!-- 2 · CTRL+ALT+A -->
+<section class="bloque" id="atajo">
+  <div class="contenedor">
+    <div class="demo-seccion invertida">
+      <div class="demo-texto anima">
+        <div class="num">02 · EL ATAJO</div>
+        <h2>¿Frase ya escrita? <span class="tealino">Ctrl+Alt+A.</span></h2>
+        <p>En mitad de la partida no hay tiempo para pausas. Escribe, pulsa el
+        atajo y tu mensaje entero se corrige y se traduce ahí mismo, dentro
+        del chat del juego. Funciona hasta en pantalla completa.</p>
+        <span class="atajo">Ctrl + Alt + A</span>
+      </div>
+      <div class="demo-visual anima tarde">
+        <div class="ventana-juego">
+          <div class="hud"><span>ALIADOS 12 · 8 ENEMIGOS</span><span>24:31</span></div>
+          <div class="log">
+            <div><span class="all">[ALL]</span> <span class="aliado">Faker2007:</span> gg ez mid diff</div>
+            <div><span class="all">[ALL]</span> <span class="aliado">xXDarkLordXx:</span> report jungle pls</div>
+          </div>
+          <div class="entrada-juego">
+            <div class="teclas-flotantes" id="teclas-atajo">
+              <span class="tecla" id="tecla-ctrl">Ctrl</span><span class="tecla" id="tecla-alt">Alt</span><span class="tecla" id="tecla-a">A</span>
+            </div>
+            <span id="texto-atajo">tranquilos vamos bien aun podemos ganar</span><span class="cursor"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 3 · CORRECCIÓN -->
+<section class="bloque" id="correccion">
+  <div class="contenedor">
+    <div class="demo-seccion">
+      <div class="demo-texto anima">
+        <div class="num">03 · SIN TRADUCIR</div>
+        <h2>¿Mismo idioma? <span class="tealino">Corrige y ya.</span></h2>
+        <p>El modo de siempre: escribe, para un momento, y tu frase aparece
+        corregida en tu idioma: acentos, mayúsculas y las interrogaciones
+        que faltan (¿cómo no?). Entiende la jerga: tus «jajaja» y tus nicks
+        son sagrados.</p>
+        <span class="atajo">corrección con motor local · sin internet</span>
+      </div>
+      <div class="demo-visual anima tarde">
+        <div class="ventana-clara">
+          <div class="titulo-clara"><span class="avatar-mini">M</span> Mamá · WhatsApp Web</div>
+          <div class="conversacion" id="conversacion-corr">
+            <div class="burbuja suya">¿Vienes el domingo a comer?</div>
+          </div>
+          <div class="zona-entrada">
+            <div class="tarjeta-flotante" id="tarjeta-corr">
+              <div class="resultado" id="tarjeta-texto-corr"></div>
+              <div class="pista">corregido · Enter para aplicar</div>
+            </div>
+            <div class="entrada"><span id="entrada-corr"></span><span class="cursor"></span></div>
+            <div class="chip-estado" id="chip-corr">pausa de 1,5 s…</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 4 · PREDICCIÓN -->
+<section class="bloque" id="prediccion">
+  <div class="contenedor">
+    <div class="demo-seccion invertida">
+      <div class="demo-texto anima">
+        <div class="num">04 · MIENTRAS TECLEAS</div>
+        <h2>Ves la palabra <span class="tealino">antes de acabarla.</span></h2>
+        <p>Desde la segunda letra, AllChat te enseña las palabras que encajan,
+        justo donde escribes. Elige la tuya con Tab y sigue: vas más rápido
+        y cada palabra queda escrita correctamente, sin pensar en la
+        ortografía.</p>
+        <p>Y si escribir te cuesta porque vas despacio, con un dedo o
+        las letras se te bailan, AllChat la termina por ti. En casa lo van
+        a querer hasta los que "no son de ordenadores".</p>
+        <span class="atajo">200.000 palabras por idioma · Tab para completar</span>
+      </div>
+      <div class="demo-visual anima tarde">
+        <div class="ventana">
+          <div class="titulo"><span class="puntos"><span></span><span></span><span></span></span> # equipo · tu servidor de Discord</div>
+          <div class="chat" style="min-height:84px">
+            <div class="msj"><div class="avatar" style="background:#23a559">L</div>
+              <div><div class="autor" style="color:#7fd8a5">Lucas_88</div>
+              <div class="texto">y si vamos todos juntos por mid?</div></div></div>
+          </div>
+          <div class="zona-entrada">
+            <div class="chips-caret" id="chips-pred">
+              <span>estrategia</span><span>estrella</span><span>estrecho</span>
+              <span class="pista-tab">Tab</span>
+            </div>
+            <div class="entrada"><span id="entrada-pred"></span><span class="cursor"></span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 5 · APRENDE DE TI -->
+<section class="bloque" id="aprende">
+  <div class="contenedor">
+    <div class="demo-seccion">
+      <div class="demo-texto anima">
+        <div class="num">05 · SE VUELVE TUYO</div>
+        <h2>Cuanto más escribes, <span class="tealino">más te entiende.</span></h2>
+        <p>AllChat aprende de tus frases: tus nombres, tus muletillas, tu
+        forma de hablar. Cada día te las predice antes. <strong>Y todo se
+        queda en tu PC</strong>: lo aprendido vive en un archivito dentro de
+        tu ordenador, jamás en un servidor.</p>
+        <p>Con su interruptor en Ajustes y su botón de borrar para empezar
+        de cero cuando quieras. Tú mandas.</p>
+        <span class="atajo">100% en tu PC · bórralo cuando quieras</span>
+      </div>
+      <div class="demo-visual anima tarde">
+        <div class="ventana">
+          <div class="titulo"><span class="puntos"><span></span><span></span><span></span></span> # general · tu servidor de Discord</div>
+          <div class="chat" style="min-height:84px">
+            <div class="msj"><div class="avatar" style="background:#e0707a">B</div>
+              <div><div class="autor" style="color:#f0a5ab">Bea</div>
+              <div class="texto">holaaa ya estoy aquí</div></div></div>
+          </div>
+          <div class="zona-entrada">
+            <div class="sello-aprendido" id="sello-aprende">aprendido de ti ✓</div>
+            <div class="pastilla-aprende" id="pastilla-aprende">
+              <span class="palabra">Bea</span>
+              <span class="tab" id="tab-aprende">Tab</span>
+            </div>
+            <div class="entrada"><span id="entrada-aprende"></span><span class="cursor"></span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 6 · A TU GUSTO -->
+<section class="bloque" id="estilos">
+  <div class="contenedor">
+    <div class="demo-seccion invertida">
+      <div class="demo-texto anima">
+        <div class="num">06 · A TU GUSTO</div>
+        <h2>Tus tarjetas, <span class="tealino">tu estilo.</span></h2>
+        <p>Los recuadros flotantes se adaptan a ti: estilo tarjeta completa
+        o modo mínimo discreto, con el color que tú elijas. Que AllChat
+        pegue con tu escritorio, no al revés.</p>
+        <span class="atajo">Ajustes ⟶ Recuadros flotantes</span>
+      </div>
+      <div class="demo-visual anima tarde">
+        <div class="escenario-estilos">
+          <div class="muestra-tarjeta estilo-tarjeta" id="muestra-tarjeta">
+            <div class="titulin">ALLCHAT · CORREGIDO</div>
+            <div class="frase">Hi! Anyone up for ranked?</div>
+          </div>
+          <div class="etiqueta-estilo" id="etiqueta-estilo">estilo: tarjeta</div>
+          <div class="paleta" id="paleta">
+            <span style="background:#4be1c3" class="activa"></span>
+            <span style="background:#a78bfa"></span>
+            <span style="background:#f5a35c"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 7 · LEER -->
+<section class="bloque" id="leer">
+  <div class="contenedor">
+    <div class="demo-seccion">
+      <div class="demo-texto anima">
+        <div class="num">07 · EN LA OTRA DIRECCIÓN</div>
+        <h2>¿Te escriben raro? <span class="tealino">Léelo en tu idioma.</span></h2>
+        <p>Selecciona cualquier texto, o recorta la zona de pantalla si el juego
+        no te deja seleccionar, y AllChat te lo traduce al instante en un
+        recuadro flotante. Coreano, ruso, japonés, da igual.</p>
+        <span class="atajo">seleccionar ⟶ traducción al vuelo</span>
+      </div>
+      <div class="demo-visual anima tarde">
+        <div class="ventana">
+          <div class="titulo"><span class="puntos"><span></span><span></span><span></span></span> # equipo · chat internacional</div>
+          <div class="chat" style="min-height:100px">
+            <div class="msj"><div class="avatar" style="background:#e0707a">P</div>
+              <div><div class="autor" style="color:#f0a5ab">Park_MinSu</div>
+              <div class="texto" style="position:relative">
+                <span id="texto-sel">우리 팀 정글 어디 있어?</span>
+                <span class="globo-trad" id="globo-leer">¿Dónde está nuestro jungla?</span>
+              </div></div></div>
+            <div class="msj"><div class="avatar" style="background:#5865f2">K</div>
+              <div><div class="autor" style="color:#8ab4f8">KimSeo</div>
+              <div class="texto">ㅋㅋㅋㅋㅋ</div></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 8 · SOBRE NOSOTROS -->
+<section class="bloque compacto" id="nosotros">
+  <div class="contenedor">
+    <div class="sobre">
+      <div class="lado-texto anima">
+        <div class="num">08 · SOBRE NOSOTROS</div>
+        <h2>Detrás de AllChat <span class="tealino">hay una persona.</span></h2>
+        <p>AllChat no lo hace una empresa ni un equipo. Lo hace una
+        persona, en España, a ratos y con mucha cabezonería.</p>
+        <p>Empezó por algo muy tonto y muy real: juegas, hablas, escribes
+        con prisa, y media conversación se te queda dentro. Porque no te
+        sale la frase en el idioma del otro, o porque la escribiste
+        corriendo y prefieres borrarla antes que enviarla.</p>
+        <p>La idea no fue hacer otra app más a la que ir a copiar y pegar,
+        sino meter la ayuda dentro de la que ya tienes delante: tu
+        Discord, tu juego, tu navegador. Por eso AllChat vive flotando
+        encima de todo y no te pide que cambies de ventana.</p>
+        <p>Si algo no te cuadra o se te ocurre algo mejor, escribe. Lo lee
+        la misma persona que lo programa, y así es como han salido la
+        mitad de las cosas que acabas de ver.</p>
+        <div class="firma">
+          <span class="chip-firma">Hecho en España</span>
+          <span class="chip-firma">Beta privada</span>
+          <span class="chip-firma">Tu texto no sale de tu PC</span>
+        </div>
+      </div>
+      <div class="lado-visual anima tarde">
+        <div class="tarjeta-taller baila">
+          <div class="fila-dato">
+            <div class="cifra" data-hasta="1">1</div>
+            <div class="que">persona construyéndolo, a diario</div>
+          </div>
+          <div class="fila-dato">
+            <div class="cifra" data-hasta="9">9</div>
+            <div class="que">idiomas que puedes traducir y leer</div>
+          </div>
+          <div class="fila-dato">
+            <div class="cifra" data-hasta="6">6</div>
+            <div class="que">idiomas que corrige sin pedirle nada a internet</div>
+          </div>
+          <div class="fila-dato">
+            <div class="cifra" data-hasta="0">0</div>
+            <div class="que">frases tuyas guardadas en ningún servidor</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 9 · APÚNTATE + EL CANDADO + PIE -->
+<section class="bloque" id="probar">
+  <div class="contenedor">
+    <div style="width:100%">
+      <div class="cierre anima">
+        <h2>Habla con <span class="grad">todo el mundo</span>.</h2>
+        <p class="intro">Beta gratuita para Windows. Apúntate con tu nick y te
+        avisamos cuando haya una plaza disponible.</p>
+        <div class="lista">
+          <form id="form-espera">
+            <input id="nombre" type="text" placeholder="Tu nick (o tu nombre)" required minlength="2" maxlength="80">
+            <input id="correo" type="email" placeholder="tu@correo.com" required>
+            <button class="boton" id="boton-espera" type="submit">Quiero probarlo</button>
+          </form>
+          <p class="nota" id="nota-espera">Sin spam: recibirás un único aviso cuando haya una plaza disponible.</p>
+        </div>
+      </div>
+      <div class="privacidad anima tarde">
+        <h2>🔒 Tu texto no sale de tu PC</h2>
+        <p>La corrección funciona con un motor local instalado en tu ordenador:
+        lo que escribes no viaja a ningún servidor para corregirse. Y lo que
+        AllChat aprende de ti también se queda: vive en un archivo de tu PC
+        que puedes borrar cuando quieras. Solo la traducción usa internet,
+        como cualquier traductor.</p>
+      </div>
+      <footer id="contacto" class="anima tarde">
+        <span>© 2026 AllChat · beta privada</span>
+        <span>¿Dudas o ideas? <a href="mailto:hola@allchat.es">hola@allchat.es</a></span>
+        <span>Hecho en España para gamers de todo el mundo 🎮</span>
+      </footer>
+    </div>
+  </div>
+</section>
+
+<div class="puntos-progreso" id="puntos-progreso" aria-hidden="true"></div>
 
 <script>
   /* ---------- lista de espera (real) ---------- */
@@ -707,6 +982,152 @@
       nota.textContent = "Sin conexión con el servidor. Prueba en un momento.";
     }
   });
+
+  /* ================================================================
+     EL CARRUSEL: la rueda avanza de sección en sección
+     ================================================================ */
+  const bloques = [...document.querySelectorAll(".bloque")];
+  const nombresBloque = ["Portada", "01 Frase traductora", "02 Ctrl+Alt+A",
+    "03 Corrección", "04 Predicción", "05 Aprende de ti", "06 A tu gusto",
+    "07 Leer", "08 Sobre nosotros", "Apúntate"];
+  const enMovil = () => window.matchMedia("(max-width: 760px)").matches;
+  const menosMovimiento = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  let indice = 0;
+  let bloqueado = false;
+
+  function medirNav() {
+    const alto = document.querySelector("nav").getBoundingClientRect().height;
+    document.documentElement.style.setProperty("--alto-nav", alto + "px");
+  }
+  medirNav();
+  window.addEventListener("resize", medirNav);
+  // el ResizeObserver es el que de verdad cubre todos los casos: la
+  // barra crece a dos líneas cuando la ventana es estrecha, y entonces
+  // el alto de cada sección tiene que recalcularse
+  if (window.ResizeObserver) new ResizeObserver(medirNav).observe(document.querySelector("nav"));
+
+  function irA(i) {
+    i = Math.max(0, Math.min(bloques.length - 1, i));
+    indice = i;
+    bloqueado = true;
+    bloques[i].scrollIntoView({ behavior: menosMovimiento ? "auto" : "smooth", block: "start" });
+    setTimeout(() => { bloqueado = false; }, 900);
+    marcarPunto();
+  }
+
+  window.addEventListener("wheel", e => {
+    // en el móvil manda el dedo, siempre; y con animaciones reducidas,
+    // el scroll de toda la vida
+    if (enMovil() || menosMovimiento || e.ctrlKey) return;
+    e.preventDefault();
+    if (bloqueado) return;
+    const direccion = e.deltaY > 0 ? 1 : -1;
+    const caja = bloques[indice].getBoundingClientRect();
+    const pantalla = window.innerHeight;
+    const hueco = pantalla - parseFloat(
+      getComputedStyle(document.documentElement).getPropertyValue("--alto-nav") || 0);
+    // Si una sección no cabe en la pantalla (portátiles bajitos, zoom
+    // del navegador) hay que recorrerla por dentro antes de saltar, o su
+    // parte de abajo no se puede leer nunca.
+    if (caja.height > hueco + 4) {
+      const bajando = direccion > 0 && caja.bottom > pantalla + 4;
+      const subiendo = direccion < 0 && caja.top < -4;
+      if (bajando || subiendo) {
+        window.scrollBy({ top: direccion * (pantalla - 70), behavior: "smooth" });
+        bloqueado = true;
+        setTimeout(() => { bloqueado = false; }, 480);
+        return;
+      }
+    }
+    irA(indice + direccion);
+  }, { passive: false });
+
+  window.addEventListener("keydown", e => {
+    if (enMovil() || menosMovimiento) return;
+    const escribiendo = /^(INPUT|TEXTAREA)$/.test(document.activeElement.tagName);
+    if (escribiendo) return;
+    if (["ArrowDown", "PageDown"].includes(e.key)) { e.preventDefault(); irA(indice + 1); }
+    if (["ArrowUp", "PageUp"].includes(e.key)) { e.preventDefault(); irA(indice - 1); }
+  });
+
+  /* ---------- puntos de progreso ---------- */
+  const zonaPuntos = document.getElementById("puntos-progreso");
+  bloques.forEach((b, i) => {
+    const p = document.createElement("button");
+    p.type = "button";
+    p.title = nombresBloque[i] || ("Sección " + (i + 1));
+    p.setAttribute("aria-label", "Ir a " + p.title);
+    p.addEventListener("click", () => irA(i));
+    zonaPuntos.appendChild(p);
+  });
+  function marcarPunto() {
+    [...zonaPuntos.children].forEach((p, i) => p.classList.toggle("activo", i === indice));
+  }
+
+  /* ---------- entradas animadas y sección actual ---------- */
+  const ojo = new IntersectionObserver(entradas => {
+    entradas.forEach(en => { if (en.isIntersecting) en.target.classList.add("visto"); });
+  }, { threshold: 0.22 });
+  bloques.forEach(b => ojo.observe(b));
+
+  const ojoIndice = new IntersectionObserver(entradas => {
+    entradas.forEach(en => {
+      if (en.isIntersecting && !bloqueado) {
+        indice = bloques.indexOf(en.target);
+        marcarPunto();
+      }
+    });
+  }, { threshold: 0.55 });
+  bloques.forEach(b => ojoIndice.observe(b));
+  marcarPunto();
+
+  /* ================================================================
+     EL MOVIMIENTO CON EL RATÓN
+     ================================================================ */
+  document.querySelectorAll(".demo-visual > *").forEach(x => x.classList.add("baila"));
+  document.querySelectorAll(".demo-texto, .sobre .lado-texto").forEach(x =>
+    x.classList.add("baila", "baila-texto"));
+
+  if (!menosMovimiento) {
+    document.querySelectorAll(".baila").forEach(t => {
+      const esTexto = t.classList.contains("baila-texto");
+      const grados = esTexto ? 3.5 : 7;   // el texto, la mitad: torcido se lee peor
+      const viaje = esTexto ? 11 : 15;
+      t.addEventListener("mousemove", e => {
+        const c = t.getBoundingClientRect();
+        const x = (e.clientX - c.left) / c.width;
+        const y = (e.clientY - c.top) / c.height;
+        t.style.setProperty("--px", ((x - 0.5) * viaje).toFixed(1) + "px");
+        t.style.setProperty("--py", ((y - 0.5) * viaje).toFixed(1) + "px");
+        t.style.transform = "perspective(1000px) rotateX(" + ((0.5 - y) * grados).toFixed(2) +
+          "deg) rotateY(" + ((x - 0.5) * grados).toFixed(2) + "deg) translateY(" +
+          (esTexto ? -3 : -6) + "px) scale(" + (esTexto ? 1.006 : 1.015) + ")";
+        t.classList.add("tocada");
+      });
+      t.addEventListener("mouseleave", () => {
+        t.style.transform = "";
+        t.style.setProperty("--px", "0px");
+        t.style.setProperty("--py", "0px");
+        t.classList.remove("tocada");
+      });
+    });
+  }
+
+  /* las cifras suben contando la primera vez que se ven */
+  const ojoCifras = new IntersectionObserver(entradas => {
+    entradas.forEach(en => {
+      if (!en.isIntersecting) return;
+      ojoCifras.unobserve(en.target);
+      const hasta = parseInt(en.target.dataset.hasta, 10);
+      if (menosMovimiento || hasta === 0) { en.target.textContent = hasta; return; }
+      let n = 0;
+      const t = setInterval(() => {
+        en.target.textContent = ++n;
+        if (n >= hasta) clearInterval(t);
+      }, 220);
+    });
+  }, { threshold: 0.9 });
+  document.querySelectorAll(".cifra[data-hasta]").forEach(c => ojoCifras.observe(c));
 
   /* ---------- demos animadas ---------- */
   function escribir(el, texto, ms, cb) {
@@ -828,7 +1249,7 @@
     }
   }
 
-  /* 05: estilos de tarjeta y colores */
+  /* 06: estilos de tarjeta y colores */
   async function demoEstilos() {
     const muestra = document.getElementById("muestra-tarjeta");
     const etiqueta = document.getElementById("etiqueta-estilo");
