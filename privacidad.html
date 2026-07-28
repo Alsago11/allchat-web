@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Política de privacidad de AllChat</title>
+<meta name="description" content="Qué datos recoge AllChat, qué se queda en tu PC, qué sale de él y a quién. Contado en cristiano y sin letra pequeña.">
+<link rel="canonical" href="https://allchat.es/privacidad.html">
+<meta name="robots" content="index, follow">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="AllChat">
+<meta property="og:locale" content="es_ES">
+<meta property="og:url" content="https://allchat.es/privacidad.html">
+<meta property="og:title" content="Política de privacidad de AllChat">
+<meta property="og:description" content="Qué se queda en tu PC, qué sale y a quién. Sin letra pequeña.">
+<meta property="og:image" content="https://allchat.es/og-imagen.png">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="icon" type="image/png" sizes="96x96" href="/favicon-96.png">
+<link rel="icon" type="image/png" sizes="192x192" href="/favicon-192.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<style>
+  :root {
+    --fondo: #0a0d14;
+    --panel: #10141d;
+    --panel2: #161c28;
+    --teal: #4be1c3;
+    --violeta: #a78bfa;
+    --naranja: #f5a35c;
+    --texto: #e8edf4;
+    --atenuado: #8b98a5;
+    --borde: #232c3b;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    background:
+      radial-gradient(ellipse 900px 560px at 32% 240px, rgba(75,225,195,.13), transparent 70%),
+      radial-gradient(ellipse 900px 560px at 72% 160px, rgba(167,139,250,.12), transparent 70%),
+      var(--fondo);
+    color: var(--texto);
+    font-family: "Segoe UI", system-ui, sans-serif; line-height: 1.6;
+  }
+  .envoltorio { max-width: 760px; margin: 0 auto; padding: 0 22px 80px; }
+
+  header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 22px 0 40px; gap: 16px; flex-wrap: wrap;
+  }
+  .marca { display: flex; align-items: center; gap: 10px;
+           text-decoration: none; color: var(--texto); }
+  .marca svg { width: 34px; height: 34px; }
+  .marca span { font-weight: 700; font-size: 1.15rem; letter-spacing: .3px; }
+  .volver { color: var(--atenuado); text-decoration: none; font-size: .92rem; }
+  .volver:hover { color: var(--teal); }
+
+  h1 { font-size: clamp(1.9rem, 5vw, 2.6rem); line-height: 1.2;
+       margin-bottom: 10px; }
+  .grad { background: linear-gradient(100deg, var(--teal), var(--violeta));
+          -webkit-background-clip: text; background-clip: text;
+          -webkit-text-fill-color: transparent; }
+  .fecha { color: var(--atenuado); font-size: .9rem; margin-bottom: 34px; }
+
+  h2 { font-size: 1.3rem; margin: 42px 0 12px; }
+  h3 { font-size: 1.02rem; margin: 24px 0 6px; color: var(--teal); }
+  p { margin-bottom: 14px; }
+  a { color: var(--teal); }
+
+  .resumen {
+    background: var(--panel); border: 1px solid var(--borde);
+    border-radius: 16px; padding: 22px 24px; margin-bottom: 10px;
+  }
+  .resumen h2 { margin-top: 0; }
+  .resumen ul { margin: 0; padding-left: 20px; }
+  .resumen li { margin-bottom: 8px; }
+
+  .tabla { width: 100%; border-collapse: collapse; margin: 18px 0 22px;
+           font-size: .94rem; }
+  .tabla th, .tabla td {
+    border: 1px solid var(--borde); padding: 10px 12px;
+    text-align: left; vertical-align: top;
+  }
+  .tabla th { background: var(--panel2); font-weight: 600; }
+  .envuelve-tabla { overflow-x: auto; }
+
+  .aviso {
+    background: var(--panel2); border-left: 3px solid var(--naranja);
+    border-radius: 0 12px 12px 0; padding: 16px 20px; margin: 20px 0;
+  }
+  .aviso strong { color: var(--naranja); }
+
+  .bien {
+    background: var(--panel2); border-left: 3px solid var(--teal);
+    border-radius: 0 12px 12px 0; padding: 16px 20px; margin: 20px 0;
+  }
+
+  ul { padding-left: 20px; margin-bottom: 14px; }
+  li { margin-bottom: 6px; }
+
+  footer {
+    border-top: 1px solid var(--borde); margin-top: 56px; padding-top: 24px;
+    color: var(--atenuado); font-size: .9rem;
+  }
+  footer a { color: var(--atenuado); }
+  footer a:hover { color: var(--teal); }
+</style>
+</head>
+<body>
+<div class="envoltorio">
+
+  <header>
+    <a class="marca" href="/">
+      <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <rect x="6" y="10" width="52" height="38" rx="12"
+              fill="none" stroke="url(#g)" stroke-width="3.2"/>
+        <path d="M22 48 L20 58 L32 48 Z" fill="url(#g)"/>
+        <text x="32" y="35" text-anchor="middle" font-size="15"
+              font-family="Segoe UI, sans-serif" font-weight="700"
+              fill="url(#g)">ALL</text>
+        <defs>
+          <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#4be1c3"/>
+            <stop offset="1" stop-color="#a78bfa"/>
+          </linearGradient>
+        </defs>
+      </svg>
+      <span>AllChat</span>
+    </a>
+    <a class="volver" href="/">Volver a la página principal</a>
+  </header>
+
+  <h1>Política de <span class="grad">privacidad</span></h1>
+  <p class="fecha">Última actualización: 29 de julio de 2026</p>
+
+  <div class="resumen">
+    <h2>Lo importante, en cinco líneas</h2>
+    <ul>
+      <li>Lo que AllChat <strong>aprende de ti</strong>, tu diccionario y tus
+          ajustes viven en archivos de tu PC y no salen de ahí nunca.</li>
+      <li>La <strong>corrección</strong> se hace con un motor instalado en tu
+          ordenador. Solo si ese motor no arranca, AllChat usa un servicio de
+          internet, y te avisa en pantalla cuando pasa.</li>
+      <li>La <strong>traducción</strong> sí usa internet: el texto que traduces
+          va a Google Translate, como en cualquier traductor.</li>
+      <li>De tu cuenta guardamos <strong>tu correo</strong> y tu progreso.
+          Nunca guardamos frases tuyas, solo cuántas fueron.</li>
+      <li>No vendemos tus datos a nadie, no hay publicidad y no hay perfilado.</li>
+    </ul>
+  </div>
+
+  <h2>Quién es el responsable</h2>
+  <p>El responsable del tratamiento de tus datos es
+  <strong>Álvaro Sánchez</strong>, persona física, con
+  domicilio en España, creador y titular de AllChat.</p>
+  <p>Para cualquier cosa relacionada con tus datos, escribe a
+  <a href="mailto:hola@allchat.es">hola@allchat.es</a>. Contestamos nosotros,
+  no un formulario.</p>
+
+  <h2>Qué NO sale nunca de tu ordenador</h2>
+  <p>Esta es la promesa central de AllChat y está escrita en el código, no
+  solo aquí:</p>
+  <ul>
+    <li><strong>Lo que AllChat aprende de tu forma de escribir.</strong> Vive
+        en un archivo de tu PC. Puedes ver cuántas parejas de palabras ha
+        aprendido y borrarlo entero desde Ajustes, cuando quieras.</li>
+    <li><strong>Tu diccionario personal</strong> y las palabras que le
+        enseñas.</li>
+    <li><strong>Tus ajustes</strong>: colores, atajos, modos, idioma y a quién
+        eliges que te acompañe.</li>
+    <li><strong>El registro de la aplicación</strong> (registro.log). Se queda
+        en tu PC. Solo sale si <em>tú</em> decides adjuntarlo para reportar un
+        fallo, y desde la versión 0.49 ese archivo ya no guarda lo que
+        escribes: apunta cuántas palabras eran, no cuáles, y tu correo sale
+        censurado.</li>
+  </ul>
+
+  <h2>Qué sale de tu ordenador, a dónde y para qué</h2>
+
+  <div class="envuelve-tabla">
+  <table class="tabla">
+    <thead>
+      <tr><th>Qué</th><th>A dónde</th><th>Para qué</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Tu correo electrónico</td>
+        <td>Nuestro servidor (api.allchat.es) y Resend, que es quien envía
+            el mensaje</td>
+        <td>Crear tu cuenta y mandarte el enlace para verificarla</td>
+      </tr>
+      <tr>
+        <td>El nombre que le pusiste a tu PC</td>
+        <td>Nuestro servidor</td>
+        <td>Distinguir tus equipos dentro de tu cuenta, para que el portátil
+            y el sobremesa convivan</td>
+      </tr>
+      <tr>
+        <td>Tu dirección IP</td>
+        <td>Nuestro servidor</td>
+        <td>Evitar que alguien pida miles de enlaces seguidos. Se borra
+            pasada una hora</td>
+      </tr>
+      <tr>
+        <td>Cuántas frases te ha corregido y traducido</td>
+        <td>Nuestro servidor, en lotes cada pocos minutos</td>
+        <td>Calcular tu nivel y tu experiencia. Viajan números, nunca frases</td>
+      </tr>
+      <tr>
+        <td>El texto que traduces</td>
+        <td>Google Translate</td>
+        <td>Traducirlo. Sin esto no hay traducción</td>
+      </tr>
+      <tr>
+        <td>El texto que corriges, <em>solo si el motor local no arranca</em></td>
+        <td>La API pública de LanguageTool</td>
+        <td>Poder corregirte igualmente. AllChat te avisa en pantalla cuando
+            entra en este modo</td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+
+  <div class="aviso">
+    <p><strong>Sobre la corrección y el motor local.</strong> AllChat instala
+    en tu ordenador un motor de corrección que funciona sin internet, y es el
+    que se usa siempre que está disponible. Si ese motor no consigue
+    arrancar en tu equipo, AllChat cambia a la API pública de LanguageTool
+    para poder seguir corrigiéndote, y en ese caso el texto que corriges sí
+    viaja a ese servicio. Te lo decimos en pantalla en cuanto ocurre.</p>
+  </div>
+
+  <div class="bien">
+    <p>Lo que <strong>nunca</strong> hacemos con tu texto: guardarlo en
+    nuestro servidor, usarlo para entrenar nada, venderlo o cederlo a nadie
+    para publicidad. Nuestro servidor jamás recibe una frase tuya.</p>
+  </div>
+
+  <h2>Qué guardamos en nuestro servidor y cuánto tiempo</h2>
+  <div class="envuelve-tabla">
+  <table class="tabla">
+    <thead>
+      <tr><th>Dato</th><th>Cuánto tiempo</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Tu correo, la fecha de alta, tu nivel, tu experiencia, tu racha
+            y si tienes premium y hasta cuándo</td>
+        <td>Mientras tengas cuenta. Si pides que la borremos, se borra</td>
+      </tr>
+      <tr>
+        <td>Una huella (hash) de tu sesión y el nombre de tu equipo</td>
+        <td>Mientras la sesión siga activa. Guardamos la huella, no la
+            sesión: con lo que hay en la base de datos no se puede entrar
+            en tu cuenta</td>
+      </tr>
+      <tr>
+        <td>Los intentos de entrar, con tu IP</td>
+        <td>Se borran pasada una hora</td>
+      </tr>
+      <tr>
+        <td>Los lotes de experiencia</td>
+        <td>Se borran a los 7 días</td>
+      </tr>
+      <tr>
+        <td>Si te apuntaste a la lista de espera desde la web: tu correo, tu
+            nick y la fecha</td>
+        <td>Hasta que pidas que se borre o la lista deje de tener sentido</td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+  <p>No guardamos contraseñas porque AllChat no usa contraseñas: se entra con
+  un enlace que te mandamos al correo.</p>
+
+  <h2>Con quién se comparten datos</h2>
+  <p>Solo con lo imprescindible para que la aplicación funcione. Ninguno de
+  estos servicios recibe datos para publicidad:</p>
+  <ul>
+    <li><strong>Google Translate</strong>: recibe el texto que traduces.</li>
+    <li><strong>LanguageTool</strong>: recibe el texto que corriges, solo en
+        el caso descrito arriba de que el motor local no arranque.</li>
+    <li><strong>Resend</strong>: envía el correo con tu enlace de acceso, y
+        para eso necesita tu dirección.</li>
+    <li><strong>Hetzner</strong>: es donde vive nuestro servidor, en Alemania
+        (Unión Europea).</li>
+    <li><strong>Cloudflare</strong>: sirve esta web y ve la dirección IP de
+        quien la visita.</li>
+    <li><strong>GitHub</strong>: aloja el canal desde el que AllChat descarga
+        sus actualizaciones, así que ve la IP de tu equipo cuando comprueba
+        si hay versión nueva.</li>
+  </ul>
+
+  <h2>Base legal</h2>
+  <p>Tratamos tus datos porque son necesarios para prestarte el servicio que
+  nos has pedido (artículo 6.1.b del RGPD): sin tu correo no hay cuenta, y sin
+  cuenta no hay progreso que guardar ni premium que reconocer. La dirección IP
+  de los intentos de acceso la tratamos por interés legítimo en proteger el
+  servicio de abusos (artículo 6.1.f).</p>
+
+  <h2>Tus derechos</h2>
+  <p>Puedes ejercer en cualquier momento tus derechos de acceso,
+  rectificación, supresión, limitación, portabilidad y oposición. Escribe a
+  <a href="mailto:hola@allchat.es">hola@allchat.es</a> desde el correo de tu
+  cuenta y lo resolvemos.</p>
+  <p>Borrar tu cuenta borra tu correo, tu progreso y tus sesiones de nuestro
+  servidor. Lo que AllChat aprendió de ti no hace falta que lo borremos
+  nosotros: nunca lo tuvimos, está en tu PC y lo borras tú desde Ajustes.</p>
+  <p>Si crees que no hemos hecho las cosas bien, puedes reclamar ante la
+  <a href="https://www.aepd.es" target="_blank" rel="noopener">Agencia
+  Española de Protección de Datos</a>.</p>
+
+  <h2>Menores</h2>
+  <p>AllChat no está dirigido a menores de 14 años y no recogemos datos de
+  forma consciente de personas de esa edad.</p>
+
+  <h2>Cambios en esta política</h2>
+  <p>Si cambiamos algo importante, cambiaremos la fecha de arriba y lo
+  contaremos en las novedades de la aplicación. AllChat está en beta y crece
+  rápido: cuando una función nueva toque datos, esta página se actualiza antes
+  de que la función llegue a tu ordenador.</p>
+
+  <footer>
+    <p>AllChat &middot; <a href="/">allchat.es</a> &middot;
+    <a href="mailto:hola@allchat.es">hola@allchat.es</a></p>
+  </footer>
+
+</div>
+</body>
+</html>

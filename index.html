@@ -536,6 +536,7 @@
     align-items: center; justify-content: space-between;
   }
   footer a { color: var(--teal); text-decoration: none; }
+  footer .legal { display: flex; gap: 16px; flex-wrap: wrap; align-items: center; }
 
   /* ---------- móvil: aquí NO se secuestra nada ---------- */
   @media (max-width: 760px) {
@@ -939,7 +940,10 @@
       <footer id="contacto" class="anima tarde">
         <span>© 2026 AllChat · beta privada</span>
         <span>¿Dudas o ideas? <a href="mailto:hola@allchat.es">hola@allchat.es</a></span>
-        <span>Hecho en España para gamers de todo el mundo 🎮</span>
+        <span class="legal">
+          <a href="/privacidad.html">Política de privacidad</a>
+          <span>Hecho en España para gamers de todo el mundo 🎮</span>
+        </span>
       </footer>
     </div>
   </div>
