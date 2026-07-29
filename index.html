@@ -1069,9 +1069,14 @@
   // Ahora se mide LA RÁFAGA: rueda seguida, sin parar, en el mismo
   // sentido. Como mantener pulsado el borrado. Si sueltas la rueda un
   // cuarto de segundo, la ráfaga se acaba y vuelta a empezar.
-  const RAFAGA_PARA_SOLTAR = 1200;   // ms de rueda seguida sin parar
-  const GOLPES_MINIMOS = 5;          // y con unos cuantos golpes dentro
-  const CORTE_RAFAGA = 260;          // ms sin rueda: se acabó la ráfaga
+  // SEGUNDA CALIBRACIÓN (29/07): con 1200 ms no se soltaba ni dándole
+  // rápido, y es lógico: un "dale rápido" de verdad dura medio segundo,
+  // no un segundo y pico. Con 600 ms y seis golpes hay sitio de sobra
+  // entre lo normal (tres muescas y mirar la sección, 240 ms) y la
+  // insistencia (ocho o diez muescas seguidas, 600 ms largos).
+  const RAFAGA_PARA_SOLTAR = 600;    // ms de rueda seguida sin parar
+  const GOLPES_MINIMOS = 6;          // y con unos cuantos golpes dentro
+  const CORTE_RAFAGA = 350;          // ms sin rueda: se acabó la ráfaga
   const VUELTA_AL_CARRUSEL = 10000;  // ms parado antes de recuperarlo
   let suelto = false, relojVuelta = null;
   let rafagaDesde = 0, golpesRafaga = 0, ultimoGolpe = 0, sentidoRafaga = 0;
