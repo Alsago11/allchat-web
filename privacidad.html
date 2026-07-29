@@ -138,8 +138,9 @@
       <li>Lo que AllChat <strong>aprende de ti</strong>, tu diccionario y tus
           ajustes viven en archivos de tu PC y no salen de ahí nunca.</li>
       <li>La <strong>corrección</strong> se hace con un motor instalado en tu
-          ordenador. Solo si ese motor no arranca, AllChat usa un servicio de
-          internet, y te avisa en pantalla cuando pasa.</li>
+          ordenador. Si ese motor no arranca, AllChat prefiere no corregir
+          antes que sacar tu texto de ahí: solo sale si tú enciendes la
+          corrección por internet en Ajustes, y viene apagada.</li>
       <li>La <strong>traducción</strong> sí usa internet: el texto que traduces
           va a Google Translate, como en cualquier traductor.</li>
       <li>De tu cuenta guardamos <strong>tu correo</strong> y tu progreso.
@@ -211,10 +212,11 @@
         <td>Traducirlo. Sin esto no hay traducción</td>
       </tr>
       <tr>
-        <td>El texto que corriges, <em>solo si el motor local no arranca</em></td>
+        <td>El texto que corriges, <em>solo si tú enciendes la corrección
+            por internet</em> (viene apagada)</td>
         <td>La API pública de LanguageTool</td>
-        <td>Poder corregirte igualmente. AllChat te avisa en pantalla cuando
-            entra en este modo</td>
+        <td>Poder corregirte cuando el motor de tu PC no arranca. Si no lo
+            enciendes, no sale nada</td>
       </tr>
     </tbody>
   </table>
@@ -223,10 +225,12 @@
   <div class="aviso">
     <p><strong>Sobre la corrección y el motor local.</strong> AllChat instala
     en tu ordenador un motor de corrección que funciona sin internet, y es el
-    que se usa siempre que está disponible. Si ese motor no consigue
-    arrancar en tu equipo, AllChat cambia a la API pública de LanguageTool
-    para poder seguir corrigiéndote, y en ese caso el texto que corriges sí
-    viaja a ese servicio. Te lo decimos en pantalla en cuanto ocurre.</p>
+    que se usa siempre. Si ese motor no consigue arrancar en tu equipo,
+    AllChat no corrige y te lo dice: tu texto no sale de ahí. En Ajustes, en
+    Modos, hay un interruptor para permitir la corrección por internet en ese
+    caso; <strong>viene apagado</strong> y solo lo enciendes tú. Si lo
+    enciendes, el texto que corrijas viajará a la API pública de LanguageTool
+    mientras el motor de tu PC siga sin arrancar.</p>
   </div>
 
   <div class="bien">
@@ -277,8 +281,10 @@
   estos servicios recibe datos para publicidad:</p>
   <ul>
     <li><strong>Google Translate</strong>: recibe el texto que traduces.</li>
-    <li><strong>LanguageTool</strong>: recibe el texto que corriges, solo en
-        el caso descrito arriba de que el motor local no arranque.</li>
+    <li><strong>LanguageTool</strong>: recibe el texto que corriges solo si
+        tú has encendido la corrección por internet y el motor de tu PC no
+        arranca. Con el interruptor apagado, que es como viene, no recibe
+        nada.</li>
     <li><strong>Resend</strong>: envía el correo con tu enlace de acceso, y
         para eso necesita tu dirección.</li>
     <li><strong>Hetzner</strong>: es donde vive nuestro servidor, en Alemania
