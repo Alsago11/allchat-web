@@ -551,18 +551,26 @@
   footer a { color: var(--teal); text-decoration: none; }
   footer .legal { display: flex; gap: 16px; flex-wrap: wrap; align-items: center; }
 
-  /* ---------- móvil: aquí NO se secuestra nada ---------- */
-  @media (max-width: 760px) {
-    /* con las dos columnas una encima de otra, obligar a que cada punto
-       mida una pantalla dejaría secciones cortadas: en el móvil el
-       ritmo se hace con aire y con las entradas animadas, y el dedo
-       manda siempre */
-    .bloque { min-height: 78vh; padding: 56px 0; }
-    .bloque.compacto, .bloque:last-of-type { padding: 48px 0; }
+  /* ---------- con el DEDO no se secuestra nada ----------
+     Esto va por tipo de puntero y NO por ancho de ventana (29/07): con
+     el ancho, cualquiera con zoom del navegador o con el escalado de
+     Windows alto se quedaba sin carrusel sin saber por qué. Táctil o
+     ventana diminuta: ritmo con aire, entradas animadas y el dedo
+     manda. Con ratón o trackpad: carrusel, aunque la ventana sea
+     estrecha. */
+  @media (pointer: coarse), (max-width: 559px) {
+    .bloque { min-height: 78vh; }
     html { scroll-snap-type: none; }
     .puntos-progreso { display: none; }
-    /* los enlaces en UNA línea que se arrastra con el dedo: envueltos
-       ocupaban cuatro líneas de barra pegajosa y se comían la pantalla */
+  }
+
+  /* ---------- ventana estrecha: solo la barra y el aire ----------
+     Esto sí es cosa del ancho, tenga el visitante dedo o ratón. */
+  @media (max-width: 760px) {
+    .bloque { padding: 56px 0; }
+    .bloque.compacto, .bloque:last-of-type { padding: 48px 0; }
+    /* los enlaces en UNA línea que se arrastra: envueltos ocupaban
+       cuatro líneas de barra pegajosa y se comían la pantalla */
     nav .contenedor { gap: 14px; }
     nav .enlaces {
       flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none;
@@ -1010,7 +1018,16 @@
   const nombresBloque = ["Portada", "01 Frase traductora", "02 Ctrl+Alt+A",
     "03 Corrección", "04 Predicción", "05 Aprende de ti", "06 A tu gusto",
     "07 Leer", "08 Sobre nosotros", "Apúntate"];
-  const enMovil = () => window.matchMedia("(max-width: 760px)").matches;
+  // Quién manda: el DEDO o la RUEDA. Antes esto se decidía solo por el
+  // ancho (760px) y eso dejaba sin carrusel a cualquiera con zoom del
+  // navegador o con el escalado de Windows alto: en un portátil al 150%
+  // basta un zoom del 125% para bajar de 760 y quedarte con el scroll
+  // normal sin saber por qué (le pasó a Álvaro el 29/07). El zoom se
+  // guarda por sitio, así que una vez que ocurre, se queda.
+  // Ahora se mira el tipo de puntero: con ratón o trackpad hay carrusel
+  // aunque la ventana sea estrecha; con dedo, jamás.
+  const enMovil = () => window.matchMedia("(pointer: coarse)").matches ||
+                        window.innerWidth < 560;
   const menosMovimiento = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   let indice = 0;
   let bloqueado = false;
@@ -1045,11 +1062,19 @@
      "cuánto llega" se soltaría el freno a todo el mundo. Solo cuentan
      los golpes que llegan cuando ya hemos dicho que no, con 90 ms de
      separación entre ellos para que una ráfaga no cuente como veinte. */
-  const GOLPES_PARA_SOLTAR = 3;
-  const SEPARACION_MINIMA = 90;      // ms entre golpes que cuentan
-  const OLVIDA_INSISTENCIA = 1500;   // ms sin insistir y se reinicia
+  // CALIBRADO EL 29/07 con Álvaro: la primera versión contaba golpes y
+  // se soltaba bajando normal ("las dos primeras secciones van bien y
+  // luego empieza a ir rápido"). Bajar dando dos o tres muescas
+  // seguidas es lo NORMAL, no es querer saltarse nada.
+  // Ahora se mide LA RÁFAGA: rueda seguida, sin parar, en el mismo
+  // sentido. Como mantener pulsado el borrado. Si sueltas la rueda un
+  // cuarto de segundo, la ráfaga se acaba y vuelta a empezar.
+  const RAFAGA_PARA_SOLTAR = 1200;   // ms de rueda seguida sin parar
+  const GOLPES_MINIMOS = 5;          // y con unos cuantos golpes dentro
+  const CORTE_RAFAGA = 260;          // ms sin rueda: se acabó la ráfaga
   const VUELTA_AL_CARRUSEL = 10000;  // ms parado antes de recuperarlo
-  let suelto = false, insistencias = 0, ultimoGolpe = 0, relojVuelta = null;
+  let suelto = false, relojVuelta = null;
+  let rafagaDesde = 0, golpesRafaga = 0, ultimoGolpe = 0, sentidoRafaga = 0;
 
   function soltarFreno() {
     if (suelto) return;
@@ -1083,17 +1108,25 @@
     if (enMovil() || menosMovimiento || e.ctrlKey) return;
     if (suelto) { programarVuelta(); return; }   // sin freno: scroll normal
     e.preventDefault();
-    if (bloqueado) {
-      const ahora = Date.now();
-      if (ahora - ultimoGolpe > OLVIDA_INSISTENCIA) insistencias = 0;
-      if (ahora - ultimoGolpe >= SEPARACION_MINIMA) {
-        ultimoGolpe = ahora;
-        if (++insistencias >= GOLPES_PARA_SOLTAR) soltarFreno();
-      }
+
+    const direccion = e.deltaY > 0 ? 1 : -1;
+
+    // ¿sigue la misma ráfaga o empieza otra? Parar un cuarto de segundo
+    // o cambiar de sentido la corta: eso ya no es "déjame pasar", es
+    // mirar la página.
+    const ahora = Date.now();
+    if (ahora - ultimoGolpe > CORTE_RAFAGA || direccion !== sentidoRafaga) {
+      rafagaDesde = ahora;
+      golpesRafaga = 0;
+      sentidoRafaga = direccion;
+    }
+    ultimoGolpe = ahora;
+    golpesRafaga++;
+    if (ahora - rafagaDesde >= RAFAGA_PARA_SOLTAR && golpesRafaga >= GOLPES_MINIMOS) {
+      soltarFreno();
       return;
     }
-    insistencias = 0;   // un golpe que avanza limpio no es insistir
-    const direccion = e.deltaY > 0 ? 1 : -1;
+    if (bloqueado) return;
     const caja = bloques[indice].getBoundingClientRect();
     const pantalla = window.innerHeight;
     const hueco = pantalla - parseFloat(
@@ -1144,6 +1177,43 @@
   });
   function marcarPunto() {
     [...zonaPuntos.children].forEach((p, i) => p.classList.toggle("activo", i === indice));
+  }
+
+  /* ---------- el chivato: allchat.es/?diagnostico ----------
+     No lo ve nadie salvo quien lo pide por la URL. Está para no volver
+     a jugar a las adivinanzas cuando alguien diga "a mí el carrusel no
+     me va": dice en una línea por qué está apagado. */
+  if (location.search.indexOf("diagnostico") >= 0) {
+    const motivos = [];
+    if (menosMovimiento) motivos.push(
+      "Windows tiene activado REDUCIR ANIMACIONES. El carrusel se apaga a " +
+      "propósito. Se quita en Configuración > Accesibilidad > Efectos visuales.");
+    if (window.matchMedia("(pointer: coarse)").matches) motivos.push(
+      "El navegador dice que aquí se toca con el DEDO, así que manda el dedo.");
+    if (window.innerWidth < 560) motivos.push(
+      "La ventana mide menos de 560 puntos de ancho.");
+    const zoom = Math.round((window.outerWidth / window.innerWidth) * 100);
+    const caja = document.createElement("div");
+    caja.style.cssText = "position:fixed;left:12px;bottom:12px;z-index:999;max-width:420px;" +
+      "background:#10141d;border:1px solid #232c3b;border-left:4px solid " +
+      (motivos.length ? "#f5a35c" : "#4be1c3") + ";border-radius:12px;padding:14px 16px;" +
+      "font:13px/1.5 Consolas,monospace;color:#8b98a5;box-shadow:0 18px 50px rgba(0,0,0,.6)";
+    caja.innerHTML =
+      "<b style='color:#e8edf4'>" + (motivos.length
+        ? "El carrusel está APAGADO"
+        : "El carrusel está ENCENDIDO") + "</b><br>" +
+      (motivos.length ? motivos.join("<br>") + "<br>" : "") +
+      "<br>ancho de ventana: " + window.innerWidth + " puntos" +
+      "<br>zoom del navegador: " + (isFinite(zoom) ? zoom + "%" : "?") +
+      " (Ctrl+0 lo deja al 100)" +
+      "<br>pantalla: " + screen.width + "x" + screen.height +
+      " · escalado: " + Math.round(window.devicePixelRatio * 100) + "%" +
+      "<br>secciones: " + bloques.length +
+      " · alto de la primera: " + Math.round(bloques[0].getBoundingClientRect().height) +
+      "<br>soltar el freno pide: " + RAFAGA_PARA_SOLTAR + " ms de rueda seguida" +
+      " (mínimo " + GOLPES_MINIMOS + " golpes, sin parar más de " + CORTE_RAFAGA + " ms)" +
+      "<br>web del 29/07 (carrusel por puntero, freno calibrado)";
+    document.body.appendChild(caja);
   }
 
   /* ---------- entradas animadas y sección actual ---------- */
