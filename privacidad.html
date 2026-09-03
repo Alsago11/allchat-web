@@ -147,7 +147,9 @@
           antes que sacar tu texto de ahí: solo sale si tú enciendes la
           corrección por internet en Ajustes, y viene apagada.</li>
       <li>La <strong>traducción</strong> sí usa internet: el texto que traduces
-          va a Google Translate, como en cualquier traductor.</li>
+          va a nuestro servidor, que lo manda a Google Cloud Translation para
+          traducirlo. El servidor no lo guarda: solo apunta cuántas
+          traducciones haces, nunca cuáles.</li>
       <li>De tu cuenta guardamos <strong>tu correo</strong> y tu progreso.
           Nunca guardamos frases tuyas, solo cuántas fueron.</li>
       <li>No vendemos tus datos a nadie, no hay publicidad y no hay perfilado.</li>
@@ -213,8 +215,10 @@
       </tr>
       <tr>
         <td>El texto que traduces</td>
-        <td>Google Translate</td>
-        <td>Traducirlo. Sin esto no hay traducción</td>
+        <td>Nuestro servidor, y de ahí Google Cloud Translation</td>
+        <td>Traducirlo. Sin esto no hay traducción. El servidor no guarda el
+            texto: solo cuenta cuántas traducciones haces al día, que es lo
+            que aplica el tope del plan gratis</td>
       </tr>
       <tr>
         <td>El texto que corriges, <em>solo si tú enciendes la corrección
@@ -285,7 +289,10 @@
   <p>Solo con lo imprescindible para que la aplicación funcione. Ninguno de
   estos servicios recibe datos para publicidad:</p>
   <ul>
-    <li><strong>Google Translate</strong>: recibe el texto que traduces.</li>
+    <li><strong>Google Cloud Translation</strong> (Google): recibe el texto
+        que traduces a través de nuestro servidor, para traducirlo. Es su
+        servicio de traducción con contrato, no el traductor gratuito de
+        la web.</li>
     <li><strong>LanguageTool</strong>: recibe el texto que corriges solo si
         tú has encendido la corrección por internet y el motor de tu PC no
         arranca. Con el interruptor apagado, que es como viene, no recibe
