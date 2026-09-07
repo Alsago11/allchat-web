@@ -1,0 +1,9 @@
+# Redirecciones de allchat.es (Cloudflare Workers con assets estaticos
+# lee este archivo y no lo sirve). Sintaxis: origen destino codigo.
+# /descargar manda a la ficha de AllChat en la Microsoft Store (Store ID
+# 9NMKD4HFR44X, msix/identidad.txt). 302 y no 301 a proposito: si algun
+# dia la descarga cambia de sitio, los navegadores no se quedan con la
+# vieja para siempre.
+/descargar https://apps.microsoft.com/detail/9NMKD4HFR44X 302
+# /discord es la invitacion permanente del servidor (INFRA).
+/discord https://discord.gg/A5E4XJdwbV 302

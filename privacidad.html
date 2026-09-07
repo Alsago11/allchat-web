@@ -135,10 +135,12 @@
   </header>
 
   <h1>Política de privacidad de AllChat</h1>
-  <p class="fecha">Última actualización: 29 de julio de 2026</p>
+  <!-- La fecha es la del lanzamiento (07/09/2026), el día que se encendió el
+       pago y se desplegó esta versión; misma marca que llevaban los términos. -->
+  <p class="fecha">Última actualización: 7 de septiembre de 2026</p>
 
   <div class="resumen">
-    <h2>Lo importante, en cinco líneas</h2>
+    <h2>Lo importante, en seis líneas</h2>
     <ul>
       <li>Lo que AllChat <strong>aprende de ti</strong>, tu diccionario y tus
           ajustes viven en archivos de tu PC y no salen de ahí nunca.</li>
@@ -152,6 +154,9 @@
           traducciones haces, nunca cuáles.</li>
       <li>De tu cuenta guardamos <strong>tu correo</strong> y tu progreso.
           Nunca guardamos frases tuyas, solo cuántas fueron.</li>
+      <li>Si pagas Premium, <strong>el pago lo hace Stripe</strong>: tu
+          tarjeta solo la ve Stripe. Nosotros sabemos qué correo pagó, qué
+          plan y hasta cuándo, y nada más.</li>
       <li>No vendemos tus datos a nadie, no hay publicidad y no hay perfilado.</li>
     </ul>
   </div>
@@ -195,6 +200,24 @@
         <td>Nuestro servidor (api.allchat.es) y Resend, que es quien envía
             el mensaje</td>
         <td>Crear tu cuenta y mandarte el enlace para verificarla</td>
+      </tr>
+      <tr>
+        <td>Si contratas Premium: tu correo, tu país y los datos de tu
+            tarjeta</td>
+        <td>La página de pago de Stripe. La tarjeta se queda en Stripe:
+            a nuestro servidor solo vuelven el correo con el que pagaste,
+            el plan y hasta cuándo dura</td>
+        <td>Cobrar la suscripción y encender Premium en tu cuenta</td>
+      </tr>
+      <tr>
+        <td>Si conectas tu Discord (es opcional): tu identificador de usuario
+            de Discord y tu nombre de usuario</td>
+        <td>De Discord a nuestro servidor, cuando pulsas "Autorizar" en la
+            página de Discord. Solo pedimos saber quién eres: ni tu correo de
+            Discord, ni tus mensajes, ni tus servidores</td>
+        <td>Darte el rol de Miembro o de Premium en el servidor de Discord de
+            AllChat sin que lo pidas, y mantenerlo al día cuando tu Premium
+            cambie</td>
       </tr>
       <tr>
         <td>El nombre que le pusiste a tu PC</td>
@@ -275,6 +298,30 @@
         <td>Se borran a los 7 días</td>
       </tr>
       <tr>
+        <td>Si has pagado Premium: el correo con el que pagaste, el plan,
+            hasta cuándo, si se renueva, los identificadores que Stripe da a
+            tu suscripción y a tu ficha de cliente (no son tu tarjeta ni
+            sirven para cobrarte), la clave de canje y, si cancelaste, el
+            motivo que elegiste al hacerlo</td>
+        <td>Mientras la suscripción exista, para reconocer tu Premium y
+            atender devoluciones. Si pides borrar tu cuenta, se borra
+            también; la factura la conserva Stripe el tiempo que le exige
+            la ley</td>
+      </tr>
+      <tr>
+        <td>Los avisos que Stripe manda a nuestro servidor sobre tu
+            suscripción (alta, renovación, baja), con su identificador</td>
+        <td>Se borran a los 30 días. Solo sirven para no aplicar dos veces
+            el mismo aviso</td>
+      </tr>
+      <tr>
+        <td>Si conectas tu Discord: tu identificador de usuario de Discord, tu
+            nombre de usuario y desde cuándo. El permiso que nos da Discord se
+            usa una sola vez, para saber quién eres, y no se guarda</td>
+        <td>Hasta que lo desconectes desde Ajustes, en Premium (se borra en
+            el acto), o hasta que se borre tu cuenta</td>
+      </tr>
+      <tr>
         <td>Si te apuntaste a la lista de espera desde la web: tu correo, tu
             nick y la fecha</td>
         <td>Hasta que pidas que se borre o la lista deje de tener sentido</td>
@@ -297,6 +344,19 @@
         tú has encendido la corrección por internet y el motor de tu PC no
         arranca. Con el interruptor apagado, que es como viene, no recibe
         nada.</li>
+    <li><strong>Stripe</strong> (Stripe Payments Europe, Irlanda): cobra la
+        suscripción Premium y actúa como vendedor de esa compra, así que
+        trata tu correo, tu país, tu tarjeta y tus facturas <strong>como
+        responsable propio</strong>, bajo su
+        <a href="https://stripe.com/es/privacy" target="_blank"
+        rel="noopener">política de privacidad</a>. Nosotros no recibimos ni
+        guardamos el número de tu tarjeta. Stripe nos avisa de tus altas,
+        renovaciones y bajas para que Premium se encienda y se apague en tu
+        cuenta.</li>
+    <li><strong>Discord</strong>: solo si conectas tu Discord desde Ajustes.
+        Discord nos dice tu identificador y tu nombre de usuario, y nuestro
+        bot pone o quita tu rol en el servidor de Discord de AllChat. A
+        Discord no le mandamos tu correo ni nada de tu cuenta.</li>
     <li><strong>Resend</strong>: envía el correo con tu enlace de acceso, y
         para eso necesita tu dirección.</li>
     <li><strong>Hetzner</strong>: es donde vive nuestro servidor, en Alemania
@@ -311,9 +371,11 @@
   <h2>Base legal</h2>
   <p>Tratamos tus datos porque son necesarios para prestarte el servicio que
   nos has pedido (artículo 6.1.b del RGPD): sin tu correo no hay cuenta, y sin
-  cuenta no hay progreso que guardar ni premium que reconocer. La dirección IP
-  de los intentos de acceso la tratamos por interés legítimo en proteger el
-  servicio de abusos (artículo 6.1.f).</p>
+  cuenta no hay progreso que guardar ni premium que reconocer. Los datos de tu
+  suscripción Premium también son necesarios para el contrato (6.1.b): sin
+  ellos no sabríamos a quién encender Premium ni a quién devolver un cobro.
+  La dirección IP de los intentos de acceso la tratamos por interés legítimo
+  en proteger el servicio de abusos (artículo 6.1.f).</p>
 
   <h2>Tus derechos</h2>
   <p>Puedes ejercer en cualquier momento tus derechos de acceso,
