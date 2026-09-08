@@ -731,7 +731,7 @@
       <a href="#nosotros">Sobre nosotros</a>
       <a href="https://discord.gg/A5E4XJdwbV" target="_blank" rel="noopener">Discord</a>
     </div>
-    <a class="cta-barra" href="https://apps.microsoft.com/detail/9NMKD4HFR44X" target="_blank" rel="noopener">Descargar</a>
+    <a class="cta-barra" href="https://apps.microsoft.com/detail/9NMKD4HFR44X" data-instalar target="_blank" rel="noopener">Descargar</a>
   </div>
 </nav>
 
@@ -762,7 +762,7 @@
       Míralo en acción: <strong>esto es lo que verás en tu pantalla.</strong></p>
       <div class="botones-heroe anima mas-tarde">
         <a class="cta" href="#frase">Ver cómo funciona ↓</a>
-        <a class="cta secundaria" href="https://apps.microsoft.com/detail/9NMKD4HFR44X" target="_blank" rel="noopener">Descargar gratis</a>
+        <a class="cta secundaria" href="https://apps.microsoft.com/detail/9NMKD4HFR44X" data-instalar target="_blank" rel="noopener">Descargar gratis</a>
       </div>
     </div>
   </div>
@@ -1030,7 +1030,7 @@
             <li>Eco y los compañeros que desbloqueas por nivel</li>
             <li>Tu texto no sale de tu PC</li>
           </ul>
-          <a class="cta secundaria" href="https://apps.microsoft.com/detail/9NMKD4HFR44X" target="_blank" rel="noopener">Descargar gratis</a>
+          <a class="cta secundaria" href="https://apps.microsoft.com/detail/9NMKD4HFR44X" data-instalar target="_blank" rel="noopener">Descargar gratis</a>
         </div>
 
         <div class="plan destacado">
@@ -1151,7 +1151,7 @@
         <p class="intro">Gratis para Windows. Se instala desde la Microsoft Store en
         dos clics, funciona en cualquier app y se actualiza solo.</p>
         <div class="descarga">
-          <a class="cta grande" href="https://apps.microsoft.com/detail/9NMKD4HFR44X" target="_blank" rel="noopener">Descargar AllChat</a>
+          <a class="cta grande" href="https://apps.microsoft.com/detail/9NMKD4HFR44X" data-instalar target="_blank" rel="noopener">Descargar AllChat</a>
         </div>
         <div class="chips-descarga">
           <span class="chip-dato"><b>Microsoft Store</b> · Windows 10 y 11</span>
@@ -1248,6 +1248,31 @@
      servidor suma por día y tira lo demás. Hazte premium no avisa: ese
      clic ya llega al servidor por /pago/ir. Si algo falla, la web sigue
      igual. */
+  /* ---------- DESCARGAR = INSTALAR (08/09): el Web Installer de la Store ----------
+     En Windows, los botones Descargar no llevan a la ficha de la Store:
+     bajan el instalador que genera el propio servicio de la Store para
+     AllChat (un exe de menos de 1 MB firmado por Microsoft, "AllChat
+     Installer.exe") que instala con la misma API que la Store y abre la
+     app al terminar; si algo no cumple, él mismo abre la ficha. Es el
+     mismo enlace que genera el badge de Microsoft en modo Direct
+     (get.microsoft.com/installer/download/<Store ID>). Fuera de Windows
+     (móvil, Mac) y sin JavaScript, los botones siguen llevando a la
+     ficha: ahí un exe no sirve de nada. "source" es lo que la Store
+     apunta como origen de la instalación (Partner Center > Acquisitions). */
+  (function () {
+    const INSTALADOR = "https://get.microsoft.com/installer/download/9NMKD4HFR44X"
+                     + "?referrer=appbadge&source=allchat.es&cid=web-allchat-es";
+    const esWindows = /Windows NT/i.test(navigator.userAgent)
+                   || (navigator.userAgentData && navigator.userAgentData.platform === "Windows");
+    if (esWindows) {
+      document.querySelectorAll("a[data-instalar]").forEach(a => {
+        a.href = INSTALADOR;
+        a.removeAttribute("target");   // una descarga no necesita pestaña nueva
+        a.title = "Baja un instalador pequeño firmado por Microsoft; ábrelo y AllChat se instala solo";
+      });
+    }
+  })();
+
   (function () {
     const AVISO = "https://api.allchat.es/visita";
     function avisar(datos) {
@@ -1268,7 +1293,9 @@
     pais().then(loc => avisar({
       que: "visita", pais: loc, origen: document.referrer || "",
       utm: new URLSearchParams(location.search).get("utm_source") || "" }));
-    document.querySelectorAll('a[href*="apps.microsoft.com"]').forEach(a =>
+    // Descargar: la ficha de la Store (móvil, Mac, sin JS) o el instalador
+    // directo de get.microsoft.com (Windows); los dos cuentan igual
+    document.querySelectorAll('a[href*="apps.microsoft.com"], a[href*="get.microsoft.com"]').forEach(a =>
       a.addEventListener("click", () => avisar({ que: "descargar" })));
     document.querySelectorAll('a[href*="discord.gg"]').forEach(a =>
       a.addEventListener("click", () => avisar({ que: "discord" })));
