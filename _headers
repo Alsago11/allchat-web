@@ -1,0 +1,47 @@
+# Cabeceras de allchat.es (Cloudflare Workers con assets estaticos lee
+# este archivo, igual que lee _redirects; comprobado en la doc de
+# Cloudflare el 09/09/2026). Sintaxis: la ruta en su linea, y debajo las
+# cabeceras con sangria. Hasta 100 reglas.
+#
+# Antes del 09/09 la web no servia NI UNA cabecera de seguridad: las seis
+# de aqui abajo faltaban todas.
+
+/*
+  # De donde puede cargar cosas la pagina. Lo que hay que saber para no
+  # romperla el dia que se toque:
+  #   - script-src y style-src llevan 'unsafe-inline' porque el JS y el
+  #     CSS van DENTRO del html, y ademas las cintas del fondo usan
+  #     style="--dx:..." y el carrusel escribe el.style desde JS.
+  #     Con 'unsafe-inline' esta CSP no protege de XSS, y no pasa nada:
+  #     la web es estatica, no hay ni un campo donde escribir. Lo que si
+  #     hace es cerrar DE DONDE se carga y quien puede enmarcarla.
+  #   - connect-src deja api.allchat.es (el aviso de visita) y 'self'
+  #     (/cdn-cgi/trace, que es de donde sale el pais). Si se quita
+  #     cualquiera de los dos, el contador del panel se queda a cero.
+  #   - img-src lleva data: por el fondo de rejilla de la ventana de
+  #     juego de la demo 02, que va en un data:image/svg+xml.
+  #   - Los enlaces a la Store, a Discord o al pago NO pasan por aqui:
+  #     son navegaciones, no recursos.
+  Content-Security-Policy: default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; form-action 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; connect-src 'self' https://api.allchat.es; font-src 'self'
+
+  # Siempre por https durante seis meses. Se empieza SIN includeSubDomains
+  # y SIN preload a proposito: includeSubDomains obliga a que cualquier
+  # subdominio de allchat.es sirva https valido para siempre, y preload no
+  # se deshace en meses. Si algun dia se quiere, se sube entonces.
+  Strict-Transport-Security: max-age=15552000
+
+  # Que el navegador no adivine el tipo de archivo por el contenido.
+  X-Content-Type-Options: nosniff
+
+  # Que nadie meta allchat.es dentro de un marco en otra web. Es lo mismo
+  # que frame-ancestors de arriba; se pone tambien para los navegadores
+  # viejos, que no entienden la CSP.
+  X-Frame-Options: DENY
+
+  # Al salir a otro sitio se manda solo "https://allchat.es", no la
+  # direccion entera. No afecta al referer que RECIBIMOS, que es el que
+  # cuenta el panel: ese lo decide la web de la que venga el visitante.
+  Referrer-Policy: strict-origin-when-cross-origin
+
+  # La web no usa nada de esto, asi que se cierra.
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=()
