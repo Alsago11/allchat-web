@@ -1,0 +1,19 @@
+# Lo que Cloudflare NO debe subir como archivo publico de allchat.es.
+# Mismo formato que un .gitignore. Wrangler no sube lo que case aqui.
+#
+# EL MOTIVO, cazado el 09/09/2026: la carpeta .git se estaba sirviendo
+# entera. /.git/HEAD, /.git/config y /.git/index devolvian contenido de
+# verdad, o sea que cualquiera podia reconstruir el historial completo
+# del repositorio, incluidos los archivos borrados.
+# No hubo fuga: allchat-web es PUBLICO en GitHub y su historial se
+# reviso entero (32 commits, 16 archivos, ni una clave). Pero se cierra
+# igual, porque el dia que alguien commitee un secreto sin querer estaria
+# vivo en internet al minuto siguiente, y porque cualquier escaner lo
+# marca en rojo.
+.git
+
+# La configuracion del despliegue tampoco pinta nada servida.
+wrangler.jsonc
+
+# Y este mismo archivo.
+.assetsignore
