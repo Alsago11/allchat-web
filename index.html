@@ -68,31 +68,25 @@
 <style>
   :root {
     --fondo: #0a0d14;
-    --panel: #10141d;
-    --panel2: #161c28;
+    --panel: #141b28;
+    --panel2: #1d2634;
     --teal: #4be1c3;
     --violeta: #a78bfa;
     --naranja: #f5a35c;
     --texto: #e8edf4;
-    --atenuado: #8b98a5;
-    --borde: #232c3b;
+    --atenuado: #96a4b4;
+    --borde: #2b3547;
     --alto-nav: 56px;
   }
   * { margin: 0; padding: 0; box-sizing: border-box; }
   html {
     scroll-behavior: smooth;
     scroll-padding-top: var(--alto-nav);
-    /* EL CARRUSEL (elegido por Álvaro 28/07): cada punto ocupa su
-       pantalla y la rueda avanza de uno en uno. El imán va en
-       "proximity" y no en "mandatory" a propósito: con mandatory, una
-       sección más alta que la pantalla se vuelve inalcanzable por
-       abajo (el navegador te devuelve al principio). */
-    scroll-snap-type: y proximity;
   }
   body {
     background:
-      radial-gradient(ellipse 900px 560px at 32% 240px, rgba(75,225,195,.13), transparent 70%),
-      radial-gradient(ellipse 900px 560px at 72% 160px, rgba(167,139,250,.12), transparent 70%),
+      radial-gradient(ellipse 900px 560px at 32% 240px, rgba(75,225,195,.15), transparent 70%),
+      radial-gradient(ellipse 900px 560px at 72% 160px, rgba(167,139,250,.13), transparent 70%),
       var(--fondo);
     color: var(--texto);
     font-family: "Segoe UI", system-ui, sans-serif; line-height: 1.6;
@@ -129,19 +123,27 @@
   }
   nav .cta-barra:hover { filter: brightness(1.08); transform: translateY(-1px); }
 
-  /* ---------- el ritmo: una sección, una pantalla ---------- */
-  .bloque {
-    min-height: calc(100vh - var(--alto-nav));
-    min-height: calc(100dvh - var(--alto-nav));
-    padding: 68px 0; display: flex; align-items: center;
-    scroll-snap-align: start;
-  }
+  /* ---------- el ritmo: cada sección mide lo que mide ----------
+     Antes cada sección medía una pantalla entera con el contenido
+     centrado, y eso, sin el carrusel vertical que la recorría, dejaba
+     huecos negros enormes: es lo que reportó un betatester con portátil.
+     Las dos cosas se fueron juntas. */
+  .bloque { padding: 88px 0; }
   .bloque > .contenedor { width: 100%; }
-  /* "Sobre nosotros" es el que más texto lleva y el último junta
-     formulario, candado y pie: medidos los dos, con el aire normal se
-     salían de la pantalla en una ventana de 700 de alto. */
-  .bloque.compacto { padding: 32px 0; }
-  .bloque:last-of-type { padding: 42px 0; }
+  .bloque.compacto { padding: 76px 0; }
+  .bloque:last-of-type { padding: 76px 0 40px; }
+  #portada { padding: 92px 0 78px; }
+  /* con las secciones midiendo lo suyo hacen falta costuras, o el final
+     de una y el principio de la siguiente se confunden */
+  .banda { border-top: 1px solid var(--borde); }
+  .banda.tenue { background: rgba(255,255,255,.022); }
+  #comofunciona {
+    background:
+      radial-gradient(ellipse 760px 420px at 50% 40%, rgba(75,225,195,.07), transparent 70%),
+      rgba(255,255,255,.022);
+  }
+  #planes { background: radial-gradient(ellipse 700px 380px at 50% 0%, rgba(167,139,250,.09), transparent 70%); }
+  #descargar { background: radial-gradient(ellipse 800px 420px at 50% 100%, rgba(75,225,195,.09), transparent 70%); }
 
   /* entradas animadas: cada punto entra al llegar */
   .js .anima {
@@ -151,22 +153,6 @@
   .bloque.visto .anima { opacity: 1; transform: translateY(0); }
   .bloque.visto .anima.tarde { transition-delay: .14s; }
   .bloque.visto .anima.mas-tarde { transition-delay: .26s; }
-
-  /* ---------- puntos de progreso ---------- */
-  .puntos-progreso {
-    position: fixed; right: 18px; top: 50%; transform: translateY(-50%);
-    z-index: 60; display: flex; flex-direction: column; gap: 10px;
-  }
-  .puntos-progreso button {
-    width: 9px; height: 9px; padding: 0; border-radius: 50%; cursor: pointer;
-    border: 1px solid #3a465b; background: transparent; transition: all .25s;
-  }
-  .puntos-progreso button:hover { border-color: var(--teal); }
-  .puntos-progreso button.activo { background: var(--teal); border-color: var(--teal); transform: scale(1.35); }
-  /* mientras el scroll va suelto, los puntos se apagan: que se vea que
-     la página está en otro modo y no parezca que hace cosas raras */
-  .puntos-progreso.suelto button { opacity: .3; }
-  .puntos-progreso.suelto button.activo { transform: scale(1); }
 
   /* ---------- héroe ---------- */
   .heroe { text-align: center; width: 100%; }
@@ -666,24 +652,11 @@
   footer a { color: var(--teal); text-decoration: none; }
   footer .legal { display: flex; gap: 16px; flex-wrap: wrap; align-items: center; }
 
-  /* ---------- con el DEDO no se secuestra nada ----------
-     Esto va por tipo de puntero y NO por ancho de ventana (29/07): con
-     el ancho, cualquiera con zoom del navegador o con el escalado de
-     Windows alto se quedaba sin carrusel sin saber por qué. Táctil o
-     ventana diminuta: ritmo con aire, entradas animadas y el dedo
-     manda. Con ratón o trackpad: carrusel, aunque la ventana sea
-     estrecha. */
-  @media (pointer: coarse), (max-width: 559px) {
-    .bloque { min-height: 78vh; }
-    html { scroll-snap-type: none; }
-    .puntos-progreso { display: none; }
-  }
-
   /* ---------- ventana estrecha: solo la barra y el aire ----------
      Esto sí es cosa del ancho, tenga el visitante dedo o ratón. */
   @media (max-width: 760px) {
-    .bloque { padding: 56px 0; }
-    .bloque.compacto, .bloque:last-of-type { padding: 48px 0; }
+    .bloque { padding: 62px 0; }
+    .bloque.compacto, .bloque:last-of-type { padding: 58px 0 34px; }
     .discord { flex-direction: column; align-items: flex-start; }
     .btn-discord { white-space: normal; }
     /* los enlaces en UNA línea que se arrastra: envueltos ocupaban
@@ -698,14 +671,231 @@
 
   /* quien pide menos animación, menos animación */
   @media (prefers-reduced-motion: reduce) {
-    html { scroll-behavior: auto; scroll-snap-type: none; }
+    html { scroll-behavior: auto; }
     .js .anima { opacity: 1; transform: none; transition: none; }
     .js .baila { transform: none !important; transition: none; }
     .logo-flota { animation: none; }
   }
+
+  /* ================================================================
+     EL CARRUSEL HORIZONTAL
+     Sustituye al carrusel vertical de julio, que secuestraba la rueda y
+     con trackpad soltaba el freno en 195 ms. Este se mueve A LO ANCHO y
+     no toca el scroll de la página, así que no hay freno que soltar.
+     ================================================================ */
+  .carrusel { width: 100%; }
+  .carrusel-cab { text-align: center; max-width: 620px; margin: 0 auto 30px; }
+  .carrusel-cab .num {
+    color: var(--violeta); font-family: Consolas, monospace; font-size: .9rem; letter-spacing: .1em;
+  }
+  .carrusel-cab h2 { font-size: 1.9rem; margin: 8px 0 10px; letter-spacing: -.01em; }
+  .carrusel-cab h2 .tealino { color: var(--teal); }
+
+  .escena {
+    position: relative;
+    background: rgba(20,27,40,.5); border: 1px solid var(--borde);
+    border-radius: 22px; padding: 20px 28px;
+    box-shadow: 0 30px 80px rgba(0,0,0,.35);
+    -webkit-backdrop-filter: blur(26px) saturate(1.25);
+    backdrop-filter: blur(26px) saturate(1.25);
+  }
+  .pista {
+    position: relative; display: flex; align-items: stretch;
+    overflow-x: auto; overflow-y: hidden;
+    scroll-snap-type: x mandatory; scroll-behavior: smooth;
+    scrollbar-width: none; overscroll-behavior-x: contain;
+    transition: opacity .18s ease;
+  }
+  .pista::-webkit-scrollbar { display: none; }
+  .diapo {
+    flex: 0 0 100%; min-width: 0; scroll-snap-align: center; padding: 14px 6px;
+  }
+  .diapo .demo-seccion { height: 100%; }
+  /* la 06 es la diapositiva más baja y el marco lo fija la más alta, así
+     que sin esto le queda un agujero de aire dentro */
+  .diapo .escenario-estilos { min-height: 300px; }
+
+  .flecha {
+    position: absolute; top: 50%; transform: translateY(-50%); z-index: 5;
+    width: 44px; height: 44px; border-radius: 50%; cursor: pointer;
+    background: var(--panel); border: 1px solid var(--borde); color: var(--atenuado);
+    display: flex; align-items: center; justify-content: center;
+    transition: all .18s ease;
+  }
+  .flecha:hover { border-color: var(--teal); color: var(--teal); transform: translateY(-50%) scale(1.06); }
+  .flecha.izq { left: -22px; }
+  .flecha.der { right: -22px; }
+
+  .mando-carrusel { display: flex; align-items: center; gap: 16px; margin-top: 18px; flex-wrap: wrap; }
+  .segmentos { display: flex; gap: 6px; flex: 1 1 240px; min-width: 180px; }
+  .segmento {
+    flex: 1; height: 5px; border-radius: 3px; padding: 0; cursor: pointer;
+    background: var(--borde); border: none; overflow: hidden; transition: background .2s;
+  }
+  .segmento:hover { background: #3d4a60; }
+  .segmento i { display: block; height: 100%; width: 0; background: var(--teal); border-radius: 3px; }
+  .segmento.pasado i { width: 100%; background: rgba(75,225,195,.45); }
+  .segmento.activo i { width: 0; animation: corre 5s linear forwards; }
+  .pausado .segmento.activo i { animation-play-state: paused; }
+  @keyframes corre { to { width: 100%; } }
+
+  .estado-carrusel {
+    display: flex; align-items: center; gap: 10px;
+    font-size: .84rem; color: var(--atenuado); white-space: nowrap;
+  }
+  .btn-pausa {
+    width: 34px; height: 34px; border-radius: 50%; cursor: pointer; flex: none;
+    background: var(--panel); border: 1px solid var(--borde); color: var(--teal);
+    display: flex; align-items: center; justify-content: center; transition: all .18s ease;
+  }
+  .btn-pausa:hover { border-color: var(--teal); }
+  .pausado .btn-pausa { background: var(--teal); color: #0c1017; border-color: var(--teal); }
+  .nombre-diapo { color: var(--texto); font-weight: 600; }
+  .contador-diapo { font-family: Consolas, monospace; color: var(--atenuado); }
+
+  /* sin JavaScript las siete quedan una debajo de otra y se leen enteras */
+  html:not(.js) .pista { display: block; overflow: visible; scroll-snap-type: none; }
+  html:not(.js) .diapo { padding: 34px 0; border-top: 1px solid var(--borde); }
+  html:not(.js) .diapo:first-child { border-top: none; padding-top: 6px; }
+  html:not(.js) .flecha, html:not(.js) .mando-carrusel { display: none; }
+  html:not(.js) .escena { background: transparent; border: none; padding: 0; box-shadow: none; }
+
+  /* ================================================================
+     EL FONDO: VELOS DE LUZ
+     Once cintas anchas repartidas por toda la página, cada una con su
+     silueta, su ancho, su color y su deriva. Cada una se pinta DOS
+     veces, un resplandor ancho y muy difuminado y encima un núcleo
+     estrecho y brillante: con una sola pasada el corazón cálido sale
+     marrón apagado. No se descarga nada, lo dibuja el navegador.
+     ================================================================ */
+  body { position: relative; }
+  body > nav, body > section { position: relative; z-index: 1; }
+  .fondo {
+    position: absolute; inset: 0; z-index: 0; pointer-events: none; overflow: hidden;
+    /* más luz por los lados y más calma por el centro, que es la columna
+       por donde baja el texto */
+    -webkit-mask-image: linear-gradient(90deg, #000, rgba(0,0,0,.44) 17%, rgba(0,0,0,.44) 83%, #000);
+    mask-image: linear-gradient(90deg, #000, rgba(0,0,0,.44) 17%, rgba(0,0,0,.44) 83%, #000);
+  }
+  .fondo .velos { position: absolute; inset: 0; width: 100%; height: 100%; opacity: .47; }
+  .fondo .vf { stop-color: #5b7bd6; }
+  .fondo .vt { stop-color: #4be1c3; }
+  .fondo .vw { stop-color: #ffdcc4; }
+  .fondo .vv { stop-color: #8a6fe0; }
+
+  /* cada cinta va a la deriva por su cuenta: distinto viaje, distinta
+     duración y arrancada en distinto momento, para que las once no se
+     muevan a la vez como un bloque */
+  @keyframes deriva {
+    from { transform: translate(0, 0); }
+    to   { transform: translate(var(--dx, 40px), var(--dy, 20px)); }
+  }
+  .fondo g.cinta {
+    animation: deriva var(--dur, 52s) ease-in-out infinite alternate;
+    animation-delay: var(--retraso, 0s);
+    will-change: transform;
+  }
+  /* el color pasa por los tres tintes en orden, del frío a la marca y de
+     la marca al rosa, girando el tono muy despacio. Se gira la capa
+     entera, que es una sola operación, en vez de animar veinte colores
+     uno a uno. */
+  @keyframes tintar {
+    from { filter: hue-rotate(-30deg) saturate(1.06); }
+    to   { filter: hue-rotate(44deg) saturate(1.12); }
+  }
+  .fondo .velos { animation: tintar 168s ease-in-out infinite alternate; }
+
+  /* los paneles dejan pasar la luz de detrás */
+  .plan, .tarjeta-taller, .empresas {
+    background: rgba(20,27,40,.5);
+    -webkit-backdrop-filter: blur(26px) saturate(1.25);
+    backdrop-filter: blur(26px) saturate(1.25);
+  }
+
+  /* que el fondo no se coma el texto: un halo oscuro pegado a la letra.
+     En los títulos NO se pone: los que llevan degradado tienen la letra
+     transparente y se vería la sombra suelta. */
+  .sobre p, .heroe p.sub, .carrusel-cab p, .planes-cab p, .cierre p {
+    text-shadow: 0 2px 18px rgba(6,9,16,.95), 0 0 4px rgba(6,9,16,.8);
+  }
+  /* el bloque de Sobre nosotros es el único párrafo largo que cae directo
+     sobre el fondo, sin panel debajo. La nube se sale de su caja a
+     propósito: si el degradado se apagara dentro, se vería el borde. */
+  .sobre .lado-texto { position: relative; }
+  .sobre .lado-texto::before {
+    content: ""; position: absolute; inset: -54px -72px; z-index: -1;
+    background: radial-gradient(68% 60% at 46% 50%,
+                rgba(8,11,18,.9) 0%, rgba(8,11,18,.74) 42%, rgba(8,11,18,0) 76%);
+  }
+
+  /* ---------- empresas, dentro de Planes ---------- */
+  .empresas {
+    margin-top: 20px; border: 1px solid var(--borde); border-radius: 16px;
+    padding: 22px 26px; display: flex; gap: 22px; align-items: center; flex-wrap: wrap;
+  }
+  .empresas .icono-empresas { flex: none; line-height: 0; }
+  .empresas .icono-empresas svg { display: block; }
+  .empresas .lado { flex: 1 1 340px; }
+  .empresas h3 { font-size: 1.1rem; }
+  .empresas p { color: var(--atenuado); font-size: .93rem; margin-top: 6px; }
+  .empresas .cta { white-space: nowrap; }
+
+  @media (max-width: 760px) {
+    .escena { padding: 18px 14px; border-radius: 16px; }
+    .empresas { flex-direction: column; align-items: flex-start; }
+  }
+  /* con la ventana estrecha manda el dedo: las flechas tapaban el texto
+     de la diapositiva, así que se quitan y se navega deslizando */
+  @media (max-width: 640px) {
+    .flecha { display: none; }
+    .segmento { height: 7px; }
+    .mando-carrusel { margin-top: 18px; }
+  }
+
+  /* quien pide menos animación, nada se mueve solo */
+  @media (prefers-reduced-motion: reduce) {
+    .fondo g.cinta, .fondo .velos { animation: none; }
+    .pista { scroll-behavior: auto; }
+    .segmento.activo i { animation: none; width: 100%; }
+  }
 </style>
 </head>
 <body>
+
+<!-- EL FONDO. Va debajo de todo, no se puede pulsar y no lo lee ningún
+     lector de pantalla. Once cintas de luz repartidas por toda la página,
+     cada una a la deriva a su ritmo. Cero KB: lo dibuja el navegador. -->
+<div class="fondo" aria-hidden="true">
+  <svg class="velos" viewBox="0 0 1440 6400" preserveAspectRatio="none">
+    <defs>
+      <linearGradient id="res0" x1="0" y1="0" x2="1" y2="1"><stop class="vf" offset="0" stop-opacity="0"/><stop class="vf" offset=".24" stop-opacity="0.4"/><stop class="vw" offset="0.370" stop-opacity="0.5"/><stop class="vw" offset="0.630" stop-opacity="0.5"/><stop class="vv" offset=".76" stop-opacity="0.4"/><stop class="vv" offset="1" stop-opacity="0"/></linearGradient>
+      <linearGradient id="nuc0" x1="0" y1="0" x2="1" y2="1"><stop class="vf" offset="0" stop-opacity="0"/><stop class="vf" offset=".24" stop-opacity="0.48"/><stop class="vw" offset="0.450" stop-opacity="0.95"/><stop class="vw" offset="0.550" stop-opacity="0.95"/><stop class="vv" offset=".76" stop-opacity="0.48"/><stop class="vv" offset="1" stop-opacity="0"/></linearGradient>
+      <linearGradient id="res1" x1="0" y1="0" x2="1" y2="1"><stop class="vt" offset="0" stop-opacity="0"/><stop class="vt" offset=".24" stop-opacity="0.4"/><stop class="vw" offset="0.370" stop-opacity="0.5"/><stop class="vw" offset="0.630" stop-opacity="0.5"/><stop class="vv" offset=".76" stop-opacity="0.4"/><stop class="vv" offset="1" stop-opacity="0"/></linearGradient>
+      <linearGradient id="nuc1" x1="0" y1="0" x2="1" y2="1"><stop class="vt" offset="0" stop-opacity="0"/><stop class="vt" offset=".24" stop-opacity="0.48"/><stop class="vw" offset="0.450" stop-opacity="0.95"/><stop class="vw" offset="0.550" stop-opacity="0.95"/><stop class="vv" offset=".76" stop-opacity="0.48"/><stop class="vv" offset="1" stop-opacity="0"/></linearGradient>
+      <linearGradient id="res2" x1="0" y1="0" x2="1" y2="1"><stop class="vf" offset="0" stop-opacity="0"/><stop class="vf" offset=".24" stop-opacity="0.4"/><stop class="vw" offset="0.370" stop-opacity="0.5"/><stop class="vw" offset="0.630" stop-opacity="0.5"/><stop class="vt" offset=".76" stop-opacity="0.4"/><stop class="vt" offset="1" stop-opacity="0"/></linearGradient>
+      <linearGradient id="nuc2" x1="0" y1="0" x2="1" y2="1"><stop class="vf" offset="0" stop-opacity="0"/><stop class="vf" offset=".24" stop-opacity="0.48"/><stop class="vw" offset="0.450" stop-opacity="0.95"/><stop class="vw" offset="0.550" stop-opacity="0.95"/><stop class="vt" offset=".76" stop-opacity="0.48"/><stop class="vt" offset="1" stop-opacity="0"/></linearGradient>
+      <filter id="b-ancho" x="-14%" y="-260%" width="128%" height="620%"><feGaussianBlur stdDeviation="46"/></filter>
+      <filter id="b-medio" x="-14%" y="-260%" width="128%" height="620%"><feGaussianBlur stdDeviation="32"/></filter>
+      <filter id="b-fino" x="-14%" y="-260%" width="128%" height="620%"><feGaussianBlur stdDeviation="20"/></filter>
+      <filter id="b-na" x="-14%" y="-260%" width="128%" height="620%"><feGaussianBlur stdDeviation="12"/></filter>
+      <filter id="b-nm" x="-14%" y="-260%" width="128%" height="620%"><feGaussianBlur stdDeviation="8"/></filter>
+      <filter id="b-nf" x="-14%" y="-260%" width="128%" height="620%"><feGaussianBlur stdDeviation="5"/></filter>
+    </defs>
+    <g style="mix-blend-mode:screen">
+      <g class="cinta" style="--dx:35px;--dy:19px;--dur:50s;--retraso:-11s"><path d="M-280 602 C 240 225, 580 602, 960 225 S 1380 82, 1740 485" stroke="url(#res0)" stroke-width="168" fill="none" stroke-linecap="round" filter="url(#b-ancho)"/><path d="M-280 602 C 240 225, 580 602, 960 225 S 1380 82, 1740 485" stroke="url(#nuc0)" stroke-width="56" fill="none" stroke-linecap="round" filter="url(#b-na)"/></g>
+      <g class="cinta" style="--dx:-56px;--dy:11px;--dur:57s;--retraso:-9s"><path d="M-280 654 C 300 1057, 680 654, 1020 1057 S 1420 1174, 1740 797" stroke="url(#res1)" stroke-width="96" fill="none" stroke-linecap="round" filter="url(#b-medio)"/><path d="M-280 654 C 300 1057, 680 654, 1020 1057 S 1420 1174, 1740 797" stroke="url(#nuc1)" stroke-width="32" fill="none" stroke-linecap="round" filter="url(#b-nm)"/></g>
+      <g class="cinta" style="--dx:72px;--dy:4px;--dur:66s;--retraso:-41s"><path d="M-280 1435 C 180 1375, 520 1545, 900 1595 S 1340 1435, 1740 1375" stroke="url(#res2)" stroke-width="64" fill="none" stroke-linecap="round" filter="url(#b-fino)"/><path d="M-280 1435 C 180 1375, 520 1545, 900 1595 S 1340 1435, 1740 1375" stroke="url(#nuc2)" stroke-width="21" fill="none" stroke-linecap="round" filter="url(#b-nf)"/></g>
+      <g class="cinta" style="--dx:55px;--dy:-38px;--dur:41s;--retraso:-2s"><path d="M-280 2145 C 360 2217, 760 1985, 1080 1897 S 1440 2145, 1740 2217" stroke="url(#res0)" stroke-width="64" fill="none" stroke-linecap="round" filter="url(#b-fino)"/><path d="M-280 2145 C 360 2217, 760 1985, 1080 1897 S 1440 2145, 1740 2217" stroke="url(#nuc0)" stroke-width="21" fill="none" stroke-linecap="round" filter="url(#b-nf)"/></g>
+      <g class="cinta" style="--dx:73px;--dy:-43px;--dur:67s;--retraso:-20s"><path d="M-280 2788 C 240 2556, 580 2788, 960 2556 S 1380 2468, 1740 2716" stroke="url(#res1)" stroke-width="96" fill="none" stroke-linecap="round" filter="url(#b-medio)"/><path d="M-280 2788 C 240 2556, 580 2788, 960 2556 S 1380 2468, 1740 2716" stroke="url(#nuc1)" stroke-width="32" fill="none" stroke-linecap="round" filter="url(#b-nm)"/></g>
+      <g class="cinta" style="--dx:52px;--dy:-17px;--dur:56s;--retraso:-31s"><path d="M-280 2940 C 300 3343, 680 2940, 1020 3343 S 1420 3460, 1740 3083" stroke="url(#res2)" stroke-width="96" fill="none" stroke-linecap="round" filter="url(#b-medio)"/><path d="M-280 2940 C 300 3343, 680 2940, 1020 3343 S 1420 3460, 1740 3083" stroke="url(#nuc2)" stroke-width="32" fill="none" stroke-linecap="round" filter="url(#b-nm)"/></g>
+      <g class="cinta" style="--dx:37px;--dy:37px;--dur:55s;--retraso:-26s"><path d="M-280 3721 C 180 3661, 520 3831, 900 3881 S 1340 3721, 1740 3661" stroke="url(#res0)" stroke-width="64" fill="none" stroke-linecap="round" filter="url(#b-fino)"/><path d="M-280 3721 C 180 3661, 520 3831, 900 3881 S 1340 3721, 1740 3661" stroke="url(#nuc0)" stroke-width="21" fill="none" stroke-linecap="round" filter="url(#b-nf)"/></g>
+      <g class="cinta" style="--dx:0px;--dy:-17px;--dur:70s;--retraso:-18s"><path d="M-280 4402 C 360 4452, 760 4292, 1080 4232 S 1440 4402, 1740 4452" stroke="url(#res1)" stroke-width="130" fill="none" stroke-linecap="round" filter="url(#b-medio)"/><path d="M-280 4402 C 360 4452, 760 4292, 1080 4232 S 1440 4402, 1740 4452" stroke="url(#nuc1)" stroke-width="43" fill="none" stroke-linecap="round" filter="url(#b-nm)"/></g>
+      <g class="cinta" style="--dx:64px;--dy:-33px;--dur:63s;--retraso:-6s"><path d="M-280 5024 C 240 4864, 580 5024, 960 4864 S 1380 4804, 1740 4974" stroke="url(#res2)" stroke-width="64" fill="none" stroke-linecap="round" filter="url(#b-fino)"/><path d="M-280 5024 C 240 4864, 580 5024, 960 4864 S 1380 4804, 1740 4974" stroke="url(#nuc2)" stroke-width="21" fill="none" stroke-linecap="round" filter="url(#b-nf)"/></g>
+      <g class="cinta" style="--dx:-63px;--dy:-44px;--dur:38s;--retraso:-13s"><path d="M-280 5275 C 300 5600, 680 5275, 1020 5600 S 1420 5695, 1740 5390" stroke="url(#res0)" stroke-width="168" fill="none" stroke-linecap="round" filter="url(#b-ancho)"/><path d="M-280 5275 C 300 5600, 680 5275, 1020 5600 S 1420 5695, 1740 5390" stroke="url(#nuc0)" stroke-width="56" fill="none" stroke-linecap="round" filter="url(#b-na)"/></g>
+      <g class="cinta" style="--dx:40px;--dy:2px;--dur:63s;--retraso:-26s"><path d="M-280 5985 C 180 5897, 520 6145, 900 6217 S 1340 5985, 1740 5897" stroke="url(#res1)" stroke-width="64" fill="none" stroke-linecap="round" filter="url(#b-fino)"/><path d="M-280 5985 C 180 5897, 520 6145, 900 6217 S 1340 5985, 1740 5897" stroke="url(#nuc1)" stroke-width="21" fill="none" stroke-linecap="round" filter="url(#b-nf)"/></g>
+    </g>
+  </svg>
+</div>
 
 <nav>
   <div class="contenedor">
@@ -722,11 +912,7 @@
       <span><span class="all">All</span>Chat</span>
     </a>
     <div class="enlaces">
-      <a href="#frase">Frase traductora</a>
-      <a href="#atajo">Ctrl+Alt+A</a>
-      <a href="#correccion">Corrección</a>
-      <a href="#prediccion">Predicción</a>
-      <a href="#aprende">Aprende de ti</a>
+      <a href="#comofunciona">Cómo funciona</a>
       <a href="#planes">Planes</a>
       <a href="#nosotros">Sobre nosotros</a>
       <a href="https://discord.gg/A5E4XJdwbV" target="_blank" rel="noopener">Discord</a>
@@ -738,7 +924,7 @@
 <!-- 0 · PORTADA -->
 <section class="bloque" id="portada">
   <div class="contenedor">
-    <div class="heroe">
+<div class="heroe">
       <div class="lockup anima">
         <div class="logo-flota">
           <svg class="logo-heroe" viewBox="0 0 260 216" aria-label="Logo de AllChat">
@@ -761,17 +947,28 @@
       favorito. AllChat lo corrige y lo traduce sin que salgas de la ventana.
       Míralo en acción: <strong>esto es lo que verás en tu pantalla.</strong></p>
       <div class="botones-heroe anima mas-tarde">
-        <a class="cta" href="#frase">Ver cómo funciona ↓</a>
+        <a class="cta" href="#comofunciona">Ver cómo funciona ↓</a>
         <a class="cta secundaria" href="https://apps.microsoft.com/detail/9NMKD4HFR44X" data-instalar target="_blank" rel="noopener">Descargar gratis</a>
       </div>
     </div>
   </div>
 </section>
 
-<!-- 1 · FRASE TRADUCTORA -->
-<section class="bloque" id="frase">
+<!-- 01 a 07 · LAS SIETE DEMOS, EN UN CARRUSEL HORIZONTAL -->
+<section class="bloque banda tenue" id="comofunciona">
   <div class="contenedor">
-    <div class="demo-seccion">
+    <div class="carrusel">
+      <div class="carrusel-cab anima">
+        <div class="num">CÓMO FUNCIONA</div>
+        <h2>Siete cosas que hace <span class="tealino">mientras escribes.</span></h2>
+      </div>
+      <div class="escena anima tarde">
+        <button class="flecha izq" id="flecha-izq" type="button" aria-label="Anterior">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>
+        </button>
+        <div class="pista" id="pista" tabindex="0" aria-live="polite" aria-label="Lo que hace AllChat">
+          <article class="diapo" id="frase" data-nombre="La estrella" data-num="01">
+<div class="demo-seccion">
       <div class="demo-texto anima">
         <div class="num">01 · LA ESTRELLA</div>
         <h2>Escribe. Respira. <span class="tealino">Ya está traducido.</span></h2>
@@ -799,13 +996,9 @@
         </div>
       </div>
     </div>
-  </div>
-</section>
-
-<!-- 2 · CTRL+ALT+A -->
-<section class="bloque" id="atajo">
-  <div class="contenedor">
-    <div class="demo-seccion invertida">
+          </article>
+          <article class="diapo" id="atajo" data-nombre="El atajo" data-num="02">
+<div class="demo-seccion invertida">
       <div class="demo-texto anima">
         <div class="num">02 · EL ATAJO</div>
         <h2>¿Frase ya escrita? <span class="tealino">Ctrl+Alt+A.</span></h2>
@@ -830,13 +1023,9 @@
         </div>
       </div>
     </div>
-  </div>
-</section>
-
-<!-- 3 · CORRECCIÓN -->
-<section class="bloque" id="correccion">
-  <div class="contenedor">
-    <div class="demo-seccion">
+          </article>
+          <article class="diapo" id="correccion" data-nombre="Sin traducir" data-num="03">
+<div class="demo-seccion">
       <div class="demo-texto anima">
         <div class="num">03 · SIN TRADUCIR</div>
         <h2>¿Mismo idioma? <span class="tealino">Corrige y ya.</span></h2>
@@ -863,13 +1052,9 @@
         </div>
       </div>
     </div>
-  </div>
-</section>
-
-<!-- 4 · PREDICCIÓN -->
-<section class="bloque" id="prediccion">
-  <div class="contenedor">
-    <div class="demo-seccion invertida">
+          </article>
+          <article class="diapo" id="prediccion" data-nombre="Mientras tecleas" data-num="04">
+<div class="demo-seccion invertida">
       <div class="demo-texto anima">
         <div class="num">04 · MIENTRAS TECLEAS</div>
         <h2>Ves la palabra <span class="tealino">antes de acabarla.</span></h2>
@@ -900,13 +1085,9 @@
         </div>
       </div>
     </div>
-  </div>
-</section>
-
-<!-- 5 · APRENDE DE TI -->
-<section class="bloque" id="aprende">
-  <div class="contenedor">
-    <div class="demo-seccion">
+          </article>
+          <article class="diapo" id="aprende" data-nombre="Se vuelve tuyo" data-num="05">
+<div class="demo-seccion">
       <div class="demo-texto anima">
         <div class="num">05 · SE VUELVE TUYO</div>
         <h2>Cuanto más escribes, <span class="tealino">más te entiende.</span></h2>
@@ -937,13 +1118,9 @@
         </div>
       </div>
     </div>
-  </div>
-</section>
-
-<!-- 6 · A TU GUSTO -->
-<section class="bloque" id="estilos">
-  <div class="contenedor">
-    <div class="demo-seccion invertida">
+          </article>
+          <article class="diapo" id="estilos" data-nombre="A tu gusto" data-num="06">
+<div class="demo-seccion invertida">
       <div class="demo-texto anima">
         <div class="num">06 · A TU GUSTO</div>
         <h2>Tus tarjetas, <span class="tealino">tu estilo.</span></h2>
@@ -967,13 +1144,9 @@
         </div>
       </div>
     </div>
-  </div>
-</section>
-
-<!-- 7 · LEER -->
-<section class="bloque" id="leer">
-  <div class="contenedor">
-    <div class="demo-seccion">
+          </article>
+          <article class="diapo" id="leer" data-nombre="En la otra dirección" data-num="07">
+<div class="demo-seccion">
       <div class="demo-texto anima">
         <div class="num">07 · EN LA OTRA DIRECCIÓN</div>
         <h2>¿Te escriben raro? <span class="tealino">Léelo en tu idioma.</span></h2>
@@ -999,13 +1172,31 @@
         </div>
       </div>
     </div>
+          </article>
+        </div>
+        <button class="flecha der" id="flecha-der" type="button" aria-label="Siguiente">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg>
+        </button>
+      </div>
+      <div class="mando-carrusel">
+        <div class="segmentos" id="segmentos"></div>
+        <div class="estado-carrusel">
+          <button class="btn-pausa" id="btn-pausa" type="button" aria-label="Parar">
+            <svg id="icono-pausa" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>
+          </button>
+          <span><span class="contador-diapo" id="contador">1 de 7</span> ·
+          <span class="nombre-diapo" id="nombre-diapo">La estrella</span></span>
+          <span id="aviso-pausa" style="color:var(--teal)"></span>
+        </div>
+      </div>
+    </div>
   </div>
 </section>
 
-<!-- 8 · PLANES -->
-<section class="bloque compacto" id="planes">
+<!-- 08 · PLANES -->
+<section class="bloque compacto banda" id="planes">
   <div class="contenedor">
-    <div class="planes">
+<div class="planes">
       <div class="planes-cab anima">
         <div class="num">08 · PLANES</div>
         <h2>Corregir es gratis. <span class="tealino">Traducir, cuando quieras.</span></h2>
@@ -1067,6 +1258,39 @@
         </div>
       </div>
 
+      <div class="empresas anima mas-tarde">
+        <div class="icono-empresas">
+          <svg width="58" height="58" viewBox="0 0 64 64" aria-hidden="true">
+            <defs>
+              <mask id="edificios">
+                <rect x="6" y="22" width="19" height="34" fill="#fff"/>
+                <rect x="27" y="8" width="18" height="48" fill="#fff"/>
+                <rect x="47" y="30" width="12" height="26" fill="#fff"/>
+                <g fill="#000">
+                  <rect x="10" y="27" width="4" height="4"/><rect x="17" y="27" width="4" height="4"/>
+                  <rect x="10" y="34" width="4" height="4"/><rect x="17" y="34" width="4" height="4"/>
+                  <rect x="10" y="41" width="4" height="4"/><rect x="17" y="41" width="4" height="4"/>
+                  <rect x="10" y="48" width="4" height="4"/><rect x="17" y="48" width="4" height="4"/>
+                  <rect x="31" y="13" width="4" height="4"/><rect x="38" y="13" width="4" height="4"/>
+                  <rect x="31" y="20" width="4" height="4"/><rect x="38" y="20" width="4" height="4"/>
+                  <rect x="31" y="27" width="4" height="4"/><rect x="38" y="27" width="4" height="4"/>
+                  <rect x="31" y="34" width="4" height="4"/><rect x="38" y="34" width="4" height="4"/>
+                  <rect x="31" y="41" width="4" height="4"/><rect x="38" y="41" width="4" height="4"/>
+                  <rect x="49" y="35" width="4" height="4"/><rect x="49" y="42" width="4" height="4"/>
+                  <rect x="49" y="49" width="4" height="4"/>
+                </g>
+              </mask>
+            </defs>
+            <rect width="64" height="64" fill="#ffffff" mask="url(#edificios)"/>
+          </svg>
+        </div>
+        <div class="lado">
+          <h3>¿Sois un equipo o una empresa?</h3>
+          <p>Escríbenos y te contestamos lo antes posible.</p>
+        </div>
+        <a class="cta secundaria" href="mailto:hola@allchat.es?subject=AllChat%20para%20un%20equipo">Escribir a hola@allchat.es</a>
+      </div>
+
       <div class="ver-comparacion anima mas-tarde">
         <button type="button" id="btn-comparacion" aria-expanded="false" aria-controls="comparacion">Ver la comparación completa ▾</button>
       </div>
@@ -1092,10 +1316,10 @@
   </div>
 </section>
 
-<!-- 9 · SOBRE NOSOTROS -->
-<section class="bloque compacto" id="nosotros">
+<!-- 09 · SOBRE NOSOTROS -->
+<section class="bloque compacto banda" id="nosotros">
   <div class="contenedor">
-    <div class="sobre">
+<div class="sobre">
       <div class="lado-texto anima">
         <div class="num">09 · SOBRE NOSOTROS</div>
         <h2>Detrás de AllChat <span class="tealino">hay una persona.</span></h2>
@@ -1143,9 +1367,9 @@
 </section>
 
 <!-- 10 · DESCARGAR + DISCORD + EL CANDADO + PIE -->
-<section class="bloque" id="descargar">
+<section class="bloque banda" id="descargar">
   <div class="contenedor">
-    <div style="width:100%">
+<div style="width:100%">
       <div class="cierre anima">
         <h2>Habla con <span class="grad">todo el mundo</span>.</h2>
         <p class="intro">Gratis para Windows. Se instala desde la Microsoft Store en
@@ -1207,13 +1431,7 @@
   </div>
 </section>
 
-<div class="puntos-progreso" id="puntos-progreso" aria-hidden="true"></div>
-
 <script>
-  /* ---------- PLANES: mensual o anual, y la comparación plegada ----------
-     Los precios llevan el IVA dentro (INFRA "EL PAGO POR STRIPE"). El
-     botón de comprar es un enlace a api.allchat.es/pago/ir, que manda a
-     la página de pago de Stripe; aquí solo se le cambia el plan. */
   const PRECIOS = {
     mes:  { premium: "5,99 €", cada: "al mes", equivale: "", plan: "mensual" },
     anio: { premium: "54,99 €", cada: "al año", equivale: "sale a 4,58 € al mes", plan: "anual" },
@@ -1301,236 +1519,170 @@
       a.addEventListener("click", () => avisar({ que: "discord" })));
   })();
 
-  /* ================================================================
-     EL CARRUSEL: la rueda avanza de sección en sección
-     ================================================================ */
-  const bloques = [...document.querySelectorAll(".bloque")];
-  const nombresBloque = ["Portada", "01 Frase traductora", "02 Ctrl+Alt+A",
-    "03 Corrección", "04 Predicción", "05 Aprende de ti", "06 A tu gusto",
-    "07 Leer", "08 Planes", "09 Sobre nosotros", "Descargar"];
-  // Quién manda: el DEDO o la RUEDA. Antes esto se decidía solo por el
-  // ancho (760px) y eso dejaba sin carrusel a cualquiera con zoom del
-  // navegador o con el escalado de Windows alto: en un portátil al 150%
-  // basta un zoom del 125% para bajar de 760 y quedarte con el scroll
-  // normal sin saber por qué (le pasó a Álvaro el 29/07). El zoom se
-  // guarda por sitio, así que una vez que ocurre, se queda.
-  // Ahora se mira el tipo de puntero: con ratón o trackpad hay carrusel
-  // aunque la ventana sea estrecha; con dedo, jamás.
-  const enMovil = () => window.matchMedia("(pointer: coarse)").matches ||
-                        window.innerWidth < 560;
-  const menosMovimiento = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  let indice = 0;
-  let bloqueado = false;
 
+  /* ================================================================
+     EL CARRUSEL HORIZONTAL
+     Reglas, y son las que hacen que no repita el fallo del vertical:
+     no toca el scroll de la página ni una línea; se para al pulsar y
+     vuelve solo a los 20 segundos; con el ratón encima se espera, para
+     poder leer; con "menos animación" no avanza nunca solo; y sin
+     JavaScript las siete quedan una debajo de otra, que eso es CSS.
+     ================================================================ */
+  const menosMovimiento = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const RITMO = 5000;    // lo que dura cada diapositiva
+  const VUELTA = 20000;  // lo que tarda en volver a andar sola tras pararla
+  const pista = document.getElementById("pista");
+  const diapos = [...pista.querySelectorAll(".diapo")];
+  const zonaSeg = document.getElementById("segmentos");
+  const btnPausa = document.getElementById("btn-pausa");
+  const iconoPausa = document.getElementById("icono-pausa");
+  const avisoPausa = document.getElementById("aviso-pausa");
+  const contador = document.getElementById("contador");
+  const nombreDiapo = document.getElementById("nombre-diapo");
+  const ICONO_PAUSA = '<rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/>';
+  const ICONO_SEGUIR = '<path d="M8 5l11 7-11 7z"/>';
+
+  let actual = 0, reloj = null, relojVuelta = null;
+  let paradoAMano = false, ratonEncima = false;
+
+  diapos.forEach((d, i) => {
+    const s = document.createElement("button");
+    s.type = "button"; s.className = "segmento";
+    s.setAttribute("aria-label", "Ir a " + d.dataset.nombre);
+    s.innerHTML = "<i></i>";
+    s.addEventListener("click", () => { irA(i); pararAMano(true); });
+    zonaSeg.appendChild(s);
+  });
+  const segmentos = [...zonaSeg.children];
+
+  function pintar() {
+    segmentos.forEach((s, i) => {
+      s.classList.toggle("pasado", i < actual);
+      s.classList.remove("activo");
+    });
+    diapos.forEach((d, i) => d.classList.toggle("activa", i === actual));
+    // reiniciar la cuenta atrás: hay que forzar el repintado o el
+    // navegador reutiliza la animación y la barra no vuelve a empezar
+    const barra = segmentos[actual].querySelector("i");
+    barra.style.animation = "none"; void barra.offsetWidth; barra.style.animation = "";
+    segmentos[actual].classList.add("activo");
+    contador.textContent = (actual + 1) + " de " + diapos.length;
+    nombreDiapo.textContent = diapos[actual].dataset.nombre;
+  }
+
+  function llevarLaPista(instantaneo) {
+    const d = diapos[actual];
+    const destino = d.offsetLeft - (pista.clientWidth - d.offsetWidth) / 2;
+    if (instantaneo) {
+      const antes = pista.style.scrollBehavior;
+      pista.style.scrollBehavior = "auto";
+      pista.scrollLeft = destino;
+      pista.style.scrollBehavior = antes;
+    } else {
+      pista.scrollTo({ left: destino, behavior: menosMovimiento ? "auto" : "smooth" });
+    }
+  }
+
+  function irA(i, instantaneo) {
+    actual = Math.max(0, Math.min(diapos.length - 1, i));
+    llevarLaPista(instantaneo);
+    pintar();
+    programar();
+  }
+
+  /* volver del final al principio se hace de un corte con un parpadeo
+     corto: un viaje suave de siete pantallas se hace eterno */
+  function alPrincipio() {
+    if (menosMovimiento) { actual = 0; llevarLaPista(true); pintar(); programar(); return; }
+    pista.style.opacity = "0";
+    setTimeout(() => {
+      actual = 0; llevarLaPista(true); pintar(); programar();
+      pista.style.opacity = "1";
+    }, 180);
+  }
+  function siguiente() { if (actual >= diapos.length - 1) alPrincipio(); else irA(actual + 1); }
+
+  function enPausa() { return paradoAMano || ratonEncima || menosMovimiento; }
+  function programar() {
+    clearTimeout(reloj);
+    document.body.classList.toggle("pausado", enPausa());
+    if (enPausa()) return;
+    reloj = setTimeout(siguiente, RITMO);
+  }
+  function pararAMano(si) {
+    paradoAMano = si;
+    iconoPausa.innerHTML = si ? ICONO_SEGUIR : ICONO_PAUSA;
+    btnPausa.setAttribute("aria-label", si ? "Seguir" : "Parar");
+    avisoPausa.textContent = si ? "en pausa" : "";
+    clearTimeout(relojVuelta);
+    if (si) relojVuelta = setTimeout(() => pararAMano(false), VUELTA);
+    programar();
+  }
+
+  btnPausa.addEventListener("click", () => pararAMano(!paradoAMano));
+  document.getElementById("flecha-izq").addEventListener("click", () => {
+    irA(actual === 0 ? diapos.length - 1 : actual - 1); pararAMano(true);
+  });
+  document.getElementById("flecha-der").addEventListener("click", () => {
+    if (actual >= diapos.length - 1) alPrincipio(); else irA(actual + 1);
+    pararAMano(true);
+  });
+  /* pulsar la diapositiva para en seco */
+  pista.addEventListener("click", e => {
+    if (e.target.closest("a, button")) return;
+    pararAMano(!paradoAMano);
+  });
+  /* con el ratón encima se espera, para poder leer sin que salte */
+  pista.addEventListener("mouseenter", () => { ratonEncima = true; programar(); });
+  pista.addEventListener("mouseleave", () => { ratonEncima = false; programar(); });
+  pista.addEventListener("focusin", () => { ratonEncima = true; programar(); });
+  pista.addEventListener("focusout", () => { ratonEncima = false; programar(); });
+  pista.addEventListener("keydown", e => {
+    if (e.key === "ArrowRight") { e.preventDefault(); irA(Math.min(actual + 1, diapos.length - 1)); pararAMano(true); }
+    if (e.key === "ArrowLeft")  { e.preventDefault(); irA(Math.max(actual - 1, 0)); pararAMano(true); }
+  });
+  /* arrastrar o deslizar a lo ancho: manda el visitante */
+  let relojArrastre = null;
+  pista.addEventListener("scroll", () => {
+    clearTimeout(relojArrastre);
+    relojArrastre = setTimeout(() => {
+      const centro = pista.scrollLeft + pista.clientWidth / 2;
+      let cerca = 0, mejor = Infinity;
+      diapos.forEach((d, i) => {
+        const dist = Math.abs(d.offsetLeft + d.offsetWidth / 2 - centro);
+        if (dist < mejor) { mejor = dist; cerca = i; }
+      });
+      if (cerca !== actual) { actual = cerca; pintar(); pararAMano(true); }
+    }, 130);
+  }, { passive: true });
+  window.addEventListener("resize", () => llevarLaPista(true));
+  /* un enlace a #atajo lleva a esa diapositiva, no a ningún sitio raro */
+  function porElHash() {
+    const i = diapos.findIndex(d => "#" + d.id === location.hash);
+    if (i >= 0) { irA(i, true); pararAMano(true); document.getElementById("comofunciona").scrollIntoView(); }
+  }
+  window.addEventListener("hashchange", porElHash);
+  porElHash();
+  pintar();
+  programar();
+
+  /* la barra pegajosa mide lo que mide, y de ahí sale el hueco que deja
+     al saltar a un ancla */
   function medirNav() {
     const alto = document.querySelector("nav").getBoundingClientRect().height;
     document.documentElement.style.setProperty("--alto-nav", alto + "px");
   }
   medirNav();
   window.addEventListener("resize", medirNav);
-  // el ResizeObserver es el que de verdad cubre todos los casos: la
-  // barra crece a dos líneas cuando la ventana es estrecha, y entonces
-  // el alto de cada sección tiene que recalcularse
   if (window.ResizeObserver) new ResizeObserver(medirNav).observe(document.querySelector("nav"));
 
-  function irA(i) {
-    i = Math.max(0, Math.min(bloques.length - 1, i));
-    indice = i;
-    bloqueado = true;
-    bloques[i].scrollIntoView({ behavior: menosMovimiento ? "auto" : "smooth", block: "start" });
-    setTimeout(() => { bloqueado = false; }, 900);
-    marcarPunto();
-  }
-
-  /* ---------- la salida de emergencia del carrusel ----------
-     Si alguien insiste con la rueda mientras el carrusel está ocupado,
-     es que quiere ir más rápido de lo que le dejamos: se suelta el
-     freno y el scroll vuelve a ser suyo. A los 10 segundos sin tocar
-     nada, vuelve el carrusel.
-     Se mide la INSISTENCIA, no la velocidad: un trackpad manda ráfagas
-     de eventos diminutos con solo deslizar el dedo, así que midiendo
-     "cuánto llega" se soltaría el freno a todo el mundo. Solo cuentan
-     los golpes que llegan cuando ya hemos dicho que no, con 90 ms de
-     separación entre ellos para que una ráfaga no cuente como veinte. */
-  // CALIBRADO EL 29/07 con Álvaro: la primera versión contaba golpes y
-  // se soltaba bajando normal ("las dos primeras secciones van bien y
-  // luego empieza a ir rápido"). Bajar dando dos o tres muescas
-  // seguidas es lo NORMAL, no es querer saltarse nada.
-  // Ahora se mide LA RÁFAGA: rueda seguida, sin parar, en el mismo
-  // sentido. Como mantener pulsado el borrado. Si sueltas la rueda un
-  // cuarto de segundo, la ráfaga se acaba y vuelta a empezar.
-  // SEGUNDA CALIBRACIÓN (29/07): con 1200 ms no se soltaba ni dándole
-  // rápido, y es lógico: un "dale rápido" de verdad dura medio segundo,
-  // no un segundo y pico. Con 600 ms y seis golpes hay sitio de sobra
-  // entre lo normal (tres muescas y mirar la sección, 240 ms) y la
-  // insistencia (ocho o diez muescas seguidas, 600 ms largos).
-  const RAFAGA_PARA_SOLTAR = 600;    // ms de rueda seguida sin parar
-  const GOLPES_MINIMOS = 6;          // y con unos cuantos golpes dentro
-  const CORTE_RAFAGA = 350;          // ms sin rueda: se acabó la ráfaga
-  const VUELTA_AL_CARRUSEL = 10000;  // ms parado antes de recuperarlo
-  let suelto = false, relojVuelta = null;
-  let rafagaDesde = 0, golpesRafaga = 0, ultimoGolpe = 0, sentidoRafaga = 0;
-
-  function soltarFreno() {
-    if (suelto) return;
-    suelto = true;
-    insistencias = 0;
-    // sin esto, al parar la rueda el imán recoloca la sección y la
-    // sensación de scroll libre se rompe
-    document.documentElement.style.scrollSnapType = "none";
-    zonaPuntos.classList.add("suelto");
-    programarVuelta();
-  }
-  function programarVuelta() {
-    clearTimeout(relojVuelta);
-    relojVuelta = setTimeout(() => {
-      suelto = false;
-      document.documentElement.style.scrollSnapType = "";
-      zonaPuntos.classList.remove("suelto");
-      // LA PÁGINA NO SE MUEVE AL VOLVER, a propósito: recolocar solo
-      // donde estabas leyendo es lo que hace que una web parezca que
-      // tiene vida propia. El siguiente golpe de rueda ya lleva a la
-      // sección siguiente.
-    }, VUELTA_AL_CARRUSEL);
-  }
-  // arrastrar la barra del navegador también cuenta como estar usándola
-  window.addEventListener("scroll", () => { if (suelto) programarVuelta(); },
-                          { passive: true });
-
-  window.addEventListener("wheel", e => {
-    // en el móvil manda el dedo, siempre; y con animaciones reducidas,
-    // el scroll de toda la vida
-    if (enMovil() || menosMovimiento || e.ctrlKey) return;
-    if (suelto) { programarVuelta(); return; }   // sin freno: scroll normal
-    e.preventDefault();
-
-    const direccion = e.deltaY > 0 ? 1 : -1;
-
-    // ¿sigue la misma ráfaga o empieza otra? Parar un cuarto de segundo
-    // o cambiar de sentido la corta: eso ya no es "déjame pasar", es
-    // mirar la página.
-    const ahora = Date.now();
-    if (ahora - ultimoGolpe > CORTE_RAFAGA || direccion !== sentidoRafaga) {
-      rafagaDesde = ahora;
-      golpesRafaga = 0;
-      sentidoRafaga = direccion;
-    }
-    ultimoGolpe = ahora;
-    golpesRafaga++;
-    if (ahora - rafagaDesde >= RAFAGA_PARA_SOLTAR && golpesRafaga >= GOLPES_MINIMOS) {
-      soltarFreno();
-      return;
-    }
-    if (bloqueado) return;
-    const caja = bloques[indice].getBoundingClientRect();
-    const pantalla = window.innerHeight;
-    const hueco = pantalla - parseFloat(
-      getComputedStyle(document.documentElement).getPropertyValue("--alto-nav") || 0);
-    // Si una sección no cabe en la pantalla (portátiles bajitos, zoom
-    // del navegador) hay que recorrerla por dentro antes de saltar, o su
-    // parte de abajo no se puede leer nunca.
-    if (caja.height > hueco + 4) {
-      const bajando = direccion > 0 && caja.bottom > pantalla + 4;
-      const subiendo = direccion < 0 && caja.top < -4;
-      if (bajando || subiendo) {
-        window.scrollBy({ top: direccion * (pantalla - 70), behavior: "smooth" });
-        bloqueado = true;
-        setTimeout(() => { bloqueado = false; }, 480);
-        return;
-      }
-    }
-    irA(indice + direccion);
-  }, { passive: false });
-
-  window.addEventListener("keydown", e => {
-    if (enMovil() || menosMovimiento || suelto) return;
-    const escribiendo = /^(INPUT|TEXTAREA)$/.test(document.activeElement.tagName);
-    if (escribiendo) return;
-    if (["ArrowDown", "PageDown"].includes(e.key)) { e.preventDefault(); irA(indice + 1); }
-    if (["ArrowUp", "PageUp"].includes(e.key)) { e.preventDefault(); irA(indice - 1); }
-  });
-
-  /* el logo, arriba del todo. Es un enlace de verdad (funciona sin
-     JavaScript y con el clic del medio abre pestaña), pero cuando el JS
-     va lo llevamos por irA para que el carrusel no se quede creyendo
-     que sigue en la sección de antes. */
-  document.getElementById("ir-arriba").addEventListener("click", e => {
-    if (enMovil() || menosMovimiento || suelto) return;   // scroll normal
-    e.preventDefault();
-    irA(0);
-  });
-
-  /* ---------- puntos de progreso ---------- */
-  const zonaPuntos = document.getElementById("puntos-progreso");
-  bloques.forEach((b, i) => {
-    const p = document.createElement("button");
-    p.type = "button";
-    p.title = nombresBloque[i] || ("Sección " + (i + 1));
-    p.setAttribute("aria-label", "Ir a " + p.title);
-    p.addEventListener("click", () => irA(i));
-    zonaPuntos.appendChild(p);
-  });
-  function marcarPunto() {
-    [...zonaPuntos.children].forEach((p, i) => p.classList.toggle("activo", i === indice));
-  }
-
-  /* ---------- el chivato: allchat.es/?diagnostico ----------
-     No lo ve nadie salvo quien lo pide por la URL. Está para no volver
-     a jugar a las adivinanzas cuando alguien diga "a mí el carrusel no
-     me va": dice en una línea por qué está apagado. */
-  if (location.search.indexOf("diagnostico") >= 0) {
-    const motivos = [];
-    if (menosMovimiento) motivos.push(
-      "Windows tiene activado REDUCIR ANIMACIONES. El carrusel se apaga a " +
-      "propósito. Se quita en Configuración > Accesibilidad > Efectos visuales.");
-    if (window.matchMedia("(pointer: coarse)").matches) motivos.push(
-      "El navegador dice que aquí se toca con el DEDO, así que manda el dedo.");
-    if (window.innerWidth < 560) motivos.push(
-      "La ventana mide menos de 560 puntos de ancho.");
-    const zoom = Math.round((window.outerWidth / window.innerWidth) * 100);
-    const caja = document.createElement("div");
-    caja.style.cssText = "position:fixed;left:12px;bottom:12px;z-index:999;max-width:420px;" +
-      "background:#10141d;border:1px solid #232c3b;border-left:4px solid " +
-      (motivos.length ? "#f5a35c" : "#4be1c3") + ";border-radius:12px;padding:14px 16px;" +
-      "font:13px/1.5 Consolas,monospace;color:#8b98a5;box-shadow:0 18px 50px rgba(0,0,0,.6)";
-    caja.innerHTML =
-      "<b style='color:#e8edf4'>" + (motivos.length
-        ? "El carrusel está APAGADO"
-        : "El carrusel está ENCENDIDO") + "</b><br>" +
-      (motivos.length ? motivos.join("<br>") + "<br>" : "") +
-      "<br>ancho de ventana: " + window.innerWidth + " puntos" +
-      "<br>zoom del navegador: " + (isFinite(zoom) ? zoom + "%" : "?") +
-      " (Ctrl+0 lo deja al 100)" +
-      "<br>pantalla: " + screen.width + "x" + screen.height +
-      " · escalado: " + Math.round(window.devicePixelRatio * 100) + "%" +
-      "<br>secciones: " + bloques.length +
-      " · alto de la primera: " + Math.round(bloques[0].getBoundingClientRect().height) +
-      "<br>soltar el freno pide: " + RAFAGA_PARA_SOLTAR + " ms de rueda seguida" +
-      " (mínimo " + GOLPES_MINIMOS + " golpes, sin parar más de " + CORTE_RAFAGA + " ms)" +
-      "<br>web del lanzamiento (planes, Store y Discord; carrusel por puntero)";
-    document.body.appendChild(caja);
-  }
-
-  /* ---------- entradas animadas y sección actual ---------- */
+  /* ---------- entradas animadas: cada sección entra al llegar ---------- */
   const ojo = new IntersectionObserver(entradas => {
     entradas.forEach(en => { if (en.isIntersecting) en.target.classList.add("visto"); });
-  }, { threshold: 0.22 });
-  bloques.forEach(b => ojo.observe(b));
+  }, { threshold: 0.18 });
+  document.querySelectorAll(".bloque").forEach(b => ojo.observe(b));
 
-  const ojoIndice = new IntersectionObserver(entradas => {
-    entradas.forEach(en => {
-      if (en.isIntersecting && !bloqueado) {
-        indice = bloques.indexOf(en.target);
-        marcarPunto();
-      }
-    });
-  }, { threshold: 0.55 });
-  bloques.forEach(b => ojoIndice.observe(b));
-  marcarPunto();
 
-  /* ================================================================
-     EL MOVIMIENTO CON EL RATÓN
-     ================================================================ */
   document.querySelectorAll(".demo-visual > *").forEach(x => x.classList.add("baila"));
   document.querySelectorAll(".demo-texto, .sobre .lado-texto").forEach(x =>
     x.classList.add("baila", "baila-texto"));
