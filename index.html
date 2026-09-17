@@ -651,6 +651,12 @@
   }
   footer a { color: var(--teal); text-decoration: none; }
   footer .legal { display: flex; gap: 16px; flex-wrap: wrap; align-items: center; }
+  /* las cuentas de X (17/09): el logo de X en SVG, del color del texto que
+     lo rodea; en la barra, solo el icono, y en el pie, las dos cuentas */
+  .icono-x { width: 1em; height: 1em; display: inline-block; flex: none; fill: currentColor; }
+  nav .enlaces a.enlace-x { display: inline-flex; align-items: center; }
+  footer .redes { display: flex; gap: 6px 14px; flex-wrap: wrap; align-items: center; }
+  footer .redes a { display: inline-flex; align-items: center; gap: 6px; }
 
   /* ---------- ventana estrecha: solo la barra y el aire ----------
      Esto sí es cosa del ancho, tenga el visitante dedo o ratón. */
@@ -916,6 +922,7 @@
       <a href="#planes">Planes</a>
       <a href="#nosotros">Sobre nosotros</a>
       <a href="https://discord.gg/A5E4XJdwbV" target="_blank" rel="noopener">Discord</a>
+      <a class="enlace-x" href="https://x.com/allchat_es" target="_blank" rel="noopener" title="AllChat en X" aria-label="AllChat en X"><svg class="icono-x" viewBox="0 0 24 24" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
     </div>
     <a class="cta-barra" href="https://apps.microsoft.com/detail/9NMKD4HFR44X" data-instalar target="_blank" rel="noopener">Descargar</a>
   </div>
@@ -1421,6 +1428,10 @@
       <footer id="contacto" class="anima tarde">
         <span>© 2026 AllChat</span>
         <span>¿Dudas o ideas? <a href="mailto:hola@allchat.es">hola@allchat.es</a></span>
+        <span class="redes">
+          <a href="https://x.com/allchat_es" target="_blank" rel="noopener"><svg class="icono-x" viewBox="0 0 24 24" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>@allchat_es</a>
+          <a href="https://x.com/allchat_en" target="_blank" rel="noopener" lang="en">In English: @allchat_en</a>
+        </span>
         <span class="legal">
           <a href="/privacidad">Política de privacidad</a>
           <a href="/terminos">Términos y condiciones</a>
@@ -1492,6 +1503,9 @@
   })();
 
   (function () {
+    // solo cuenta la web de verdad: abierta en local (o copiada en otro
+    // dominio) mandaba visitas falsas al panel, sin país (17/09)
+    if (location.hostname !== "allchat.es") return;
     const AVISO = "https://api.allchat.es/visita";
     function avisar(datos) {
       try {
