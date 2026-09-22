@@ -864,6 +864,33 @@
     .pista { scroll-behavior: auto; }
     .segmento.activo i { animation: none; width: 100%; }
   }
+
+  /* ---------- PREGUNTAS (22/09, elegida la A: acordeón con details, sin JavaScript) ---------- */
+  .preguntas { width: 100%; max-width: 880px; margin: 0 auto; }
+  .preguntas-cab { text-align: center; margin-bottom: 26px; }
+  .preguntas-cab .num { color: var(--violeta); font-family: Consolas, monospace; font-size: .9rem; letter-spacing: .1em; }
+  .preguntas-cab h2 { font-size: 1.9rem; margin: 8px 0 10px; letter-spacing: -.01em; }
+  .preguntas-cab h2 .tealino { color: var(--teal); }
+  .preguntas-cab p { color: var(--atenuado); font-size: 1.02rem; }
+  .preguntas a { color: var(--teal); }
+  /* A: acordeón nativo (details), funciona sin JavaScript */
+  .faq-a details {
+    background: var(--panel); border: 1px solid var(--borde); border-radius: 14px;
+    margin-bottom: 10px; transition: border-color .2s;
+  }
+  .faq-a details[open] { border-color: rgba(75,225,195,.55); }
+  .faq-a summary {
+    list-style: none; cursor: pointer; padding: 16px 52px 16px 20px; position: relative;
+    font-weight: 700; font-size: 1.02rem; color: var(--texto);
+  }
+  .faq-a summary::-webkit-details-marker { display: none; }
+  .faq-a summary::after {
+    content: "+"; position: absolute; right: 20px; top: 50%; transform: translateY(-50%);
+    color: var(--teal); font-size: 1.4rem; font-weight: 400; transition: transform .25s;
+  }
+  .faq-a details[open] summary::after { transform: translateY(-50%) rotate(45deg); }
+  .faq-a summary:hover { color: var(--teal); }
+  .faq-a .resp { padding: 0 20px 18px; color: var(--atenuado); font-size: .95rem; line-height: 1.6; }
 </style>
 </head>
 <body>
@@ -921,6 +948,7 @@
       <a href="#comofunciona">Cómo funciona</a>
       <a href="#planes">Planes</a>
       <a href="#nosotros">Sobre nosotros</a>
+      <a href="#preguntas">Preguntas</a>
       <a href="https://discord.gg/A5E4XJdwbV" target="_blank" rel="noopener">Discord</a>
       <a class="enlace-x" href="https://x.com/allchat_es" target="_blank" rel="noopener" title="AllChat en X" aria-label="AllChat en X"><svg class="icono-x" viewBox="0 0 24 24" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
     </div>
@@ -1373,7 +1401,32 @@
   </div>
 </section>
 
-<!-- 10 · DESCARGAR + DISCORD + EL CANDADO + PIE -->
+
+<!-- 10 · PREGUNTAS FRECUENTES (22/09). El 25 lo vigila el portero; los
+     pesos de la descarga cambian con cada version: repasarlos en /publicar -->
+<section class="bloque compacto banda" id="preguntas">
+  <div class="contenedor">
+    <div class="preguntas">
+      <div class="preguntas-cab anima">
+        <div class="num">10 · PREGUNTAS</div>
+        <h2>Lo que nos preguntan, <span class="tealino">sin letra pequeña.</span></h2>
+        <p>Si algo no está aquí, escríbenos a <a href="mailto:hola@allchat.es">hola@allchat.es</a>: contesta una persona.</p>
+      </div>
+      <div class="faq-a anima tarde">
+        <details><summary>¿Funciona en la app de Discord o solo en la web?</summary><div class="resp">En las dos. AllChat no vive dentro de Discord: trabaja con el teclado de Windows, así que funciona en la app de escritorio de Discord, en Discord en el navegador y en casi cualquier sitio donde escribas en tu PC. Lo que no hay es versión para el móvil ni para Mac: AllChat es solo para Windows.</div></details>
+        <details><summary>¿Por qué me pide un correo?</summary><div class="resp">Para guardar tu nivel, tu progreso y, si lo tienes, tu Premium, y que no se pierdan si cambias de ordenador. No hay contraseña: te llega un enlace, lo confirmas y ya estás dentro, una sola vez en cada ordenador. No te mandamos publicidad.</div></details>
+        <details><summary>¿En qué juegos no funciona?</summary><div class="resp">En los que van como administrador: Windows no deja que un programa normal vea lo que escribes en ellos. AllChat te avisa cuando pasa y, si hay una casilla de Windows que lo arregla, te lleva a ella. Tampoco sirve en juegos sin chat de texto. No tenemos una lista de juegos "compatibles": solo decimos dónde lo hemos probado y funciona.</div></details>
+        <details><summary>¿Y los anticheats?</summary><div class="resp">Algunos anticheats vigilan los programas que leen el teclado, y AllChat es uno de ellos. No sabemos si algún día alguno lo marcará, y el riesgo de una sanción es tuyo (lo dicen <a href="/terminos">los términos</a>, en el punto 8). Algunos juegos prohíben en sus normas los programas que escriben o actúan por ti: si un juego lo prohíbe, o tienes dudas, no lo uses ahí.</div></details>
+        <details><summary>¿Traduce la voz?</summary><div class="resp">No. AllChat traduce lo que tecleas y lo que lees en pantalla (una zona que señalas o un texto que seleccionas), pero no escucha el micrófono ni el chat de voz.</div></details>
+        <details><summary>¿Qué es gratis?</summary><div class="resp">Corregir y predecir, sin límite y para siempre. Traducir, 25 mensajes al día: un mensaje cuenta uno aunque AllChat lo traduzca varias veces mientras lo escribes. Premium quita ese límite por 5,99 € al mes o 54,99 € al año, y se cancela cuando quieras.</div></details>
+        <details><summary>¿Sale mi texto de mi PC?</summary><div class="resp">Para corregir, no: el corrector va dentro de AllChat y funciona sin internet. Para traducir, sí: lo que pides traducir viaja a nuestro servidor y de ahí a Google Cloud Translation, se traduce y no se guarda. Lo que AllChat aprende de tu forma de escribir se queda en tu ordenador. Todo, con detalle, en <a href="/privacidad">la política de privacidad</a>.</div></details>
+        <details><summary>¿Cuánto ocupa?</summary><div class="resp">La descarga pesa unos 390 MB, porque lleva el corrector dentro para que funcione sin internet, e instalado ocupa hasta unos 760 MB. Se instala gratis desde la Microsoft Store y hace falta Windows 10 (versión 2004 o posterior) u 11, de 64 bits.</div></details>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 11 · DESCARGAR + DISCORD + EL CANDADO + PIE -->
 <section class="bloque banda" id="descargar">
   <div class="contenedor">
 <div style="width:100%">
