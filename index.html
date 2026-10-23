@@ -612,7 +612,7 @@
   .chip-dato b { color: var(--teal); font-weight: 700; }
   .discord {
     margin-top: 30px; text-align: left;
-    background: linear-gradient(135deg, rgba(88,101,242,.16), rgba(88,101,242,.05));
+    background: rgba(88,101,242,.10);
     border: 1px solid rgba(88,101,242,.45); border-radius: 16px; padding: 22px 26px;
     display: flex; gap: 22px; align-items: center; flex-wrap: wrap;
   }
@@ -1395,31 +1395,8 @@
 </section>
 
 
-<!-- 10 · PREGUNTAS FRECUENTES (22/09). El 25 lo vigila el portero; los
-     pesos de la descarga cambian con cada version: repasarlos en /publicar -->
-<section class="bloque compacto banda" id="preguntas">
-  <div class="contenedor">
-    <div class="preguntas">
-      <div class="preguntas-cab anima">
-        <div class="num">10 · PREGUNTAS</div>
-        <h2>Lo que nos preguntan, <span class="tealino">sin letra pequeña.</span></h2>
-        <p>Si algo no está aquí, escríbenos a <a href="mailto:hola@allchat.es">hola@allchat.es</a>: contesta una persona.</p>
-      </div>
-      <div class="faq-a anima tarde">
-        <details><summary>¿Funciona en la app de Discord o solo en la web?</summary><div class="resp">En las dos. AllChat no vive dentro de Discord: trabaja con el teclado de Windows, así que funciona en la app de escritorio de Discord, en Discord en el navegador y en casi cualquier sitio donde escribas en tu PC. Lo que no hay es versión para el móvil ni para Mac: AllChat es solo para Windows.</div></details>
-        <details><summary>¿Por qué me pide un correo?</summary><div class="resp">Para guardar tu nivel, tu progreso y, si lo tienes, tu Premium, y que no se pierdan si cambias de ordenador. No hay contraseña: te llega un enlace, lo confirmas y ya estás dentro, una sola vez en cada ordenador. No te mandamos publicidad.</div></details>
-        <details><summary>¿En qué juegos no funciona?</summary><div class="resp">En los que van como administrador: Windows no deja que un programa normal vea lo que escribes en ellos. AllChat te avisa cuando pasa y, si hay una casilla de Windows que lo arregla, te lleva a ella. Tampoco sirve en juegos sin chat de texto. No tenemos una lista de juegos "compatibles": solo decimos dónde lo hemos probado y funciona.</div></details>
-        <details><summary>¿Y los anticheats?</summary><div class="resp">Algunos anticheats vigilan los programas que leen el teclado, y AllChat es uno de ellos. No sabemos si algún día alguno lo marcará, y el riesgo de una sanción es tuyo (lo dicen <a href="/terminos">los términos</a>, en el punto 8). Algunos juegos prohíben en sus normas los programas que escriben o actúan por ti: si un juego lo prohíbe, o tienes dudas, no lo uses ahí.</div></details>
-        <details><summary>¿Traduce la voz?</summary><div class="resp">No. AllChat traduce lo que tecleas y lo que lees en pantalla (una zona que señalas o un texto que seleccionas), pero no escucha el micrófono ni el chat de voz.</div></details>
-        <details><summary>¿Qué es gratis?</summary><div class="resp">Corregir y predecir, sin límite y para siempre. Traducir, 25 mensajes al día: un mensaje cuenta uno aunque AllChat lo traduzca varias veces mientras lo escribes. Premium quita ese límite por 5,99 € al mes o 54,99 € al año, y se cancela cuando quieras.</div></details>
-        <details><summary>¿Sale mi texto de mi PC?</summary><div class="resp">Para corregir, no: el corrector va dentro de AllChat y funciona sin internet. Para traducir, sí: lo que pides traducir viaja a nuestro servidor y de ahí a Google Cloud Translation, se traduce y no se guarda. Lo que AllChat aprende de tu forma de escribir se queda en tu ordenador. Todo, con detalle, en <a href="/privacidad">la política de privacidad</a>.</div></details>
-        <details><summary>¿Cuánto ocupa?</summary><div class="resp">La descarga pesa unos 390 MB, porque lleva el corrector dentro para que funcione sin internet, e instalado ocupa hasta unos 760 MB. Se instala gratis desde la Microsoft Store y hace falta Windows 10 (versión 2004 o posterior) u 11, de 64 bits.</div></details>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- 11 · DESCARGAR + DISCORD + EL CANDADO + PIE -->
+<!-- 10 · DESCARGAR + DISCORD + EL CANDADO (23/10: antes de las preguntas,
+     pedido suyo: la portada acaba con las preguntas y el pie) -->
 <section class="bloque banda" id="descargar">
   <div class="contenedor">
 <div style="width:100%">
@@ -1471,7 +1448,32 @@
         que puedes borrar cuando quieras. Solo la traducción usa internet,
         como cualquier traductor.</p>
       </div>
-      <footer id="contacto" class="anima tarde">
+    </div>
+  </div>
+</section>
+
+<!-- 11 · PREGUNTAS FRECUENTES (22/09; al final desde el 23/10) Y EL PIE. El 25 lo vigila el portero; los
+     pesos de la descarga cambian con cada version: repasarlos en /publicar -->
+<section class="bloque compacto banda" id="preguntas">
+  <div class="contenedor">
+    <div class="preguntas">
+      <div class="preguntas-cab anima">
+        <div class="num">10 · PREGUNTAS</div>
+        <h2>Lo que nos preguntan, <span class="tealino">sin letra pequeña.</span></h2>
+        <p>Si algo no está aquí, escríbenos a <a href="mailto:hola@allchat.es">hola@allchat.es</a>: contesta una persona.</p>
+      </div>
+      <div class="faq-a anima tarde">
+        <details><summary>¿Funciona en la app de Discord o solo en la web?</summary><div class="resp">En las dos. AllChat no vive dentro de Discord: trabaja con el teclado de Windows, así que funciona en la app de escritorio de Discord, en Discord en el navegador y en casi cualquier sitio donde escribas en tu PC. Lo que no hay es versión para el móvil ni para Mac: AllChat es solo para Windows.</div></details>
+        <details><summary>¿Por qué me pide un correo?</summary><div class="resp">Para guardar tu nivel, tu progreso y, si lo tienes, tu Premium, y que no se pierdan si cambias de ordenador. No hay contraseña: te llega un enlace, lo confirmas y ya estás dentro, una sola vez en cada ordenador. No te mandamos publicidad.</div></details>
+        <details><summary>¿En qué juegos no funciona?</summary><div class="resp">En los que van como administrador: Windows no deja que un programa normal vea lo que escribes en ellos. AllChat te avisa cuando pasa y, si hay una casilla de Windows que lo arregla, te lleva a ella. Tampoco sirve en juegos sin chat de texto. No tenemos una lista de juegos "compatibles": solo decimos dónde lo hemos probado y funciona.</div></details>
+        <details><summary>¿Y los anticheats?</summary><div class="resp">Algunos anticheats vigilan los programas que leen el teclado, y AllChat es uno de ellos. No sabemos si algún día alguno lo marcará, y el riesgo de una sanción es tuyo (lo dicen <a href="/terminos">los términos</a>, en el punto 8). Algunos juegos prohíben en sus normas los programas que escriben o actúan por ti: si un juego lo prohíbe, o tienes dudas, no lo uses ahí.</div></details>
+        <details><summary>¿Traduce la voz?</summary><div class="resp">No. AllChat traduce lo que tecleas y lo que lees en pantalla (una zona que señalas o un texto que seleccionas), pero no escucha el micrófono ni el chat de voz.</div></details>
+        <details><summary>¿Qué es gratis?</summary><div class="resp">Corregir y predecir, sin límite y para siempre. Traducir, 25 mensajes al día: un mensaje cuenta uno aunque AllChat lo traduzca varias veces mientras lo escribes. Premium quita ese límite por 5,99 € al mes o 54,99 € al año, y se cancela cuando quieras.</div></details>
+        <details><summary>¿Sale mi texto de mi PC?</summary><div class="resp">Para corregir, no: el corrector va dentro de AllChat y funciona sin internet. Para traducir, sí: lo que pides traducir viaja a nuestro servidor y de ahí a Google Cloud Translation, se traduce y no se guarda. Lo que AllChat aprende de tu forma de escribir se queda en tu ordenador. Todo, con detalle, en <a href="/privacidad">la política de privacidad</a>.</div></details>
+        <details><summary>¿Cuánto ocupa?</summary><div class="resp">La descarga pesa unos 390 MB, porque lleva el corrector dentro para que funcione sin internet, e instalado ocupa hasta unos 760 MB. Se instala gratis desde la Microsoft Store y hace falta Windows 10 (versión 2004 o posterior) u 11, de 64 bits.</div></details>
+      </div>
+    </div>
+    <footer id="contacto" class="anima tarde">
         <span>© 2026 AllChat</span>
         <span>¿Dudas o ideas? <a href="mailto:hola@allchat.es">hola@allchat.es</a></span>
         <span class="redes">
@@ -1484,7 +1486,6 @@
           <span>Hecho en España para gamers de todo el mundo 🎮</span>
         </span>
       </footer>
-    </div>
   </div>
 </section>
 
