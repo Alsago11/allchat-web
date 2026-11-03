@@ -1605,9 +1605,10 @@
      clic en Descargar o en Discord, para el panel de fundador. Va lo
      justo: el país (se le pregunta a Cloudflare aquí mismo, en
      /cdn-cgi/trace, porque api.allchat.es no pasa por Cloudflare), de
-     dónde se llega (el referer, o utm_source si el enlace lo trae) y
-     qué se pulsa. Ni cookie, ni identificador, ni IP guardada: el
-     servidor suma por día y tira lo demás. Hazte premium no avisa: ese
+     dónde se llega (el referer, o utm_source si el enlace lo trae, y
+     utm_campaign si lleva campaña) y qué se pulsa, con el mismo país
+     (03/11, para el mapa del panel). Ni cookie, ni identificador, ni IP
+     guardada: el servidor suma por día y tira lo demás. Hazte premium no avisa: ese
      clic ya llega al servidor por /pago/ir. Si algo falla, la web sigue
      igual. */
   /* ---------- DESCARGAR = INSTALAR (08/09): el Web Installer de la Store ----------
@@ -1655,16 +1656,18 @@
         return m ? m[1] : "";
       } catch (e) { return ""; }
     }
-    pais().then(loc => avisar({
-      que: "visita", pais: loc, origen: document.referrer || "",
-      utm: new URLSearchParams(location.search).get("utm_source") || "" }));
+    let loc = "";   // el país, preguntado una vez: los clics lo llevan también
+    const enlace = new URLSearchParams(location.search);
+    pais().then(p => { loc = p; avisar({
+      que: "visita", pais: p, origen: document.referrer || "",
+      utm: enlace.get("utm_source") || "", campana: enlace.get("utm_campaign") || "" }); });
     // Descargar: la ficha de la Store (móvil, Mac, sin JS) o el instalador
     // directo de get.microsoft.com (Windows); los dos cuentan igual
     document.querySelectorAll('a[href*="apps.microsoft.com"], a[href*="get.microsoft.com"]').forEach(a =>
-      a.addEventListener("click", () => avisar({ que: "descargar" })));
+      a.addEventListener("click", () => avisar({ que: "descargar", pais: loc })));
     document.querySelectorAll('a[href*="discord.gg"]').forEach(a =>
       a.addEventListener("click", () =>
-        avisar({ que: "discord", donde: a.dataset.donde || "" })));
+        avisar({ que: "discord", pais: loc, donde: a.dataset.donde || "" })));
   })();
 
 

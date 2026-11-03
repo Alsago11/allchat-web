@@ -12,3 +12,9 @@
 /ficha https://apps.microsoft.com/detail/9NMKD4HFR44X 302
 # /discord es la invitacion permanente del servidor (INFRA).
 /discord https://discord.gg/A5E4XJdwbV 302
+# Los atajos de los videos (03/11, plan de marketing 1.4): se dicen en el
+# video y se escriben en el PC. Pasan por el servidor, que cuenta el clic
+# (por dia, sin IP) y lleva directo al instalador de la Store con su cid
+# (tt-video o yt-video). Ningun atajo mas sin su OK.
+/tt https://api.allchat.es/ir/tt 302
+/yt https://api.allchat.es/ir/yt 302
