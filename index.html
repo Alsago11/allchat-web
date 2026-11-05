@@ -6,9 +6,13 @@
 <title>AllChat: corrector y traductor flotante para juegos y chat (Windows)</title>
 <meta name="description" content="AllChat corrige y traduce lo que escribes en Discord, juegos y cualquier app de Windows, sin salir de la ventana. Predicción que aprende de ti, 100% en tu PC. Gratis en la Microsoft Store.">
 <link rel="canonical" href="https://allchat.es/">
+<link rel="alternate" hreflang="es" href="https://allchat.es/">
+<link rel="alternate" hreflang="en" href="https://allchat.es/en">
+<link rel="alternate" hreflang="x-default" href="https://allchat.es/en">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="AllChat">
 <meta property="og:locale" content="es_ES">
+<meta property="og:locale:alternate" content="en_US">
 <meta property="og:url" content="https://allchat.es/">
 <meta property="og:title" content="AllChat: el idioma ya no te frena">
 <meta property="og:description" content="Escribe en tu idioma en Discord, en tu juego o en tu foro favorito. AllChat lo corrige y lo traduce sin que salgas de la ventana. Gratis para Windows, en la Microsoft Store.">
@@ -970,6 +974,54 @@
     .heroe p.linea-regalo .lr-corto { display: inline; }
   }
 
+
+  /* EL GLOBO DE LOS IDIOMAS (05/11/2026, la B de propuestas_web_en.html,
+     elegida por él: "el más universal para que todo el mundo entienda
+     que eso cambia el idioma"). La inglesa (/en) sale de esta página con
+     scripts/web_en/generar_en.py: no se edita a mano. */
+  /* selector de idioma, propuesta B: el globo con su menú (funciona sin JS con <details>) */
+  nav details.idioma { position: relative; flex: none; }
+  nav details.idioma > summary {
+    list-style: none; cursor: pointer; user-select: none;
+    display: inline-flex; align-items: center; gap: 6px; height: 38px;
+    background: rgba(255,255,255,.03); color: var(--atenuado);
+    border: 1px solid var(--borde); border-radius: 9px;
+    padding: 0 10px; font-size: .85rem; font-weight: 600;
+    transition: border-color .18s ease, color .18s ease;
+  }
+  nav details.idioma > summary::-webkit-details-marker { display: none; }
+  nav details.idioma > summary:hover, nav details.idioma[open] > summary { color: var(--teal); border-color: var(--teal); }
+  nav details.idioma > summary:focus-visible, nav .idioma-op:focus-visible { outline: 2px solid var(--teal); outline-offset: 2px; }
+  nav details.idioma .idioma-globo { width: 18px; height: 18px; flex: none; }
+  nav details.idioma .idioma-flecha { width: 11px; height: 11px; flex: none; transition: transform .18s ease; }
+  nav details.idioma[open] .idioma-flecha { transform: rotate(180deg); }
+  nav .idioma-menu {
+    position: absolute; top: calc(100% + 8px); right: 0; z-index: 60;
+    list-style: none; min-width: 160px; padding: 6px;
+    background: var(--panel); border: 1px solid var(--borde); border-radius: 10px;
+    box-shadow: 0 12px 30px rgba(0,0,0,.45);
+  }
+  nav .idioma-op {
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    padding: 9px 12px; border-radius: 7px; font-size: .9rem; font-weight: 600;
+    color: var(--texto); text-decoration: none; white-space: nowrap;
+  }
+  nav a.idioma-op:hover { background: var(--panel2); color: var(--teal); }
+  nav .idioma-op.actual { color: var(--teal); }
+  nav .idioma-op .idioma-marca { width: 15px; height: 15px; flex: none; }
+  @media (max-width: 760px) {
+    nav details.idioma > summary { width: 36px; height: 36px; padding: 0; justify-content: center; }
+    nav details.idioma .codigo-idioma, nav details.idioma .idioma-flecha { display: none; }
+    nav details.idioma .idioma-globo { width: 20px; height: 20px; }
+    nav .idioma-op { padding: 12px 14px; font-size: .95rem; }
+  }
+  /* la barra por encima de las secciones (z-index 1) y del aviso de la C (2): si no, la portada tapa el menú y no se puede pulsar */
+  body > nav { z-index: 5; }
+  /* en el teléfono la fila de enlaces ya no tiene hueco: fuera, como en la C, sin astilla cortada */
+  @media (max-width: 480px) {
+    nav .enlaces { display: none; }
+  }
+
 </style>
 </head>
 <body>
@@ -1031,6 +1083,11 @@
       <a class="enlace-x" href="https://x.com/allchat_es" target="_blank" rel="noopener" title="AllChat en X" aria-label="AllChat en X"><svg class="icono-x" viewBox="0 0 24 24" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
     </div>
     <div class="acciones-barra">
+      <details class="idioma" data-selector-idioma>
+        <summary aria-label="Idioma: español. Cambiar de idioma" title="Idioma: español. Cambiar de idioma"><svg class="idioma-globo" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3z"/></svg><span class="codigo-idioma">ES</span><svg class="idioma-flecha" viewBox="0 0 12 12" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4.5l3 3 3-3"/></svg></summary>
+        <ul class="idioma-menu"><li><span class="idioma-op actual" lang="es" aria-current="true">Español<svg class="idioma-marca" viewBox="0 0 16 16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 8.5l3 3 6-7"/></svg></span></li><li><a class="idioma-op" href="/en" hreflang="en" lang="en">English</a></li></ul>
+      </details><script>(function(){var d=document.querySelector("nav details.idioma");if(!d)return;document.addEventListener("click",function(e){if(d.open&&!d.contains(e.target))d.open=false;});document.addEventListener("keydown",function(e){if(e.key==="Escape"&&d.open){d.open=false;d.querySelector("summary").focus();}});})();</script>
+      
       <a class="btn-dc-barra" data-nuevo-discord data-donde="barra" href="https://discord.gg/A5E4XJdwbV" target="_blank" rel="noopener" title="Únete a la comunidad en Discord: 50 traducciones de regalo al conectar tu Discord desde AllChat" aria-label="Únete a la comunidad en Discord: 50 traducciones de regalo al conectar tu Discord desde AllChat"><svg class="logo-dc" viewBox="0 2.85 24 18.3" aria-hidden="true"><path fill="#5865f2" d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></svg><span class="texto-dc">Únete al Discord</span></a>
       <a class="cta-barra" href="https://apps.microsoft.com/detail/9NMKD4HFR44X" data-instalar target="_blank" rel="noopener">Descargar</a>
     </div>
@@ -1243,10 +1300,10 @@
       <div class="demo-texto anima">
         <div class="num">06 · A TU GUSTO</div>
         <h2>Tus tarjetas, <span class="tealino">tu estilo.</span></h2>
-        <p>Los recuadros flotantes se adaptan a ti: estilo tarjeta completa
-        o modo mínimo discreto, con el color que tú elijas. Que AllChat
+        <p>Los recuadros flotantes se adaptan a ti: estilo Detallado, con
+        todo a la vista, o Simple y discreto, en el color que tú elijas. Que AllChat
         pegue con tu escritorio, no al revés.</p>
-        <span class="atajo">Ajustes ⟶ Recuadros flotantes</span>
+        <span class="atajo">Ajustes ⟶ Personalización</span>
       </div>
       <div class="demo-visual anima tarde">
         <div class="escenario-estilos">
@@ -1254,7 +1311,7 @@
             <div class="titulin">ALLCHAT · CORREGIDO</div>
             <div class="frase">Hi! Anyone up for ranked?</div>
           </div>
-          <div class="etiqueta-estilo" id="etiqueta-estilo">estilo: tarjeta</div>
+          <div class="etiqueta-estilo" id="etiqueta-estilo">estilo: Detallado</div>
           <div class="paleta" id="paleta">
             <span style="background:#4be1c3" class="activa"></span>
             <span style="background:#a78bfa"></span>
@@ -2019,7 +2076,7 @@
       muestra.style.setProperty("--acento", acentos[color]);
       muestra.classList.toggle("estilo-minimo", minimo);
       muestra.classList.toggle("estilo-tarjeta", !minimo);
-      etiqueta.textContent = "estilo: " + (minimo ? "mínimo" : "tarjeta");
+      etiqueta.textContent = "estilo: " + (minimo ? "Simple" : "Detallado");
       paso++;
       await espera(1700);
     }

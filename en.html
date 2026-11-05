@@ -1,0 +1,2146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AllChat: floating spell checker and translator for games and chat (Windows)</title>
+<meta name="description" content="AllChat corrects and translates what you type in Discord, games and any Windows app, without leaving the window. Prediction that learns from you, 100% on your PC. Free on the Microsoft Store.">
+<link rel="canonical" href="https://allchat.es/en">
+<link rel="alternate" hreflang="es" href="https://allchat.es/">
+<link rel="alternate" hreflang="en" href="https://allchat.es/en">
+<link rel="alternate" hreflang="x-default" href="https://allchat.es/en">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="AllChat">
+<meta property="og:locale" content="en_US">
+<meta property="og:locale:alternate" content="es_ES">
+<meta property="og:url" content="https://allchat.es/en">
+<meta property="og:title" content="AllChat: language won't hold you back">
+<meta property="og:description" content="Type in your language on Discord, in your game or on your favorite forum. AllChat corrects and translates it without you leaving the window. Free for Windows, on the Microsoft Store.">
+<!-- La imagen al compartir el enlace (propuesta A elegida por Álvaro
+     27/07). URL ABSOLUTA a propósito: Open Graph no admite rutas
+     relativas, y sin ella Discord y WhatsApp no la encuentran. -->
+<meta property="og:image" content="https://allchat.es/og-imagen.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:type" content="image/png">
+<meta property="og:image:alt" content="AllChat logo with its headline in Spanish (it says: language won't hold you back).">
+<!-- summary_large_image, no summary: con summary la imagen sale
+     pequeña y recortada en cuadrado -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://allchat.es/og-imagen.png">
+<meta name="twitter:image:alt" content="AllChat logo with its headline in Spanish (it says: language won't hold you back).">
+<meta name="twitter:title" content="AllChat: language won't hold you back">
+<meta name="twitter:description" content="Corrects and translates what you type in games and chats on Windows, without leaving the window. Prediction learns from you, 100% on your PC.">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "AllChat",
+  "url": "https://allchat.es/en",
+  "operatingSystem": "Windows",
+  "applicationCategory": "UtilitiesApplication",
+  "description": "Floating spell checker and translator for Windows: corrects and translates what you type in Discord, games and any app, without leaving the window. Word prediction that learns from you, 100% on your PC.",
+  "inLanguage": "en",
+  "installUrl": "https://apps.microsoft.com/detail/9NMKD4HFR44X",
+  "offers": [
+    { "@type": "Offer", "price": "0", "priceCurrency": "EUR",
+      "description": "Free plan, forever" },
+    { "@type": "Offer", "price": "5.99", "priceCurrency": "EUR",
+      "description": "Premium, per month (€54.99 per year)" }
+  ]
+}
+</script>
+<!-- Favicon en ARCHIVOS de verdad, no en data URI: el navegador pinta
+     el data URI igual, pero Googlebot no lo acepta y por eso el
+     resultado de búsqueda salía con el globo genérico (27/07). Los
+     tamaños son múltiplos de 48, como pide Google.
+     Desde el lanzamiento (arte/favicon/final.py): el fondo llega hasta
+     el borde (el círculo de Google ya no enseña mordiscos blancos) y el
+     .ico lleva el 16 SIN el [ALL] (a ese tamaño era un borrón) y el 32 y
+     el 48 con él. El svg ya no se declara a propósito: los navegadores
+     lo prefieren a cualquier tamaño y pintarían el [ALL] también a 16. -->
+<link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48">
+<link rel="icon" type="image/png" sizes="96x96" href="/favicon-96.png">
+<link rel="icon" type="image/png" sizes="192x192" href="/favicon-192.png">
+<link rel="icon" type="image/png" sizes="512x512" href="/favicon-512.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<!-- Marca de que el JavaScript va: las entradas animadas empiezan
+     invisibles, y sin esta clase alguien con el JS caído se quedaría
+     mirando una web en blanco. Va aquí arriba a propósito, antes de
+     pintar nada. -->
+<script>document.documentElement.className += " js";</script>
+<style>
+  :root {
+    --fondo: #0a0d14;
+    --panel: #141b28;
+    --panel2: #1d2634;
+    --teal: #4be1c3;
+    --violeta: #a78bfa;
+    --naranja: #f5a35c;
+    --texto: #e8edf4;
+    --atenuado: #96a4b4;
+    --borde: #2b3547;
+    --alto-nav: 56px;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: var(--alto-nav);
+  }
+  body {
+    background:
+      radial-gradient(ellipse 1100px 600px at 50% 220px, rgba(75,225,195,.15), transparent 70%),
+      var(--fondo);
+    color: var(--texto);
+    font-family: "Segoe UI", system-ui, sans-serif; line-height: 1.6;
+  }
+  .contenedor { max-width: 1040px; margin: 0 auto; padding: 0 24px; }
+
+  /* ---------- nav pegajosa ---------- */
+  nav {
+    position: sticky; top: 0; z-index: 50;
+    background: rgba(10,13,20,.85); backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--borde);
+  }
+  nav .contenedor { display: flex; align-items: center; justify-content: space-between; padding-top: 10px; padding-bottom: 10px; gap: 12px; }
+  /* el logo lleva arriba del todo de un clic: lo hace todo el mundo sin
+     pensarlo (pedido de Álvaro 29/07) */
+  .marca {
+    display: flex; align-items: center; gap: 10px; font-weight: 700;
+    font-size: 1.15rem; white-space: nowrap;
+    color: var(--texto); text-decoration: none;
+    transition: transform .18s ease, filter .18s ease;
+  }
+  .marca:hover { transform: translateY(-1px); filter: brightness(1.12); }
+  .marca:active { transform: translateY(0); }
+  .marca .all { color: var(--teal); }
+  nav .enlaces { display: flex; gap: 16px; font-size: .85rem; flex-wrap: wrap; justify-content: flex-end; }
+  nav .enlaces a { color: var(--atenuado); text-decoration: none; white-space: nowrap; }
+  nav .enlaces a:hover { color: var(--teal); }
+  /* el botón de descargar, pequeño y siempre a la vista (maqueta 02/09) */
+  nav .cta-barra {
+    flex: none; background: var(--teal); color: #0c1017; font-weight: 700;
+    border-radius: 9px; padding: 8px 16px; font-size: .85rem;
+    text-decoration: none; white-space: nowrap;
+    transition: filter .18s ease, transform .18s ease;
+  }
+  nav .cta-barra:hover { filter: brightness(1.08); transform: translateY(-1px); }
+
+  /* ---------- el ritmo: cada sección mide lo que mide ----------
+     Antes cada sección medía una pantalla entera con el contenido
+     centrado, y eso, sin el carrusel vertical que la recorría, dejaba
+     huecos negros enormes: es lo que reportó un betatester con portátil.
+     Las dos cosas se fueron juntas. */
+  .bloque { padding: 88px 0; }
+  .bloque > .contenedor { width: 100%; }
+  .bloque.compacto { padding: 76px 0; }
+  .bloque:last-of-type { padding: 76px 0 40px; }
+  #portada { padding: 92px 0 78px; }
+  /* con las secciones midiendo lo suyo hacen falta costuras, o el final
+     de una y el principio de la siguiente se confunden */
+  .banda { border-top: 1px solid var(--borde); }
+  .banda.tenue { background: rgba(255,255,255,.022); }
+  #comofunciona {
+    background:
+      radial-gradient(ellipse 760px 420px at 50% 40%, rgba(75,225,195,.07), transparent 70%),
+      rgba(255,255,255,.022);
+  }
+  #planes { background: radial-gradient(ellipse 700px 380px at 50% 0%, rgba(75,225,195,.07), transparent 70%); }
+  #descargar { background: radial-gradient(ellipse 800px 420px at 50% 100%, rgba(75,225,195,.09), transparent 70%); }
+
+  /* entradas animadas: cada punto entra al llegar */
+  .js .anima {
+    opacity: 0; transform: translateY(30px);
+    transition: opacity .7s cubic-bezier(.2,.7,.2,1), transform .7s cubic-bezier(.2,.7,.2,1);
+  }
+  .bloque.visto .anima { opacity: 1; transform: translateY(0); }
+  .bloque.visto .anima.tarde { transition-delay: .14s; }
+  .bloque.visto .anima.mas-tarde { transition-delay: .26s; }
+
+  /* ---------- héroe ---------- */
+  .heroe { text-align: center; width: 100%; }
+  .lockup {
+    display: flex; align-items: center; justify-content: center;
+    gap: 34px; margin-bottom: 40px; flex-wrap: wrap;
+  }
+  /* El movimiento va en el envoltorio y la sombra en el svg: si los dos
+     viven en el mismo elemento, el navegador redibuja la sombra en cada
+     fotograma y el flotar se ve a saltos (cazado por Alvaro 27/07). */
+  .logo-flota {
+    flex-shrink: 0; line-height: 0;
+    animation: flotar 4.5s ease-in-out infinite;
+    will-change: transform; transform: translate3d(0, 0, 0);
+    backface-visibility: hidden;
+  }
+  .logo-heroe {
+    width: clamp(120px, 18vw, 170px); display: block;
+    filter: drop-shadow(0 14px 36px rgba(75, 225, 195, .25));
+  }
+  @keyframes flotar {
+    0%, 100% { transform: translate3d(0, 0, 0); }
+    50% { transform: translate3d(0, -9px, 0); }
+  }
+  .lockup-texto { text-align: left; }
+  .lockup-nombre {
+    font-size: clamp(3.2rem, 9vw, 4.6rem); font-weight: 700;
+    letter-spacing: -.02em; line-height: 1.05;
+  }
+  .lockup-nombre .all { color: var(--teal); }
+  .lockup-tag { color: var(--atenuado); font-size: 1.08rem; margin-top: 8px; }
+  .heroe h1 {
+    font-size: clamp(2.6rem, 7vw, 4.2rem); line-height: 1.1; letter-spacing: -.025em;
+  }
+  .heroe h1 .grad { color: var(--teal); }
+  .heroe p.sub {
+    margin: 22px auto 0; max-width: 620px; color: var(--atenuado); font-size: 1.18rem;
+  }
+  .heroe p.sub strong { color: var(--texto); }
+  .botones-heroe { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; margin-top: 32px; }
+  .cta {
+    display: inline-block; background: var(--teal); color: #0c1017;
+    font-weight: 700; border-radius: 12px; padding: 14px 30px; font-size: 1.05rem;
+    text-decoration: none; box-shadow: 0 10px 34px rgba(75,225,195,.3);
+    transition: transform .18s ease, box-shadow .25s ease, filter .18s ease;
+  }
+  .cta:hover { filter: brightness(1.08); transform: translateY(-3px); box-shadow: 0 16px 42px rgba(75,225,195,.4); }
+  .cta.secundaria {
+    background: transparent; color: var(--teal);
+    border: 1px solid rgba(75,225,195,.55); box-shadow: none;
+  }
+  .cta.secundaria:hover { background: rgba(75,225,195,.1); filter: none; }
+
+  /* ---------- secciones de demo ---------- */
+  .demo-seccion { display: flex; gap: 48px; align-items: center; flex-wrap: wrap; }
+  .demo-seccion.invertida { flex-direction: row-reverse; }
+  .demo-texto { flex: 1 1 320px; }
+  .demo-texto .num {
+    color: var(--atenuado); font-family: Consolas, monospace; font-size: .9rem;
+    letter-spacing: .1em;
+  }
+  .demo-texto h2 { font-size: 1.9rem; margin: 8px 0 12px; letter-spacing: -.01em; }
+  .demo-texto h2 .tealino { color: var(--teal); }
+  .demo-texto p { color: var(--atenuado); font-size: 1.02rem; }
+  .demo-texto p + p { margin-top: 10px; }
+  /* la línea de quien aprende un idioma (05/11, elegida la C de
+     propuestas_idiomas.html): raya teal, solo la pregunta en teal */
+  .demo-texto p.aprende-linea { margin-top: 14px; padding: 2px 0 2px 14px; border-left: 3px solid var(--teal); }
+  .demo-texto p.aprende-linea .tealino { color: var(--teal); font-weight: 700; }
+  .demo-texto .atajo {
+    display: inline-block; margin-top: 14px; font-family: Consolas, monospace;
+    border: 1px solid var(--borde); border-radius: 8px; padding: 4px 12px;
+    font-size: .85rem; color: var(--teal); background: var(--panel);
+  }
+  .demo-visual { flex: 1 1 420px; min-width: 0; }
+
+  /* ================================================================
+     EL MOVIMIENTO: las tarjetas y los textos siguen al ratón.
+     Lo de dentro viaja MÁS que el fondo y con un pelín de retraso: eso
+     es lo que hace que la frase parezca que flota de verdad. Se hace
+     en 2D a propósito, porque las ventanas llevan overflow:hidden y
+     eso aplana el 3D de verdad. El JS solo escribe --px y --py en la
+     pieza de fuera; los de dentro las heredan.
+     ================================================================ */
+  .baila { position: relative; }
+  .js .baila { transition: transform .16s ease-out, box-shadow .3s ease; will-change: transform; }
+  .js .baila.tocada { box-shadow: 0 34px 80px rgba(0,0,0,.6); }
+  .js .baila-texto.tocada { box-shadow: none; }
+
+  .js .tarjeta-flotante {
+    transform: translate(calc(var(--px, 0px) * 1.8), calc(8px + var(--py, 0px) * 1.8));
+    transition: opacity .35s ease, transform .24s ease-out;
+  }
+  .js .tarjeta-flotante.visible {
+    transform: translate(calc(var(--px, 0px) * 1.8), calc(var(--py, 0px) * 1.8));
+  }
+  .js .muestra-tarjeta {
+    transform: translate(calc(var(--px, 0px) * 2), calc(var(--py, 0px) * 2));
+    transition: background .5s ease, border-radius .5s ease, padding .5s ease,
+                color .5s ease, transform .24s ease-out;
+  }
+  .js .chips-caret {
+    transform: translate(calc(var(--px, 0px) * 1.5), calc(8px + var(--py, 0px) * 1.5));
+    transition: opacity .3s ease, transform .24s ease-out;
+  }
+  .js .chips-caret.visible {
+    transform: translate(calc(var(--px, 0px) * 1.5), calc(var(--py, 0px) * 1.5));
+  }
+  .js .pastilla-aprende {
+    transform: translate(calc(var(--px, 0px) * 1.6), calc(4px + var(--py, 0px) * 1.6));
+    transition: opacity .25s ease, transform .24s ease-out;
+  }
+  .js .pastilla-aprende.visible {
+    transform: translate(calc(var(--px, 0px) * 1.6), calc(var(--py, 0px) * 1.6));
+  }
+  .js .teclas-flotantes, .js .sello-aprendido, .js .chip-estado {
+    transform: translate(calc(var(--px, 0px) * 1.3), calc(var(--py, 0px) * 1.3));
+    transition: opacity .3s ease, transform .24s ease-out;
+  }
+  .js .globo-trad {
+    transform: translateY(-100%) translate(calc(var(--px, 0px) * 1.9), calc(var(--py, 0px) * 1.9));
+    transition: opacity .35s ease, transform .24s ease-out;
+  }
+  .js .burbuja.tuya, .js .tarjeta-taller .cifra {
+    transform: translate(calc(var(--px, 0px) * 1.2), calc(var(--py, 0px) * 1.2));
+    transition: transform .26s ease-out;
+  }
+  /* la columna de texto también se mueve, y por capas */
+  .js .baila-texto .num {
+    display: inline-block;
+    transform: translate(calc(var(--px, 0px) * .55), calc(var(--py, 0px) * .55));
+    transition: transform .26s ease-out;
+  }
+  .js .baila-texto h2 {
+    transform: translate(calc(var(--px, 0px) * 1.2), calc(var(--py, 0px) * 1.2));
+    transition: transform .24s ease-out;
+  }
+  .js .baila-texto p {
+    transform: translate(calc(var(--px, 0px) * .85), calc(var(--py, 0px) * .85));
+    transition: transform .26s ease-out;
+  }
+  .js .baila-texto .atajo, .js .baila-texto .chip-firma {
+    transform: translate(calc(var(--px, 0px) * 1.6), calc(var(--py, 0px) * 1.6));
+    transition: transform .22s ease-out, border-color .2s ease, box-shadow .2s ease;
+  }
+  .js .baila-texto:hover .atajo {
+    border-color: rgba(75,225,195,.5); box-shadow: 0 8px 22px rgba(75,225,195,.14);
+  }
+
+  /* ---------- ventanas falsas ---------- */
+  .ventana {
+    background: #313338; border-radius: 12px; overflow: hidden;
+    box-shadow: 0 22px 60px rgba(0,0,0,.55); font-size: .92rem;
+  }
+  .ventana .titulo {
+    background: #1e1f22; padding: 8px 14px; font-size: .78rem; color: #b5bac1;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .puntos { display: flex; gap: 5px; }
+  .puntos span { width: 10px; height: 10px; border-radius: 50%; background: #4b4d52; }
+  .chat { padding: 14px 16px 6px; min-height: 120px; }
+  .msj { margin-bottom: 10px; display: flex; gap: 10px; }
+  .avatar { width: 32px; height: 32px; border-radius: 50%; flex-shrink: 0;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 700; font-size: .75rem; color: #fff; }
+  .msj .autor { font-weight: 600; font-size: .88rem; }
+  .msj .texto { color: #dbdee1; }
+  .zona-entrada { position: relative; padding: 10px 16px 16px; }
+  .entrada {
+    background: #383a40; border-radius: 8px; padding: 10px 14px;
+    color: #dbdee1; min-height: 42px; font-size: .93rem;
+  }
+  .cursor {
+    display: inline-block; width: 2px; height: 1.1em; background: #dbdee1;
+    vertical-align: text-bottom; animation: parpadeo 1s steps(1) infinite;
+  }
+  @keyframes parpadeo { 50% { opacity: 0; } }
+  .pastilla-aprende {
+    position: absolute; bottom: 64px; left: 16px;
+    background: #1e1f24; border: 1px solid #3a3d46; border-radius: 999px;
+    padding: 5px 12px; font-size: .85rem;
+    display: inline-flex; gap: 8px; align-items: center;
+    opacity: 0; transform: translateY(4px);
+    transition: opacity .25s ease, transform .25s ease;
+  }
+  .pastilla-aprende.visible { opacity: 1; transform: translateY(0); }
+  .pastilla-aprende .palabra { color: var(--teal); font-weight: 600; }
+  .pastilla-aprende .tab {
+    color: var(--atenuado); font-family: Consolas, monospace;
+    font-size: .72rem; border: 1px solid #3a3d46; border-radius: 4px;
+    padding: 0 5px; transition: all .15s;
+  }
+  .pastilla-aprende .tab.pulsada { background: var(--teal); color: #08201c;
+                                   border-color: var(--teal); }
+  .sello-aprendido {
+    position: absolute; bottom: 100px; left: 22px;
+    color: var(--teal); font-size: .74rem;
+    font-family: Consolas, monospace;
+    opacity: 0; transition: opacity .3s;
+  }
+  .sello-aprendido.visible { opacity: .95; }
+  .tarjeta-flotante {
+    position: absolute; left: 16px; right: 16px; bottom: 66px;
+    background: var(--panel); border: 1px solid var(--teal);
+    border-radius: 10px; padding: 10px 14px;
+    box-shadow: 0 10px 30px rgba(75,225,195,.18);
+    opacity: 0; transform: translateY(8px); transition: all .35s ease;
+  }
+  .tarjeta-flotante.visible { opacity: 1; transform: translateY(0); }
+  .tarjeta-flotante .resultado { color: var(--teal); font-weight: 600; }
+  .tarjeta-flotante .pista { font-size: .74rem; color: var(--atenuado); margin-top: 3px; }
+  .chip-estado {
+    position: absolute; right: 22px; bottom: 24px; font-size: .72rem;
+    color: var(--atenuado); background: #2b2d31; border-radius: 999px;
+    padding: 2px 10px; opacity: 0; transition: opacity .3s;
+  }
+  .chip-estado.visible { opacity: 1; }
+
+  /* ventana de juego */
+  .ventana-juego {
+    background: #0d1117 url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="60" height="60"%3E%3Crect width="60" height="60" fill="%230d1117"/%3E%3Cpath d="M0 30h60M30 0v60" stroke="%23151b26" stroke-width="1"/%3E%3C/svg%3E');
+    border: 1px solid #1c2534; border-radius: 12px; overflow: hidden;
+    box-shadow: 0 22px 60px rgba(0,0,0,.55);
+    font-family: Consolas, monospace; font-size: .88rem;
+  }
+  .ventana-juego .hud {
+    display: flex; justify-content: space-between; padding: 8px 14px;
+    font-size: .72rem; color: #5c6b82; border-bottom: 1px solid #1c2534;
+  }
+  .ventana-juego .log { padding: 12px 16px; min-height: 96px; }
+  .ventana-juego .log div { margin-bottom: 5px; }
+  .ventana-juego .all { color: #f0c674; }
+  .ventana-juego .aliado { color: #7fb3f5; }
+  .ventana-juego .entrada-juego {
+    margin: 6px 14px 14px; border: 1px solid #2a3547; border-radius: 6px;
+    padding: 8px 12px; color: #dbe4f0; background: rgba(13,17,23,.85);
+    position: relative;
+  }
+  .teclas-flotantes {
+    position: absolute; right: 10px; top: -38px; display: flex; gap: 4px;
+    opacity: 0; transition: opacity .3s;
+  }
+  .teclas-flotantes.visible { opacity: 1; }
+  .tecla {
+    border: 1px solid #5c6b82; border-radius: 5px; padding: 1px 8px;
+    font-size: .72rem; background: #1c2230; box-shadow: 0 2px 0 #000;
+  }
+  .tecla.pulsada { background: var(--teal); color: #0c1017; box-shadow: none; transform: translateY(2px); }
+
+  /* ventana clara (WhatsApp Web, corrección) */
+  .ventana-clara {
+    background: #eae2d7; border-radius: 12px; overflow: hidden;
+    box-shadow: 0 22px 60px rgba(0,0,0,.55); font-size: .92rem; color: #2c2a26;
+  }
+  .ventana-clara .titulo-clara {
+    background: #075e54; color: #e7f6f2; padding: 9px 14px; font-size: .82rem;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .ventana-clara .avatar-mini {
+    width: 24px; height: 24px; border-radius: 50%; background: #c56a4a;
+    display: flex; align-items: center; justify-content: center;
+    font-size: .7rem; font-weight: 700; color: #fff;
+  }
+  .ventana-clara .conversacion { padding: 14px 16px 6px; min-height: 96px; }
+  .burbuja {
+    max-width: 78%; border-radius: 10px; padding: 7px 12px; margin-bottom: 8px;
+    font-size: .9rem; box-shadow: 0 1px 1px rgba(0,0,0,.12);
+  }
+  .burbuja.suya { background: #ffffff; }
+  .burbuja.tuya { background: #d9fdd3; margin-left: auto; }
+  .ventana-clara .zona-entrada { padding: 8px 12px 14px; }
+  .ventana-clara .entrada {
+    background: #ffffff; color: #2c2a26; border-radius: 999px; padding: 9px 16px;
+  }
+  .ventana-clara .cursor { background: #2c2a26; }
+  .ventana-clara .tarjeta-flotante { bottom: 62px; background: var(--panel); }
+  .ventana-clara .chip-estado { background: #d7cfc2; color: #6b675e; }
+
+  /* ventana predicción */
+  .chips-caret {
+    position: absolute; left: 16px; bottom: 66px;
+    background: var(--panel); border: 1px solid var(--borde);
+    border-radius: 10px; padding: 8px 12px;
+    display: flex; gap: 8px; align-items: center;
+    box-shadow: 0 10px 30px rgba(0,0,0,.4);
+    opacity: 0; transform: translateY(8px); transition: all .3s ease;
+    font-size: .85rem;
+  }
+  .chips-caret.visible { opacity: 1; transform: translateY(0); }
+  .chips-caret span { color: var(--atenuado); transition: all .2s; }
+  .chips-caret span.elegida { color: var(--teal); font-weight: 700; }
+  .chips-caret .pista-tab {
+    font-size: .7rem; color: var(--atenuado); border: 1px solid var(--borde);
+    border-radius: 5px; padding: 0 6px; font-family: Consolas, monospace;
+  }
+
+  /* ventana personalización */
+  .escenario-estilos {
+    background: #313338; border-radius: 12px; overflow: hidden;
+    box-shadow: 0 22px 60px rgba(0,0,0,.55); padding: 26px 22px 22px;
+    min-height: 220px; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; gap: 16px;
+  }
+  .muestra-tarjeta {
+    border-radius: 10px; padding: 12px 18px; max-width: 90%;
+    transition: all .5s ease; text-align: left;
+  }
+  .muestra-tarjeta .titulin { font-size: .72rem; letter-spacing: .06em; margin-bottom: 3px; opacity: .8; }
+  .muestra-tarjeta .frase { font-weight: 600; font-size: 1rem; }
+  .muestra-tarjeta.estilo-tarjeta { background: var(--panel); border: 1px solid var(--acento, var(--teal)); box-shadow: 0 10px 30px rgba(0,0,0,.35); }
+  .muestra-tarjeta.estilo-tarjeta .titulin { color: var(--acento, var(--teal)); }
+  .muestra-tarjeta.estilo-tarjeta .frase { color: var(--texto); }
+  .muestra-tarjeta.estilo-minimo { background: rgba(10,13,20,.92); border-radius: 999px; padding: 8px 18px; }
+  .muestra-tarjeta.estilo-minimo .titulin { display: none; }
+  .muestra-tarjeta.estilo-minimo .frase { color: var(--acento, var(--teal)); font-size: .95rem; }
+  .etiqueta-estilo { font-size: .8rem; color: #b5bac1; font-family: Consolas, monospace; }
+  .paleta { display: flex; gap: 8px; }
+  .paleta span {
+    width: 18px; height: 18px; border-radius: 50%; border: 2px solid transparent;
+    transition: border .3s;
+  }
+  .paleta span.activa { border-color: #fff; }
+
+  /* selección + globo (leer chats) */
+  .seleccion { background: rgba(75,225,195,.25); border-radius: 3px; }
+  .globo-trad {
+    position: absolute; left: 20px; top: -14px; transform: translateY(-100%);
+    background: var(--panel); border: 1px solid var(--teal); border-radius: 10px;
+    padding: 8px 14px; color: var(--teal); font-weight: 600; font-size: .88rem;
+    opacity: 0; transition: opacity .35s; box-shadow: 0 10px 30px rgba(75,225,195,.18);
+    font-family: "Segoe UI", sans-serif; white-space: nowrap;
+  }
+  .globo-trad.visible { opacity: 1; }
+
+  /* ---------- sobre nosotros ---------- */
+  .sobre { width: 100%; display: flex; gap: 48px; align-items: center; flex-wrap: wrap; }
+  .sobre .lado-texto { flex: 1 1 380px; }
+  .sobre .num { color: var(--atenuado); font-family: Consolas, monospace; font-size: .9rem; letter-spacing: .1em; }
+  .sobre h2 { font-size: 1.9rem; margin: 8px 0 14px; letter-spacing: -.01em; }
+  .sobre h2 .tealino { color: var(--teal); }
+  .sobre p { color: var(--atenuado); font-size: 1.02rem; }
+  .sobre p + p { margin-top: 12px; }
+  .sobre .firma { margin-top: 18px; display: flex; gap: 10px; flex-wrap: wrap; }
+  .sobre .chip-firma {
+    font-size: .8rem; color: var(--teal); background: var(--panel);
+    border: 1px solid var(--borde); border-radius: 999px; padding: 5px 14px;
+  }
+  .sobre .lado-visual { flex: 1 1 340px; min-width: 0; }
+  .tarjeta-taller {
+    background: var(--panel); border: 1px solid var(--borde); border-radius: 16px;
+    padding: 24px; box-shadow: 0 22px 60px rgba(0,0,0,.45);
+  }
+  .tarjeta-taller .fila-dato { display: flex; align-items: baseline; gap: 14px; padding: 12px 0; border-bottom: 1px solid var(--borde); }
+  .tarjeta-taller .fila-dato:last-child { border-bottom: none; }
+  .tarjeta-taller .cifra { font-size: 1.8rem; font-weight: 700; color: var(--teal); font-variant-numeric: tabular-nums; min-width: 92px; }
+  .tarjeta-taller .que { color: var(--atenuado); font-size: .93rem; }
+
+  /* ---------- privacidad, pegada al formulario ---------- */
+  .privacidad {
+    margin-top: 34px; background: var(--panel);
+    border: 1px solid var(--borde); border-left: 4px solid var(--teal);
+    border-radius: 14px; padding: 18px 24px;
+  }
+  .privacidad h2 { font-size: 1.08rem; margin-bottom: 6px; }
+  .privacidad p { color: var(--atenuado); font-size: .89rem; }
+
+  /* ---------- PLANES (maqueta cerrada el 02/09, cuatro rondas) ----------
+     Tres columnas, "Recomendado" en el Premium, la comparación completa
+     plegada debajo y el Plus en "Próximamente". Los botones de comprar
+     son enlaces normales a api.allchat.es/pago/ir (sin JavaScript
+     también funcionan: mandan al pago mensual). */
+  .planes { width: 100%; }
+  .planes-cab { text-align: center; }
+  .planes-cab .num { color: var(--atenuado); font-family: Consolas, monospace; font-size: .9rem; letter-spacing: .1em; }
+  .planes-cab h2 { font-size: 1.9rem; margin: 8px 0 10px; letter-spacing: -.01em; }
+  .planes-cab h2 .tealino { color: var(--teal); }
+  .planes-cab p { color: var(--atenuado); max-width: 560px; margin: 0 auto; font-size: 1.02rem; }
+  .periodo {
+    display: inline-flex; margin-top: 18px; background: var(--panel);
+    border: 1px solid var(--borde); border-radius: 999px; padding: 4px;
+  }
+  .periodo button {
+    background: transparent; border: none; color: var(--atenuado);
+    padding: 7px 18px; border-radius: 999px; cursor: pointer; font-family: inherit;
+    font-size: .88rem; font-weight: 600; transition: background .2s, color .2s;
+  }
+  .periodo button.activo { background: var(--teal); color: #0c1017; }
+  .periodo .ahorra { font-size: .7rem; color: var(--teal); margin-left: 6px; font-weight: 700; }
+  .periodo button.activo .ahorra { color: #0c1017; }
+  .columnas { display: flex; gap: 18px; margin-top: 26px; flex-wrap: wrap; align-items: stretch; }
+  .plan {
+    flex: 1 1 250px; background: var(--panel); border: 1px solid var(--borde);
+    border-radius: 16px; padding: 24px 22px; position: relative;
+    display: flex; flex-direction: column;
+  }
+  .plan.destacado { border-color: var(--teal); box-shadow: 0 22px 60px rgba(75,225,195,.12); }
+  .plan.futuro { opacity: .78; }
+  .plan .cinta {
+    position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
+    font-size: .68rem; letter-spacing: .1em; text-transform: uppercase;
+    background: var(--teal); color: #0c1017; font-weight: 700;
+    padding: 4px 12px; border-radius: 999px; white-space: nowrap;
+  }
+  .plan.futuro .cinta { background: #5c6b82; }
+  .plan h3 { font-size: 1.2rem; }
+  .plan .para { color: var(--atenuado); font-size: .86rem; margin-top: 2px; }
+  .plan .precio { margin: 16px 0 4px; font-size: 2.2rem; font-weight: 700; letter-spacing: -.02em; line-height: 1; }
+  .plan .precio small { font-size: .95rem; color: var(--atenuado); font-weight: 400; letter-spacing: 0; }
+  .plan .equivale { font-size: .8rem; color: var(--atenuado); min-height: 1.2em; }
+  .plan ul { list-style: none; margin: 18px 0 22px; flex: 1; }
+  .plan li { display: flex; gap: 9px; font-size: .9rem; padding: 5px 0; color: var(--texto); }
+  .plan li::before { content: "✓"; color: var(--teal); font-weight: 700; flex: none; }
+  .plan li.gris { color: var(--atenuado); }
+  .plan li.gris::before { content: "•"; color: var(--atenuado); }
+  .plan .cta { width: 100%; text-align: center; padding: 13px 18px; font-size: 1rem; }
+  .plan .cta.apagado {
+    background: var(--panel2); color: var(--atenuado); box-shadow: none;
+    cursor: default; border: 1px solid var(--borde);
+  }
+  .plan .cta.apagado:hover { transform: none; filter: none; }
+  .plan .nota-plan { font-size: .76rem; color: var(--atenuado); margin-top: 10px; text-align: center; }
+  .ver-comparacion { text-align: center; margin-top: 22px; }
+  .ver-comparacion button {
+    background: transparent; border: 1px solid var(--borde); color: var(--atenuado);
+    border-radius: 999px; padding: 9px 20px; font-size: .88rem; cursor: pointer;
+    font-family: inherit; transition: border-color .2s, color .2s;
+  }
+  .ver-comparacion button:hover { border-color: var(--teal); color: var(--teal); }
+  .comparacion { max-height: 0; overflow: hidden; transition: max-height .45s ease; }
+  .comparacion.abierta { max-height: 900px; }
+  .tabla-scroll { overflow-x: auto; margin-top: 18px; }
+  table.compara { border-collapse: collapse; width: 100%; min-width: 620px; font-size: .92rem; }
+  table.compara th, table.compara td {
+    border-bottom: 1px solid var(--borde); padding: 11px 14px; vertical-align: middle;
+    text-align: center;
+  }
+  table.compara th { font-size: 1rem; color: var(--texto); font-weight: 700; }
+  table.compara th:first-child, table.compara td:first-child { text-align: left; }
+  table.compara th.dest { color: var(--teal); }
+  table.compara td { color: var(--atenuado); }
+  table.compara td:first-child { color: var(--texto); }
+  table.compara .si { color: var(--teal); font-weight: 700; }
+  table.compara .no { color: var(--borde); }
+  table.compara .txt { font-size: .82rem; }
+  /* sin JavaScript no hay botón que despliegue: la tabla se ve entera */
+  html:not(.js) .comparacion { max-height: none; }
+  html:not(.js) .ver-comparacion { display: none; }
+
+  /* ---------- cierre: la descarga manda, el Discord acompaña ---------- */
+  .cierre { text-align: center; }
+  .cierre h2 { font-size: 2rem; letter-spacing: -.01em; }
+  .cierre h2 .grad { color: var(--teal); }
+  .cierre p.intro { color: var(--atenuado); margin: 14px auto 0; max-width: 560px; }
+  .cierre .descarga { margin-top: 26px; }
+  .cta.grande { padding: 17px 38px; font-size: 1.15rem; }
+  .chips-descarga { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 16px; }
+  .chip-dato {
+    font-size: .78rem; color: var(--atenuado); background: var(--panel);
+    border: 1px solid var(--borde); border-radius: 999px; padding: 5px 14px;
+    font-family: Consolas, monospace;
+  }
+  .chip-dato b { color: var(--teal); font-weight: 700; }
+  .discord {
+    margin-top: 30px; text-align: left;
+    background: rgba(88,101,242,.10);
+    border: 1px solid rgba(88,101,242,.45); border-radius: 16px; padding: 22px 26px;
+    display: flex; gap: 22px; align-items: center; flex-wrap: wrap;
+  }
+  .discord .icono { flex: none; line-height: 0; }
+  .discord .texto { flex: 1 1 300px; }
+  .discord h3 { font-size: 1.15rem; }
+  .discord p { color: var(--atenuado); font-size: .95rem; margin-top: 5px; }
+  .discord .canales { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
+  .discord .canal {
+    font-family: Consolas, monospace; font-size: .78rem; color: #aab2ff;
+    background: rgba(88,101,242,.12); border: 1px solid rgba(88,101,242,.3);
+    border-radius: 8px; padding: 4px 10px;
+  }
+  .btn-discord {
+    display: inline-block; background: #5865f2; color: #fff; font-weight: 700;
+    border-radius: 12px; padding: 14px 28px; font-size: 1.02rem; text-decoration: none;
+    box-shadow: 0 10px 30px rgba(88,101,242,.35); white-space: nowrap;
+    transition: filter .18s ease, transform .18s ease;
+  }
+  .btn-discord:hover { filter: brightness(1.1); transform: translateY(-2px); }
+
+  /* ---------- pie ---------- */
+  footer {
+    margin-top: 30px; padding: 22px 0 0;
+    border-top: 1px solid var(--borde);
+    color: var(--atenuado); font-size: .85rem;
+    display: flex; flex-wrap: wrap; gap: 8px 24px;
+    align-items: center; justify-content: space-between;
+  }
+  footer a { color: var(--teal); text-decoration: none; }
+  footer .legal { display: flex; gap: 16px; flex-wrap: wrap; align-items: center; }
+  /* las cuentas de X (17/09): el logo de X en SVG, del color del texto que
+     lo rodea; en la barra, solo el icono, y en el pie, las dos cuentas */
+  .icono-x { width: 1em; height: 1em; display: inline-block; flex: none; fill: currentColor; }
+  nav .enlaces a.enlace-x { display: inline-flex; align-items: center; }
+  footer .redes { display: flex; gap: 6px 14px; flex-wrap: wrap; align-items: center; }
+  footer .redes a { display: inline-flex; align-items: center; gap: 6px; }
+
+  /* ---------- ventana estrecha: solo la barra y el aire ----------
+     Esto sí es cosa del ancho, tenga el visitante dedo o ratón. */
+  @media (max-width: 760px) {
+    .bloque { padding: 62px 0; }
+    .bloque.compacto, .bloque:last-of-type { padding: 58px 0 34px; }
+    .discord { flex-direction: column; align-items: flex-start; }
+    .btn-discord { white-space: normal; }
+    /* los enlaces en UNA línea que se arrastra: envueltos ocupaban
+       cuatro líneas de barra pegajosa y se comían la pantalla */
+    nav .contenedor { gap: 14px; }
+    nav .enlaces {
+      flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none;
+      -webkit-overflow-scrolling: touch; justify-content: flex-start;
+    }
+    nav .enlaces::-webkit-scrollbar { display: none; }
+  }
+
+  /* quien pide menos animación, menos animación */
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    .js .anima { opacity: 1; transform: none; transition: none; }
+    .js .baila { transform: none !important; transition: none; }
+    .logo-flota { animation: none; }
+  }
+
+  /* ================================================================
+     EL CARRUSEL HORIZONTAL
+     Sustituye al carrusel vertical de julio, que secuestraba la rueda y
+     con trackpad soltaba el freno en 195 ms. Este se mueve A LO ANCHO y
+     no toca el scroll de la página, así que no hay freno que soltar.
+     ================================================================ */
+  .carrusel { width: 100%; }
+  .carrusel-cab { text-align: center; max-width: 620px; margin: 0 auto 30px; }
+  .carrusel-cab .num {
+    color: var(--atenuado); font-family: Consolas, monospace; font-size: .9rem; letter-spacing: .1em;
+  }
+  .carrusel-cab h2 { font-size: 1.9rem; margin: 8px 0 10px; letter-spacing: -.01em; }
+  .carrusel-cab h2 .tealino { color: var(--teal); }
+
+  .escena {
+    position: relative;
+    background: rgba(20,27,40,.5); border: 1px solid var(--borde);
+    border-radius: 22px; padding: 20px 28px;
+    box-shadow: 0 30px 80px rgba(0,0,0,.35);
+    -webkit-backdrop-filter: blur(26px) saturate(1.25);
+    backdrop-filter: blur(26px) saturate(1.25);
+  }
+  .pista {
+    position: relative; display: flex; align-items: stretch;
+    overflow-x: auto; overflow-y: hidden;
+    scroll-snap-type: x mandatory; scroll-behavior: smooth;
+    scrollbar-width: none; overscroll-behavior-x: contain;
+    transition: opacity .18s ease;
+  }
+  .pista::-webkit-scrollbar { display: none; }
+  .diapo {
+    flex: 0 0 100%; min-width: 0; scroll-snap-align: center; padding: 14px 6px;
+  }
+  .diapo .demo-seccion { height: 100%; }
+  /* la 06 es la diapositiva más baja y el marco lo fija la más alta, así
+     que sin esto le queda un agujero de aire dentro */
+  .diapo .escenario-estilos { min-height: 300px; }
+
+  .flecha {
+    position: absolute; top: 50%; transform: translateY(-50%); z-index: 5;
+    width: 44px; height: 44px; border-radius: 50%; cursor: pointer;
+    background: var(--panel); border: 1px solid var(--borde); color: var(--atenuado);
+    display: flex; align-items: center; justify-content: center;
+    transition: all .18s ease;
+  }
+  .flecha:hover { border-color: var(--teal); color: var(--teal); transform: translateY(-50%) scale(1.06); }
+  .flecha.izq { left: -22px; }
+  .flecha.der { right: -22px; }
+
+  .mando-carrusel { display: flex; align-items: center; gap: 16px; margin-top: 18px; flex-wrap: wrap; }
+  .segmentos { display: flex; gap: 6px; flex: 1 1 240px; min-width: 180px; }
+  .segmento {
+    flex: 1; height: 5px; border-radius: 3px; padding: 0; cursor: pointer;
+    background: var(--borde); border: none; overflow: hidden; transition: background .2s;
+  }
+  .segmento:hover { background: #3d4a60; }
+  .segmento i { display: block; height: 100%; width: 0; background: var(--teal); border-radius: 3px; }
+  .segmento.pasado i { width: 100%; background: rgba(75,225,195,.45); }
+  .segmento.activo i { width: 0; animation: corre 5s linear forwards; }
+  .pausado .segmento.activo i { animation-play-state: paused; }
+  @keyframes corre { to { width: 100%; } }
+
+  .estado-carrusel {
+    display: flex; align-items: center; gap: 10px;
+    font-size: .84rem; color: var(--atenuado); white-space: nowrap;
+  }
+  .btn-pausa {
+    width: 34px; height: 34px; border-radius: 50%; cursor: pointer; flex: none;
+    background: var(--panel); border: 1px solid var(--borde); color: var(--teal);
+    display: flex; align-items: center; justify-content: center; transition: all .18s ease;
+  }
+  .btn-pausa:hover { border-color: var(--teal); }
+  .pausado .btn-pausa { background: var(--teal); color: #0c1017; border-color: var(--teal); }
+  .nombre-diapo { color: var(--texto); font-weight: 600; }
+  .contador-diapo { font-family: Consolas, monospace; color: var(--atenuado); }
+
+  /* sin JavaScript las siete quedan una debajo de otra y se leen enteras */
+  html:not(.js) .pista { display: block; overflow: visible; scroll-snap-type: none; }
+  html:not(.js) .diapo { padding: 34px 0; border-top: 1px solid var(--borde); }
+  html:not(.js) .diapo:first-child { border-top: none; padding-top: 6px; }
+  html:not(.js) .flecha, html:not(.js) .mando-carrusel { display: none; }
+  html:not(.js) .escena { background: transparent; border: none; padding: 0; box-shadow: none; }
+
+  /* ================================================================
+     EL FONDO: VELOS DE LUZ
+     Once cintas anchas repartidas por toda la página, cada una con su
+     silueta, su ancho, su color y su deriva. Cada una se pinta DOS
+     veces, un resplandor ancho y muy difuminado y encima un núcleo
+     estrecho y brillante: con una sola pasada el corazón cálido sale
+     marrón apagado. No se descarga nada, lo dibuja el navegador.
+     ================================================================ */
+  body { position: relative; }
+  body > nav, body > section { position: relative; z-index: 1; }
+  .fondo {
+    position: absolute; inset: 0; z-index: 0; pointer-events: none; overflow: hidden;
+    /* más luz por los lados y más calma por el centro, que es la columna
+       por donde baja el texto */
+    -webkit-mask-image: linear-gradient(90deg, #000, rgba(0,0,0,.44) 17%, rgba(0,0,0,.44) 83%, #000);
+    mask-image: linear-gradient(90deg, #000, rgba(0,0,0,.44) 17%, rgba(0,0,0,.44) 83%, #000);
+  }
+  .fondo .velos { position: absolute; inset: 0; width: 100%; height: 100%; opacity: .47; }
+  .fondo .vf { stop-color: #5b7bd6; }
+  .fondo .vt { stop-color: #4be1c3; }
+  .fondo .vw { stop-color: #ffdcc4; }
+  .fondo .vv { stop-color: #8a6fe0; }
+
+  /* cada cinta va a la deriva por su cuenta: distinto viaje, distinta
+     duración y arrancada en distinto momento, para que las once no se
+     muevan a la vez como un bloque */
+  @keyframes deriva {
+    from { transform: translate(0, 0); }
+    to   { transform: translate(var(--dx, 40px), var(--dy, 20px)); }
+  }
+  .fondo g.cinta {
+    animation: deriva var(--dur, 52s) ease-in-out infinite alternate;
+    animation-delay: var(--retraso, 0s);
+    will-change: transform;
+  }
+  /* el color pasa por los tres tintes en orden, del frío a la marca y de
+     la marca al rosa, girando el tono muy despacio. Se gira la capa
+     entera, que es una sola operación, en vez de animar veinte colores
+     uno a uno. */
+  @keyframes tintar {
+    from { filter: hue-rotate(-30deg) saturate(1.06); }
+    to   { filter: hue-rotate(44deg) saturate(1.12); }
+  }
+  .fondo .velos { animation: tintar 168s ease-in-out infinite alternate; }
+
+  /* los paneles dejan pasar la luz de detrás */
+  .plan, .tarjeta-taller, .empresas {
+    background: rgba(20,27,40,.5);
+    -webkit-backdrop-filter: blur(26px) saturate(1.25);
+    backdrop-filter: blur(26px) saturate(1.25);
+  }
+
+  /* que el fondo no se coma el texto: un halo oscuro pegado a la letra.
+     En los títulos NO se pone: los que llevan degradado tienen la letra
+     transparente y se vería la sombra suelta. */
+  .sobre p, .heroe p.sub, .carrusel-cab p, .planes-cab p, .cierre p {
+    text-shadow: 0 2px 18px rgba(6,9,16,.95), 0 0 4px rgba(6,9,16,.8);
+  }
+  /* el bloque de Sobre nosotros es el único párrafo largo que cae directo
+     sobre el fondo, sin panel debajo. La nube se sale de su caja a
+     propósito: si el degradado se apagara dentro, se vería el borde. */
+  .sobre .lado-texto { position: relative; }
+  .sobre .lado-texto::before {
+    content: ""; position: absolute; inset: -54px -72px; z-index: -1;
+    background: radial-gradient(68% 60% at 46% 50%,
+                rgba(8,11,18,.9) 0%, rgba(8,11,18,.74) 42%, rgba(8,11,18,0) 76%);
+  }
+
+  /* ---------- empresas, dentro de Planes ---------- */
+  .empresas {
+    margin-top: 20px; border: 1px solid var(--borde); border-radius: 16px;
+    padding: 22px 26px; display: flex; gap: 22px; align-items: center; flex-wrap: wrap;
+  }
+  .empresas .icono-empresas { flex: none; line-height: 0; }
+  .empresas .icono-empresas svg { display: block; }
+  .empresas .lado { flex: 1 1 340px; }
+  .empresas h3 { font-size: 1.1rem; }
+  .empresas p { color: var(--atenuado); font-size: .93rem; margin-top: 6px; }
+  .empresas .cta { white-space: nowrap; }
+
+  @media (max-width: 760px) {
+    .escena { padding: 18px 14px; border-radius: 16px; }
+    .empresas { flex-direction: column; align-items: flex-start; }
+  }
+  /* con la ventana estrecha manda el dedo: las flechas tapaban el texto
+     de la diapositiva, así que se quitan y se navega deslizando */
+  @media (max-width: 640px) {
+    .flecha { display: none; }
+    .segmento { height: 7px; }
+    .mando-carrusel { margin-top: 18px; }
+  }
+
+  /* quien pide menos animación, nada se mueve solo */
+  @media (prefers-reduced-motion: reduce) {
+    .fondo g.cinta, .fondo .velos { animation: none; }
+    .pista { scroll-behavior: auto; }
+    .segmento.activo i { animation: none; width: 100%; }
+  }
+
+  /* ---------- PREGUNTAS (22/09, elegida la A: acordeón con details, sin JavaScript) ---------- */
+  .preguntas { width: 100%; max-width: 880px; margin: 0 auto; }
+  .preguntas-cab { text-align: center; margin-bottom: 26px; }
+  .preguntas-cab .num { color: var(--atenuado); font-family: Consolas, monospace; font-size: .9rem; letter-spacing: .1em; }
+  .preguntas-cab h2 { font-size: 1.9rem; margin: 8px 0 10px; letter-spacing: -.01em; }
+  .preguntas-cab h2 .tealino { color: var(--teal); }
+  .preguntas-cab p { color: var(--atenuado); font-size: 1.02rem; }
+  .preguntas a { color: var(--teal); }
+  /* A: acordeón nativo (details), funciona sin JavaScript */
+  .faq-a details {
+    background: var(--panel); border: 1px solid var(--borde); border-radius: 14px;
+    margin-bottom: 10px; transition: border-color .2s;
+  }
+  .faq-a details[open] { border-color: rgba(75,225,195,.55); }
+  .faq-a summary {
+    list-style: none; cursor: pointer; padding: 16px 52px 16px 20px; position: relative;
+    font-weight: 700; font-size: 1.02rem; color: var(--texto);
+  }
+  .faq-a summary::-webkit-details-marker { display: none; }
+  .faq-a summary::after {
+    content: "+"; position: absolute; right: 20px; top: 50%; transform: translateY(-50%);
+    color: var(--teal); font-size: 1.4rem; font-weight: 400; transition: transform .25s;
+  }
+  .faq-a details[open] summary::after { transform: translateY(-50%) rotate(45deg); }
+  .faq-a summary:hover { color: var(--teal); }
+  .faq-a .resp { padding: 0 20px 18px; color: var(--atenuado); font-size: .95rem; line-height: 1.6; }
+
+  /* ---------- el Discord a la vista nada más entrar (23/10, elegida A + C) ---------- */
+
+  /* propuesta A: el Discord en la portada, tercer botón, oscuro y con borde fino */
+  .cta-discord {
+    position: relative; display: inline-flex; align-items: center; gap: 10px;
+    background: var(--panel); color: var(--texto);
+    border: 1px solid #3a4558; border-radius: 12px;
+    padding: 14px 24px; font-size: 1.05rem; font-weight: 600;
+    text-decoration: none; white-space: nowrap;
+    transition: transform .18s ease, border-color .2s ease, background .2s ease;
+  }
+  .cta-discord .logo-discord { width: 22px; height: 17px; flex: none; }
+  .cta-discord:hover { border-color: #5865f2; background: var(--panel2); transform: translateY(-3px); }
+  @media (max-width: 480px) {
+    /* en el móvil: "Ver cómo funciona" ocupa la fila; debajo, Descargar (más ancho) y Discord juntos */
+    .botones-heroe { gap: 10px; margin-top: 20px; }
+    .botones-heroe .cta { padding: 11px 18px; text-align: center; }
+    .botones-heroe .cta:not(.secundaria) { flex: 1 1 100%; }
+    .botones-heroe .cta.secundaria { flex: 1.35 1 0; min-width: 0; font-size: 1rem; }
+    .botones-heroe .cta-discord {
+      flex: 1 1 0; min-width: 0; justify-content: center;
+      padding: 11px 14px; font-size: 1rem;
+    }
+    .cta-discord .solo-ancho { display: none; }
+  }
+
+
+  /* propuesta C: el Discord pasa de enlace a botón, al lado de Descargar */
+  nav .acciones-barra { display: flex; align-items: center; gap: 10px; flex: none; }
+  nav .btn-dc-barra {
+    position: relative; display: inline-flex; align-items: center; gap: 7px;
+    background: rgba(255,255,255,.03); color: var(--texto);
+    border: 1px solid var(--borde); border-radius: 9px;
+    padding: 7px 13px 7px 10px; font-size: .85rem; font-weight: 600;
+    text-decoration: none; white-space: nowrap;
+    transition: border-color .18s ease, background .18s ease, transform .18s ease;
+  }
+  nav .btn-dc-barra:hover { border-color: rgba(88,101,242,.7); background: rgba(88,101,242,.10); transform: translateY(-1px); }
+  nav .btn-dc-barra .logo-dc { width: 21px; height: 15px; flex: none; }
+  nav .btn-dc-barra .regalo-dc {
+    background: #5865f2; color: #fff; font-size: .68rem; font-weight: 700;
+    border-radius: 999px; padding: 1px 7px; line-height: 1.5;
+  }
+  nav .btn-dc-barra .rg-corto { display: none; }
+  @media (max-width: 760px) {
+    nav .btn-dc-barra .rg-largo { display: none; }
+    nav .btn-dc-barra .rg-corto { display: inline; }
+    nav .acciones-barra { gap: 8px; }
+    nav .btn-dc-barra { padding: 8px 7px; }
+    nav .btn-dc-barra .texto-dc { display: none; }
+    nav .btn-dc-barra .logo-dc { width: 25px; height: 18px; }
+    nav .btn-dc-barra .regalo-dc {
+      position: absolute; top: -7px; right: -9px; font-size: .6rem;
+      padding: 0 5px; box-shadow: 0 0 0 2px #0a0d14;
+    }
+  }
+
+
+  /* ---------- el regalo de 50 en la portada (votado el 23/10, aplicado el 26/10) ---------- */
+
+  .cta-discord .regalo-discord {
+    position: absolute; top: -10px; right: -8px;
+    background: var(--fondo); color: var(--teal);
+    border: 1px solid var(--teal); border-radius: 999px;
+    font-size: .7rem; font-weight: 700; padding: 2px 9px; letter-spacing: .01em;
+  }
+  .heroe p.linea-regalo {
+    margin: 16px auto 0; max-width: 640px; color: var(--atenuado); font-size: .9rem;
+  }
+  .heroe p.linea-regalo strong { color: var(--texto); font-weight: 600; }
+  .heroe p.linea-regalo .lr-corto { display: none; }
+  @media (max-width: 480px) {
+    .cta-discord .regalo-discord { right: -4px; top: -11px; font-size: .66rem; padding: 1px 7px; }
+    /* en el móvil: un poco menos de aire arriba para que la línea del regalo quepa entera */
+    .heroe .lockup { margin-bottom: 22px; }
+    .logo-heroe { width: 104px; }
+    .heroe p.linea-regalo { margin-top: 10px; font-size: .82rem; }
+    .heroe p.linea-regalo .lr-largo { display: none; }
+    .heroe p.linea-regalo .lr-corto { display: inline; }
+  }
+
+  /* inglesa: los titulares reparten sus líneas, sin dejar una palabra sola (P31) */
+  h1, h2 { text-wrap: balance; }
+
+  /* EL GLOBO DE LOS IDIOMAS (05/11/2026, la B de propuestas_web_en.html,
+     elegida por él: "el más universal para que todo el mundo entienda
+     que eso cambia el idioma"). La inglesa (/en) sale de esta página con
+     scripts/web_en/generar_en.py: no se edita a mano. */
+  /* selector de idioma, propuesta B: el globo con su menú (funciona sin JS con <details>) */
+  nav details.idioma { position: relative; flex: none; }
+  nav details.idioma > summary {
+    list-style: none; cursor: pointer; user-select: none;
+    display: inline-flex; align-items: center; gap: 6px; height: 38px;
+    background: rgba(255,255,255,.03); color: var(--atenuado);
+    border: 1px solid var(--borde); border-radius: 9px;
+    padding: 0 10px; font-size: .85rem; font-weight: 600;
+    transition: border-color .18s ease, color .18s ease;
+  }
+  nav details.idioma > summary::-webkit-details-marker { display: none; }
+  nav details.idioma > summary:hover, nav details.idioma[open] > summary { color: var(--teal); border-color: var(--teal); }
+  nav details.idioma > summary:focus-visible, nav .idioma-op:focus-visible { outline: 2px solid var(--teal); outline-offset: 2px; }
+  nav details.idioma .idioma-globo { width: 18px; height: 18px; flex: none; }
+  nav details.idioma .idioma-flecha { width: 11px; height: 11px; flex: none; transition: transform .18s ease; }
+  nav details.idioma[open] .idioma-flecha { transform: rotate(180deg); }
+  nav .idioma-menu {
+    position: absolute; top: calc(100% + 8px); right: 0; z-index: 60;
+    list-style: none; min-width: 160px; padding: 6px;
+    background: var(--panel); border: 1px solid var(--borde); border-radius: 10px;
+    box-shadow: 0 12px 30px rgba(0,0,0,.45);
+  }
+  nav .idioma-op {
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    padding: 9px 12px; border-radius: 7px; font-size: .9rem; font-weight: 600;
+    color: var(--texto); text-decoration: none; white-space: nowrap;
+  }
+  nav a.idioma-op:hover { background: var(--panel2); color: var(--teal); }
+  nav .idioma-op.actual { color: var(--teal); }
+  nav .idioma-op .idioma-marca { width: 15px; height: 15px; flex: none; }
+  @media (max-width: 760px) {
+    nav details.idioma > summary { width: 36px; height: 36px; padding: 0; justify-content: center; }
+    nav details.idioma .codigo-idioma, nav details.idioma .idioma-flecha { display: none; }
+    nav details.idioma .idioma-globo { width: 20px; height: 20px; }
+    nav .idioma-op { padding: 12px 14px; font-size: .95rem; }
+  }
+  /* la barra por encima de las secciones (z-index 1) y del aviso de la C (2): si no, la portada tapa el menú y no se puede pulsar */
+  body > nav { z-index: 5; }
+  /* en el teléfono la fila de enlaces ya no tiene hueco: fuera, como en la C, sin astilla cortada */
+  @media (max-width: 480px) {
+    nav .enlaces { display: none; }
+  }
+
+</style>
+</head>
+<body>
+
+<!-- EL FONDO. Va debajo de todo, no se puede pulsar y no lo lee ningún
+     lector de pantalla. Once cintas de luz repartidas por toda la página,
+     cada una a la deriva a su ritmo. Cero KB: lo dibuja el navegador. -->
+<div class="fondo" aria-hidden="true">
+  <svg class="velos" viewBox="0 0 1440 6400" preserveAspectRatio="none">
+    <defs>
+      <linearGradient id="res0" x1="0" y1="0" x2="1" y2="1"><stop class="vf" offset="0" stop-opacity="0"/><stop class="vf" offset=".24" stop-opacity="0.4"/><stop class="vw" offset="0.370" stop-opacity="0.5"/><stop class="vw" offset="0.630" stop-opacity="0.5"/><stop class="vv" offset=".76" stop-opacity="0.4"/><stop class="vv" offset="1" stop-opacity="0"/></linearGradient>
+      <linearGradient id="nuc0" x1="0" y1="0" x2="1" y2="1"><stop class="vf" offset="0" stop-opacity="0"/><stop class="vf" offset=".24" stop-opacity="0.48"/><stop class="vw" offset="0.450" stop-opacity="0.95"/><stop class="vw" offset="0.550" stop-opacity="0.95"/><stop class="vv" offset=".76" stop-opacity="0.48"/><stop class="vv" offset="1" stop-opacity="0"/></linearGradient>
+      <linearGradient id="res1" x1="0" y1="0" x2="1" y2="1"><stop class="vt" offset="0" stop-opacity="0"/><stop class="vt" offset=".24" stop-opacity="0.4"/><stop class="vw" offset="0.370" stop-opacity="0.5"/><stop class="vw" offset="0.630" stop-opacity="0.5"/><stop class="vv" offset=".76" stop-opacity="0.4"/><stop class="vv" offset="1" stop-opacity="0"/></linearGradient>
+      <linearGradient id="nuc1" x1="0" y1="0" x2="1" y2="1"><stop class="vt" offset="0" stop-opacity="0"/><stop class="vt" offset=".24" stop-opacity="0.48"/><stop class="vw" offset="0.450" stop-opacity="0.95"/><stop class="vw" offset="0.550" stop-opacity="0.95"/><stop class="vv" offset=".76" stop-opacity="0.48"/><stop class="vv" offset="1" stop-opacity="0"/></linearGradient>
+      <linearGradient id="res2" x1="0" y1="0" x2="1" y2="1"><stop class="vf" offset="0" stop-opacity="0"/><stop class="vf" offset=".24" stop-opacity="0.4"/><stop class="vw" offset="0.370" stop-opacity="0.5"/><stop class="vw" offset="0.630" stop-opacity="0.5"/><stop class="vt" offset=".76" stop-opacity="0.4"/><stop class="vt" offset="1" stop-opacity="0"/></linearGradient>
+      <linearGradient id="nuc2" x1="0" y1="0" x2="1" y2="1"><stop class="vf" offset="0" stop-opacity="0"/><stop class="vf" offset=".24" stop-opacity="0.48"/><stop class="vw" offset="0.450" stop-opacity="0.95"/><stop class="vw" offset="0.550" stop-opacity="0.95"/><stop class="vt" offset=".76" stop-opacity="0.48"/><stop class="vt" offset="1" stop-opacity="0"/></linearGradient>
+      <filter id="b-ancho" x="-14%" y="-260%" width="128%" height="620%"><feGaussianBlur stdDeviation="46"/></filter>
+      <filter id="b-medio" x="-14%" y="-260%" width="128%" height="620%"><feGaussianBlur stdDeviation="32"/></filter>
+      <filter id="b-fino" x="-14%" y="-260%" width="128%" height="620%"><feGaussianBlur stdDeviation="20"/></filter>
+      <filter id="b-na" x="-14%" y="-260%" width="128%" height="620%"><feGaussianBlur stdDeviation="12"/></filter>
+      <filter id="b-nm" x="-14%" y="-260%" width="128%" height="620%"><feGaussianBlur stdDeviation="8"/></filter>
+      <filter id="b-nf" x="-14%" y="-260%" width="128%" height="620%"><feGaussianBlur stdDeviation="5"/></filter>
+    </defs>
+    <g style="mix-blend-mode:screen">
+      <g class="cinta" style="--dx:35px;--dy:19px;--dur:50s;--retraso:-11s"><path d="M-280 602 C 240 225, 580 602, 960 225 S 1380 82, 1740 485" stroke="url(#res0)" stroke-width="168" fill="none" stroke-linecap="round" filter="url(#b-ancho)"/><path d="M-280 602 C 240 225, 580 602, 960 225 S 1380 82, 1740 485" stroke="url(#nuc0)" stroke-width="56" fill="none" stroke-linecap="round" filter="url(#b-na)"/></g>
+      <g class="cinta" style="--dx:-56px;--dy:11px;--dur:57s;--retraso:-9s"><path d="M-280 654 C 300 1057, 680 654, 1020 1057 S 1420 1174, 1740 797" stroke="url(#res1)" stroke-width="96" fill="none" stroke-linecap="round" filter="url(#b-medio)"/><path d="M-280 654 C 300 1057, 680 654, 1020 1057 S 1420 1174, 1740 797" stroke="url(#nuc1)" stroke-width="32" fill="none" stroke-linecap="round" filter="url(#b-nm)"/></g>
+      <g class="cinta" style="--dx:72px;--dy:4px;--dur:66s;--retraso:-41s"><path d="M-280 1435 C 180 1375, 520 1545, 900 1595 S 1340 1435, 1740 1375" stroke="url(#res2)" stroke-width="64" fill="none" stroke-linecap="round" filter="url(#b-fino)"/><path d="M-280 1435 C 180 1375, 520 1545, 900 1595 S 1340 1435, 1740 1375" stroke="url(#nuc2)" stroke-width="21" fill="none" stroke-linecap="round" filter="url(#b-nf)"/></g>
+      <g class="cinta" style="--dx:55px;--dy:-38px;--dur:41s;--retraso:-2s"><path d="M-280 2145 C 360 2217, 760 1985, 1080 1897 S 1440 2145, 1740 2217" stroke="url(#res0)" stroke-width="64" fill="none" stroke-linecap="round" filter="url(#b-fino)"/><path d="M-280 2145 C 360 2217, 760 1985, 1080 1897 S 1440 2145, 1740 2217" stroke="url(#nuc0)" stroke-width="21" fill="none" stroke-linecap="round" filter="url(#b-nf)"/></g>
+      <g class="cinta" style="--dx:73px;--dy:-43px;--dur:67s;--retraso:-20s"><path d="M-280 2788 C 240 2556, 580 2788, 960 2556 S 1380 2468, 1740 2716" stroke="url(#res1)" stroke-width="96" fill="none" stroke-linecap="round" filter="url(#b-medio)"/><path d="M-280 2788 C 240 2556, 580 2788, 960 2556 S 1380 2468, 1740 2716" stroke="url(#nuc1)" stroke-width="32" fill="none" stroke-linecap="round" filter="url(#b-nm)"/></g>
+      <g class="cinta" style="--dx:52px;--dy:-17px;--dur:56s;--retraso:-31s"><path d="M-280 2940 C 300 3343, 680 2940, 1020 3343 S 1420 3460, 1740 3083" stroke="url(#res2)" stroke-width="96" fill="none" stroke-linecap="round" filter="url(#b-medio)"/><path d="M-280 2940 C 300 3343, 680 2940, 1020 3343 S 1420 3460, 1740 3083" stroke="url(#nuc2)" stroke-width="32" fill="none" stroke-linecap="round" filter="url(#b-nm)"/></g>
+      <g class="cinta" style="--dx:37px;--dy:37px;--dur:55s;--retraso:-26s"><path d="M-280 3721 C 180 3661, 520 3831, 900 3881 S 1340 3721, 1740 3661" stroke="url(#res0)" stroke-width="64" fill="none" stroke-linecap="round" filter="url(#b-fino)"/><path d="M-280 3721 C 180 3661, 520 3831, 900 3881 S 1340 3721, 1740 3661" stroke="url(#nuc0)" stroke-width="21" fill="none" stroke-linecap="round" filter="url(#b-nf)"/></g>
+      <g class="cinta" style="--dx:0px;--dy:-17px;--dur:70s;--retraso:-18s"><path d="M-280 4402 C 360 4452, 760 4292, 1080 4232 S 1440 4402, 1740 4452" stroke="url(#res1)" stroke-width="130" fill="none" stroke-linecap="round" filter="url(#b-medio)"/><path d="M-280 4402 C 360 4452, 760 4292, 1080 4232 S 1440 4402, 1740 4452" stroke="url(#nuc1)" stroke-width="43" fill="none" stroke-linecap="round" filter="url(#b-nm)"/></g>
+      <g class="cinta" style="--dx:64px;--dy:-33px;--dur:63s;--retraso:-6s"><path d="M-280 5024 C 240 4864, 580 5024, 960 4864 S 1380 4804, 1740 4974" stroke="url(#res2)" stroke-width="64" fill="none" stroke-linecap="round" filter="url(#b-fino)"/><path d="M-280 5024 C 240 4864, 580 5024, 960 4864 S 1380 4804, 1740 4974" stroke="url(#nuc2)" stroke-width="21" fill="none" stroke-linecap="round" filter="url(#b-nf)"/></g>
+      <g class="cinta" style="--dx:-63px;--dy:-44px;--dur:38s;--retraso:-13s"><path d="M-280 5275 C 300 5600, 680 5275, 1020 5600 S 1420 5695, 1740 5390" stroke="url(#res0)" stroke-width="168" fill="none" stroke-linecap="round" filter="url(#b-ancho)"/><path d="M-280 5275 C 300 5600, 680 5275, 1020 5600 S 1420 5695, 1740 5390" stroke="url(#nuc0)" stroke-width="56" fill="none" stroke-linecap="round" filter="url(#b-na)"/></g>
+      <g class="cinta" style="--dx:40px;--dy:2px;--dur:63s;--retraso:-26s"><path d="M-280 5985 C 180 5897, 520 6145, 900 6217 S 1340 5985, 1740 5897" stroke="url(#res1)" stroke-width="64" fill="none" stroke-linecap="round" filter="url(#b-fino)"/><path d="M-280 5985 C 180 5897, 520 6145, 900 6217 S 1340 5985, 1740 5897" stroke="url(#nuc1)" stroke-width="21" fill="none" stroke-linecap="round" filter="url(#b-nf)"/></g>
+    </g>
+  </svg>
+</div>
+
+<nav>
+  <div class="contenedor">
+    <a class="marca" href="#portada" id="ir-arriba" title="Back to top">
+      <svg width="34" height="28" viewBox="0 0 260 216" aria-hidden="true">
+        <path d="M116,158 L210,158 A34,34 0 0 0 244,124 L244,50 A34,34 0 0 0 210,16
+                 L50,16 A34,34 0 0 0 16,50 L16,124 A34,34 0 0 0 50,158 L50,204 Z"
+              fill="none" stroke="#4be1c3" stroke-width="16"
+              stroke-linejoin="round" stroke-linecap="round"/>
+        <text x="130" y="108" text-anchor="middle"
+              font-family="Consolas, 'Courier New', monospace" font-weight="bold"
+              font-size="58" fill="#4be1c3">[ALL]</text>
+      </svg>
+      <span><span class="all">All</span>Chat</span>
+    </a>
+    <div class="enlaces">
+      <a href="#comofunciona">How it works</a>
+      <a href="#planes">Pricing</a>
+      <a href="#nosotros">About</a>
+      <a href="#preguntas">FAQ</a>
+      <a class="enlace-x" href="https://x.com/allchat_en" target="_blank" rel="noopener" title="AllChat on X" aria-label="AllChat on X"><svg class="icono-x" viewBox="0 0 24 24" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+    </div>
+    <div class="acciones-barra">
+      <details class="idioma" data-selector-idioma>
+        <summary aria-label="Language: English. Change language" title="Language: English. Change language"><svg class="idioma-globo" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3z"/></svg><span class="codigo-idioma">EN</span><svg class="idioma-flecha" viewBox="0 0 12 12" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4.5l3 3 3-3"/></svg></summary>
+        <ul class="idioma-menu"><li><a class="idioma-op" href="/" hreflang="es" lang="es">Español</a></li><li><span class="idioma-op actual" lang="en" aria-current="true">English<svg class="idioma-marca" viewBox="0 0 16 16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 8.5l3 3 6-7"/></svg></span></li></ul>
+      </details><script>(function(){var d=document.querySelector("nav details.idioma");if(!d)return;document.addEventListener("click",function(e){if(d.open&&!d.contains(e.target))d.open=false;});document.addEventListener("keydown",function(e){if(e.key==="Escape"&&d.open){d.open=false;d.querySelector("summary").focus();}});})();</script>
+      
+      <a class="btn-dc-barra" data-nuevo-discord data-donde="barra" href="https://discord.gg/A5E4XJdwbV" target="_blank" rel="noopener" title="Join the community on Discord: 50 free translations when you connect your Discord from AllChat" aria-label="Join the community on Discord: 50 free translations when you connect your Discord from AllChat"><svg class="logo-dc" viewBox="0 2.85 24 18.3" aria-hidden="true"><path fill="#5865f2" d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></svg><span class="texto-dc">Join the Discord</span></a>
+      <a class="cta-barra" href="https://apps.microsoft.com/detail/9NMKD4HFR44X" data-instalar target="_blank" rel="noopener">Download</a>
+    </div>
+  </div>
+</nav>
+
+<!-- 0 · PORTADA -->
+<section class="bloque" id="portada">
+  <div class="contenedor">
+<div class="heroe">
+      <div class="lockup anima">
+        <div class="logo-flota">
+          <svg class="logo-heroe" viewBox="0 0 260 216" aria-label="AllChat logo">
+            <path d="M116,158 L210,158 A34,34 0 0 0 244,124 L244,50 A34,34 0 0 0 210,16
+                     L50,16 A34,34 0 0 0 16,50 L16,124 A34,34 0 0 0 50,158 L50,204 Z"
+                  fill="none" stroke="#4be1c3" stroke-width="9"
+                  stroke-linejoin="round" stroke-linecap="round"/>
+            <text x="130" y="105" text-anchor="middle"
+                  font-family="Consolas, 'Courier New', monospace" font-weight="bold"
+                  font-size="52" fill="#4be1c3">[ALL]</text>
+          </svg>
+        </div>
+        <div class="lockup-texto">
+          <div class="lockup-nombre"><span class="all">All</span>Chat</div>
+          <div class="lockup-tag">talk to the whole world</div>
+        </div>
+      </div>
+      <h1 class="anima tarde">Language <span class="grad">won't hold you back</span>.</h1>
+      <p class="sub anima mas-tarde">Type in your language on Discord, in your game or on your
+      favorite forum. AllChat corrects and translates it without you leaving the window.
+      Watch it in action: <strong>this is what you'll see on your screen.</strong></p>
+      <div class="botones-heroe anima mas-tarde">
+        <a class="cta" href="#comofunciona">See how it works ↓</a>
+        <a class="cta secundaria" href="https://apps.microsoft.com/detail/9NMKD4HFR44X" data-instalar target="_blank" rel="noopener">Download for free</a>
+        <a class="cta-discord" data-nuevo-discord data-donde="portada" href="https://discord.gg/A5E4XJdwbV" target="_blank" rel="noopener" aria-label="Join the Discord: 50 free translations when you connect your Discord from AllChat"><svg class="logo-discord" viewBox="0 2.85 24 18.3" aria-hidden="true"><path fill="#5865f2" d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></svg><span><span class="solo-ancho">Join the </span>Discord</span><span class="regalo-discord">50 free</span></a>
+      </div>
+      <p class="linea-regalo anima mas-tarde"><span class="lr-largo">Join the community (mostly in Spanish for now) and connect your Discord from AllChat: <strong>we'll give you 50 translations.</strong></span><span class="lr-corto">Connect your Discord in AllChat: <strong>50 free translations.</strong></span></p>
+    </div>
+  </div>
+</section>
+
+<!-- 01 a 07 · LAS SIETE DEMOS, EN UN CARRUSEL HORIZONTAL -->
+<section class="bloque banda tenue" id="comofunciona">
+  <div class="contenedor">
+    <div class="carrusel">
+      <div class="carrusel-cab anima">
+        <div class="num">HOW IT WORKS</div>
+        <h2>Seven things it does <span class="tealino">while you type.</span></h2>
+      </div>
+      <div class="escena anima tarde">
+        <button class="flecha izq" id="flecha-izq" type="button" aria-label="Previous">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>
+        </button>
+        <div class="pista" id="pista" tabindex="0" aria-live="polite" aria-label="What AllChat does">
+          <article class="diapo" id="frase" data-nombre="Star mode" data-num="01">
+<div class="demo-seccion">
+      <div class="demo-texto anima">
+        <div class="num">01 · STAR MODE</div>
+        <h2>Type. Breathe. <span class="tealino">Already translated.</span></h2>
+        <p>Type your sentence however it comes out, then pause for a second and a half.
+        AllChat shows it to you corrected and translated in a floating card. Like it?
+        Hit Enter and it's sent. Don't? Keep typing and it goes away.</p>
+        <span class="atajo">1.5 s pause ⟶ card ⟶ Enter</span>
+      </div>
+      <div class="demo-visual anima tarde">
+        <div class="ventana">
+          <div class="titulo"><span class="puntos"><span></span><span></span><span></span></span> # general · your Discord server</div>
+          <div class="chat" id="chat-frase">
+            <div class="msj"><div class="avatar" style="background:#5865f2">K</div>
+              <div><div class="autor" style="color:#8ab4f8">Kike_GG</div>
+              <div class="texto" lang="es">¿alguien para ranked? falta uno</div></div></div>
+          </div>
+          <div class="zona-entrada">
+            <div class="tarjeta-flotante" id="tarjeta-frase">
+              <div class="resultado" id="tarjeta-texto-frase" lang="es"></div>
+              <div class="pista">corrected and translated · Enter to apply</div>
+            </div>
+            <div class="entrada"><span id="entrada-frase"></span><span class="cursor"></span></div>
+            <div class="chip-estado" id="chip-frase">1.5 s pause…</div>
+          </div>
+        </div>
+      </div>
+    </div>
+          </article>
+          <article class="diapo" id="atajo" data-nombre="The shortcut" data-num="02">
+<div class="demo-seccion invertida">
+      <div class="demo-texto anima">
+        <div class="num">02 · THE SHORTCUT</div>
+        <h2>Already typed&nbsp;it? <span class="tealino">Ctrl+Alt+A.</span></h2>
+        <p>Mid-match there's no time for pauses. Type, hit the shortcut and
+        your whole message gets corrected and translated right there, inside
+        the game chat. It even works in full screen.</p>
+        <span class="atajo">Ctrl + Alt + A</span>
+      </div>
+      <div class="demo-visual anima tarde">
+        <div class="ventana-juego">
+          <div class="hud"><span>ALLIES 12 · 8 ENEMIES</span><span>24:31</span></div>
+          <div class="log">
+            <div><span class="all">[ALL]</span> <span class="aliado">Faker2007:</span> gg ez mid diff</div>
+            <div><span class="all">[ALL]</span> <span class="aliado">xXDarkLordXx:</span> <span lang="es">reportad al jungla pls</span></div>
+          </div>
+          <div class="entrada-juego">
+            <div class="teclas-flotantes" id="teclas-atajo">
+              <span class="tecla" id="tecla-ctrl">Ctrl</span><span class="tecla" id="tecla-alt">Alt</span><span class="tecla" id="tecla-a">A</span>
+            </div>
+            <span id="texto-atajo">chill guys its fine we can still win</span><span class="cursor"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+          </article>
+          <article class="diapo" id="correccion" data-nombre="No translation" data-num="03">
+<div class="demo-seccion">
+      <div class="demo-texto anima">
+        <div class="num">03 · NO TRANSLATION</div>
+        <h2>Same language? <span class="tealino">It just corrects.</span></h2>
+        <p>The classic mode: type, pause for a moment, and your sentence shows
+        up corrected in your language: spelling, capital letters, apostrophes
+        and the punctuation you skipped. It gets slang: your “lol” and your
+        nicknames are sacred.</p>
+        <span class="atajo">correction with a local engine · no internet</span>
+      </div>
+      <div class="demo-visual anima tarde">
+        <div class="ventana-clara">
+          <div class="titulo-clara"><span class="avatar-mini">M</span> Mom · WhatsApp Web</div>
+          <div class="conversacion" id="conversacion-corr">
+            <div class="burbuja suya">Are you coming over for lunch on Sunday?</div>
+          </div>
+          <div class="zona-entrada">
+            <div class="tarjeta-flotante" id="tarjeta-corr">
+              <div class="resultado" id="tarjeta-texto-corr"></div>
+              <div class="pista">corrected · Enter to apply</div>
+            </div>
+            <div class="entrada"><span id="entrada-corr"></span><span class="cursor"></span></div>
+            <div class="chip-estado" id="chip-corr">1.5 s pause…</div>
+          </div>
+        </div>
+      </div>
+    </div>
+          </article>
+          <article class="diapo" id="prediccion" data-nombre="While you type" data-num="04">
+<div class="demo-seccion invertida">
+      <div class="demo-texto anima">
+        <div class="num">04 · WHILE YOU TYPE</div>
+        <h2>You see the word <span class="tealino">before you finish it.</span></h2>
+        <p>From the second letter, AllChat shows you the words that fit,
+        right where you're typing. Pick yours with Tab and keep going: you
+        type faster and every word comes out spelled right without you having
+        to think about it.</p>
+        <p>And if typing is hard for you, whether you're slow, type with
+        one finger or mix up your letters, AllChat finishes the word for
+        you. At home, even the folks who “aren't computer people” will love it.</p>
+        <p class="aprende-linea"><span class="tealino">Learning a language?</span> Set it as “Your language” and AllChat feeds you the word you can't think of, while you actually chat.</p>
+        <span class="atajo">200,000 words per language · Tab to complete</span>
+      </div>
+      <div class="demo-visual anima tarde">
+        <div class="ventana">
+          <div class="titulo"><span class="puntos"><span></span><span></span><span></span></span> # team · your Discord server</div>
+          <div class="chat" style="min-height:84px">
+            <div class="msj"><div class="avatar" style="background:#23a559">L</div>
+              <div><div class="autor" style="color:#7fd8a5">Lucas_88</div>
+              <div class="texto">what if we all push mid together?</div></div></div>
+          </div>
+          <div class="zona-entrada">
+            <div class="chips-caret" id="chips-pred">
+              <span>strategy</span><span>strong</span><span>straight</span>
+              <span class="pista-tab">Tab</span>
+            </div>
+            <div class="entrada"><span id="entrada-pred"></span><span class="cursor"></span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+          </article>
+          <article class="diapo" id="aprende" data-nombre="It becomes yours" data-num="05">
+<div class="demo-seccion">
+      <div class="demo-texto anima">
+        <div class="num">05 · IT BECOMES YOURS</div>
+        <h2>The more you type, <span class="tealino">the better it gets you.</span></h2>
+        <p>AllChat learns from your sentences: your names, your go-to phrases,
+        the way you talk. Every day it predicts them sooner. <strong>And it all
+        stays on your PC</strong>: what it learns lives in a little file on
+        your computer, never on a server.</p>
+        <p>It has its own switch in Settings and an erase button to start
+        from scratch whenever you want. You're in charge.</p>
+        <span class="atajo">100% on your PC · erase it whenever you want</span>
+      </div>
+      <div class="demo-visual anima tarde">
+        <div class="ventana">
+          <div class="titulo"><span class="puntos"><span></span><span></span><span></span></span> # general · your Discord server</div>
+          <div class="chat" style="min-height:84px">
+            <div class="msj"><div class="avatar" style="background:#e0707a">B</div>
+              <div><div class="autor" style="color:#f0a5ab">Bea</div>
+              <div class="texto">heyyy i'm here</div></div></div>
+          </div>
+          <div class="zona-entrada">
+            <div class="sello-aprendido" id="sello-aprende">learned from you ✓</div>
+            <div class="pastilla-aprende" id="pastilla-aprende">
+              <span class="palabra">Bea</span>
+              <span class="tab" id="tab-aprende">Tab</span>
+            </div>
+            <div class="entrada"><span id="entrada-aprende"></span><span class="cursor"></span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+          </article>
+          <article class="diapo" id="estilos" data-nombre="Your way" data-num="06">
+<div class="demo-seccion invertida">
+      <div class="demo-texto anima">
+        <div class="num">06 · YOUR WAY</div>
+        <h2>Your cards, <span class="tealino">your style.</span></h2>
+        <p>The floating cards adapt to you: the full Detailed style or the
+        low-key Simple one, in the color you choose. Make AllChat match your
+        desktop, not the other way around.</p>
+        <span class="atajo">Settings ⟶ Customization</span>
+      </div>
+      <div class="demo-visual anima tarde">
+        <div class="escenario-estilos">
+          <div class="muestra-tarjeta estilo-tarjeta" id="muestra-tarjeta">
+            <div class="titulin">ALLCHAT · CORRECTED</div>
+            <div class="frase">Hi! Anyone up for ranked?</div>
+          </div>
+          <div class="etiqueta-estilo" id="etiqueta-estilo">style: Detailed</div>
+          <div class="paleta" id="paleta">
+            <span style="background:#4be1c3" class="activa"></span>
+            <span style="background:#a78bfa"></span>
+            <span style="background:#f5a35c"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+          </article>
+          <article class="diapo" id="leer" data-nombre="The other way around" data-num="07">
+<div class="demo-seccion">
+      <div class="demo-texto anima">
+        <div class="num">07 · THE OTHER WAY AROUND</div>
+        <h2>Can't read their message? <span class="tealino">Read it in your language.</span></h2>
+        <p>Select any text, or snip the area of the screen if the game won't
+        let you select, and AllChat translates it instantly in a floating
+        card. Korean, Russian, Japanese: it doesn't matter.</p>
+        <span class="atajo">select ⟶ instant translation</span>
+      </div>
+      <div class="demo-visual anima tarde">
+        <div class="ventana">
+          <div class="titulo"><span class="puntos"><span></span><span></span><span></span></span> # team · international chat</div>
+          <div class="chat" style="min-height:100px">
+            <div class="msj"><div class="avatar" style="background:#e0707a">P</div>
+              <div><div class="autor" style="color:#f0a5ab">Park_MinSu</div>
+              <div class="texto" style="position:relative">
+                <span id="texto-sel">우리 팀 정글 어디 있어?</span>
+                <span class="globo-trad" id="globo-leer">Where's our jungler?</span>
+              </div></div></div>
+            <div class="msj"><div class="avatar" style="background:#5865f2">K</div>
+              <div><div class="autor" style="color:#8ab4f8">KimSeo</div>
+              <div class="texto">ㅋㅋㅋㅋㅋ</div></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+          </article>
+        </div>
+        <button class="flecha der" id="flecha-der" type="button" aria-label="Next">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg>
+        </button>
+      </div>
+      <div class="mando-carrusel">
+        <div class="segmentos" id="segmentos"></div>
+        <div class="estado-carrusel">
+          <button class="btn-pausa" id="btn-pausa" type="button" aria-label="Pause">
+            <svg id="icono-pausa" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>
+          </button>
+          <span><span class="contador-diapo" id="contador">1 of 7</span> ·
+          <span class="nombre-diapo" id="nombre-diapo">Star mode</span></span>
+          <span id="aviso-pausa" style="color:var(--teal)"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 08 · PLANES -->
+<section class="bloque compacto banda" id="planes">
+  <div class="contenedor">
+<div class="planes">
+      <div class="planes-cab anima">
+        <div class="num">08 · PRICING</div>
+        <h2>Correcting is free. <span class="tealino">Translating is up to you.</span></h2>
+        <p>Correction and prediction at no cost, forever. What you pay for is translating
+        without limits, in any app.</p>
+        <div class="periodo" role="group" aria-label="Billing period">
+          <button type="button" class="activo" data-periodo="mes">Monthly</button>
+          <button type="button" data-periodo="anio">Yearly <span class="ahorra">2 months free</span></button>
+        </div>
+      </div>
+
+      <div class="columnas anima tarde">
+        <div class="plan">
+          <h3>Free</h3>
+          <div class="para">For writing well in your own language</div>
+          <div class="precio">€0 <small>forever</small></div>
+          <div class="equivale"></div>
+          <ul>
+            <li>Correction in 6 languages, in any app</li>
+            <li>Word prediction that learns from you</li>
+            <li>25 translations a day, whichever way you use them</li>
+            <li>50 free translations when you join the community and connect your Discord</li>
+            <li>Eco and the companions you unlock as you level up</li>
+            <li>Your text doesn't leave your PC</li>
+          </ul>
+          <a class="cta secundaria" href="https://apps.microsoft.com/detail/9NMKD4HFR44X" data-instalar target="_blank" rel="noopener">Download for free</a>
+        </div>
+
+        <div class="plan destacado">
+          <span class="cinta">Recommended</span>
+          <h3>Premium</h3>
+          <div class="para">For talking to the whole world</div>
+          <div class="precio"><span id="precio-premium">€5.99</span> <small id="cada-premium">a month</small></div>
+          <div class="equivale" id="equivale-premium"></div>
+          <ul>
+            <li>Everything in Free</li>
+            <li>Unlimited translation, into 9 languages</li>
+            <li>Translate as you type: pause, card, Enter</li>
+            <li>Ctrl+Alt+A: translates what you've typed instantly</li>
+            <li>Read the screen in your language</li>
+            <li>Drako, the dragon exclusive to your PixelCrew</li>
+            <li>Up to 3 computers with your account</li>
+          </ul>
+          <a class="cta" id="cta-premium" href="https://api.allchat.es/pago/ir?plan=mensual">Go premium</a>
+          <div class="nota-plan">Secure payment in your browser. Cancel anytime.</div>
+        </div>
+
+        <div class="plan futuro">
+          <span class="cinta">Coming soon</span>
+          <h3>Plus</h3>
+          <div class="para">For those who want the best translation</div>
+          <div class="precio">€9.99 <small>a month</small></div>
+          <div class="equivale"></div>
+          <ul>
+            <li>Everything in Premium</li>
+            <li>Higher-quality translation, with another engine</li>
+            <li class="gris">Available once it's ready</li>
+          </ul>
+          <span class="cta apagado">Not available yet</span>
+        </div>
+      </div>
+
+      <div class="empresas anima mas-tarde">
+        <div class="icono-empresas">
+          <svg width="58" height="58" viewBox="0 0 64 64" aria-hidden="true">
+            <defs>
+              <mask id="edificios">
+                <rect x="6" y="22" width="19" height="34" fill="#fff"/>
+                <rect x="27" y="8" width="18" height="48" fill="#fff"/>
+                <rect x="47" y="30" width="12" height="26" fill="#fff"/>
+                <g fill="#000">
+                  <rect x="10" y="27" width="4" height="4"/><rect x="17" y="27" width="4" height="4"/>
+                  <rect x="10" y="34" width="4" height="4"/><rect x="17" y="34" width="4" height="4"/>
+                  <rect x="10" y="41" width="4" height="4"/><rect x="17" y="41" width="4" height="4"/>
+                  <rect x="10" y="48" width="4" height="4"/><rect x="17" y="48" width="4" height="4"/>
+                  <rect x="31" y="13" width="4" height="4"/><rect x="38" y="13" width="4" height="4"/>
+                  <rect x="31" y="20" width="4" height="4"/><rect x="38" y="20" width="4" height="4"/>
+                  <rect x="31" y="27" width="4" height="4"/><rect x="38" y="27" width="4" height="4"/>
+                  <rect x="31" y="34" width="4" height="4"/><rect x="38" y="34" width="4" height="4"/>
+                  <rect x="31" y="41" width="4" height="4"/><rect x="38" y="41" width="4" height="4"/>
+                  <rect x="49" y="35" width="4" height="4"/><rect x="49" y="42" width="4" height="4"/>
+                  <rect x="49" y="49" width="4" height="4"/>
+                </g>
+              </mask>
+            </defs>
+            <rect width="64" height="64" fill="#ffffff" mask="url(#edificios)"/>
+          </svg>
+        </div>
+        <div class="lado">
+          <h3>Are you a team or a company?</h3>
+          <p>Write to us and we'll get back to you as soon as we can.</p>
+        </div>
+        <a class="cta secundaria" href="mailto:hola@allchat.es?subject=AllChat%20for%20a%20team">Email hola@allchat.es</a>
+      </div>
+
+      <div class="ver-comparacion anima mas-tarde">
+        <button type="button" id="btn-comparacion" aria-expanded="false" aria-controls="comparacion">See the full comparison ▾</button>
+      </div>
+      <div class="comparacion" id="comparacion">
+        <div class="tabla-scroll">
+          <table class="compara">
+            <tr><th></th><th>Free</th><th class="dest">Premium</th><th>Plus</th></tr>
+            <tr><td>Correction in 6 languages, in any app</td><td><span class="si">✓</span></td><td><span class="si">✓</span></td><td><span class="si">✓</span></td></tr>
+            <tr><td>Word prediction that learns from you</td><td><span class="si">✓</span></td><td><span class="si">✓</span></td><td><span class="si">✓</span></td></tr>
+            <tr><td>Your text doesn't leave your PC</td><td><span class="si">✓</span></td><td><span class="si">✓</span></td><td><span class="si">✓</span></td></tr>
+            <tr><td>Eco and the level-up companions</td><td><span class="si">✓</span></td><td><span class="si">✓</span></td><td><span class="si">✓</span></td></tr>
+            <tr><td>Translations a day</td><td><span class="txt">25</span></td><td><span class="si">✓</span> <span class="txt">unlimited</span></td><td><span class="si">✓</span> <span class="txt">unlimited</span></td></tr>
+            <tr><td>Translate as you type, into 9 languages</td><td><span class="txt">within your 25</span></td><td><span class="si">✓</span></td><td><span class="si">✓</span></td></tr>
+            <tr><td>Ctrl+Alt+A: translates what you've typed instantly</td><td><span class="txt">within your 25</span></td><td><span class="si">✓</span></td><td><span class="si">✓</span></td></tr>
+            <tr><td>Read the screen in your language</td><td><span class="txt">within your 25</span></td><td><span class="si">✓</span></td><td><span class="si">✓</span></td></tr>
+            <tr><td>Drako, the exclusive dragon</td><td><span class="no">–</span></td><td><span class="si">✓</span></td><td><span class="si">✓</span></td></tr>
+            <tr><td>Computers with your account</td><td><span class="txt">as many as you want</span></td><td><span class="txt">3 with premium</span></td><td><span class="txt">3 with premium</span></td></tr>
+            <tr><td>Higher-quality translation, with another engine</td><td><span class="no">–</span></td><td><span class="no">–</span></td><td><span class="si">✓</span></td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 09 · SOBRE NOSOTROS -->
+<section class="bloque compacto banda" id="nosotros">
+  <div class="contenedor">
+<div class="sobre">
+      <div class="lado-texto anima">
+        <div class="num">09 · ABOUT US</div>
+        <h2>Behind AllChat <span class="tealino">there's one person.</span></h2>
+        <p>AllChat isn't made by a company or a team. It's made by one
+        person, in Spain, in their spare time and with a whole lot of stubbornness.</p>
+        <p>It started with something really silly and really real: you play,
+        you talk, you type in a hurry, and half the conversation never makes
+        it out. Because the sentence won't come out in the other person's
+        language, or because you typed it in a rush and you'd rather delete
+        it than send it.</p>
+        <p>The idea wasn't to make yet another app you have to copy and paste
+        into, but to put the help inside the one you already have
+        open: your Discord, your game, your browser. That's why AllChat
+        floats on top of everything and never asks you to switch windows.</p>
+        <p>If something doesn't make sense or you have a better idea, get in touch.
+        It's read by the same person who codes it, and that's how half the
+        things you just saw came about.</p>
+        <div class="firma">
+          <span class="chip-firma">Made in Spain</span>
+          <span class="chip-firma">Free plan forever</span>
+          <span class="chip-firma">Your text doesn't leave your PC</span>
+        </div>
+      </div>
+      <div class="lado-visual anima tarde">
+        <div class="tarjeta-taller baila">
+          <div class="fila-dato">
+            <div class="cifra" data-hasta="1">1</div>
+            <div class="que">person building it, every day</div>
+          </div>
+          <div class="fila-dato">
+            <div class="cifra" data-hasta="9">9</div>
+            <div class="que">languages you can translate and read</div>
+          </div>
+          <div class="fila-dato">
+            <div class="cifra" data-hasta="6">6</div>
+            <div class="que">languages it corrects without going online</div>
+          </div>
+          <div class="fila-dato">
+            <div class="cifra" data-hasta="0">0</div>
+            <div class="que">of your sentences stored on any server</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- 10 · DESCARGAR + DISCORD + EL CANDADO (23/10: antes de las preguntas,
+     pedido suyo: la portada acaba con las preguntas y el pie) -->
+<section class="bloque banda" id="descargar">
+  <div class="contenedor">
+<div style="width:100%">
+      <div class="cierre anima">
+        <h2>Talk to <span class="grad">the whole world</span>.</h2>
+        <p class="intro">Free for Windows. It installs from the Microsoft Store in
+        two clicks, works in any app and updates itself.</p>
+        <div class="descarga">
+          <a class="cta grande" href="https://apps.microsoft.com/detail/9NMKD4HFR44X" data-instalar target="_blank" rel="noopener">Download AllChat</a>
+        </div>
+        <div class="chips-descarga">
+          <span class="chip-dato"><b>Microsoft Store</b> · Windows 10 and 11</span>
+          <span class="chip-dato">free, <b>no card needed</b></span>
+          <span class="chip-dato">spell checker built in</span>
+        </div>
+
+        <div class="discord" id="discord">
+          <div class="icono">
+            <svg width="52" height="52" viewBox="0 0 64 64" aria-hidden="true">
+              <circle cx="32" cy="32" r="30" fill="rgba(88,101,242,.22)"/>
+              <path d="M24 22c5-2 11-2 16 0 4 5 6 11 6 19-3 2-6 3.5-9 4l-2-3.5c1.5-.5 3-1.2 4-2
+                       -4 2-8 2.6-12 2.6S23 43.5 19 41.5c1 .8 2.5 1.5 4 2L21 47c-3-.5-6-2-9-4
+                       0-8 2-14 6-19 5-2 11-2 16 0z" fill="#5865f2" transform="translate(0,-1)"/>
+              <ellipse cx="25" cy="35" rx="3.2" ry="3.8" fill="#0a0d14"/>
+              <ellipse cx="39" cy="35" rx="3.2" ry="3.8" fill="#0a0d14"/>
+            </svg>
+          </div>
+          <div class="texto">
+            <h3>Join the community and get 50 free translations</h3>
+            <p>Join the community and connect your Discord from AllChat (Settings &gt; Premium). The 50 arrive when you press <span lang="es">«Acepto las reglas»</span> (I accept the rules) in the AllChat Discord, once per account. They're used after you've spent your 25 for the day, and they don't expire. For now, the community mostly speaks Spanish.</p>
+            <div class="canales">
+              <span class="canal">#novedades</span>
+              <span class="canal">#ayuda</span>
+              <span class="canal">#ideas</span>
+              <span class="canal">#fallos</span>
+            </div>
+          </div>
+          <a class="btn-discord" data-donde="cierre" href="https://discord.gg/A5E4XJdwbV" target="_blank" rel="noopener">Join the Discord</a>
+        </div>
+      </div>
+      <div class="privacidad anima tarde">
+        <h2>🔒 Your text doesn't leave your PC</h2>
+        <p>Correction runs on a local engine installed on your computer: what
+        you type doesn't travel to any server to get corrected. If that
+        engine fails, AllChat would rather not correct than send your text off
+        your PC, and only you can change that in Settings. And what AllChat
+        learns from you stays put too: it lives in a file on your PC that you
+        can delete whenever you want. Only translation uses the internet,
+        like any translator.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 11 · PREGUNTAS FRECUENTES (22/09; al final desde el 23/10) Y EL PIE. El 25 lo vigila el portero; los
+     pesos de la descarga cambian con cada version: repasarlos en /publicar -->
+<section class="bloque compacto banda" id="preguntas">
+  <div class="contenedor">
+    <div class="preguntas">
+      <div class="preguntas-cab anima">
+        <div class="num">10 · FAQ</div>
+        <h2>What people ask us, <span class="tealino">with no fine print.</span></h2>
+        <p>If it's not here, email us at <a href="mailto:hola@allchat.es">hola@allchat.es</a>: a real person answers.</p>
+      </div>
+      <div class="faq-a anima tarde">
+        <details><summary>Does it work in the Discord app or only on the web?</summary><div class="resp">Both. AllChat doesn't live inside Discord: it works through the Windows keyboard, so you can use it in the Discord desktop app, in Discord in your browser and almost anywhere you type on your PC. There's no version for phones or Mac, though: AllChat is Windows only.</div></details>
+        <details><summary>Does it help if I'm learning a language?</summary><div class="resp">It helps you practice while you chat; it doesn't give you lessons. Pick that language as “Your language” (Spanish, French, German, Portuguese, Italian or English) and the mode you want: Prediction, from the second letter, feeds you the word you're looking for and how it's spelled, or Correction shows you your sentence written correctly before you send it, free and without your text leaving your PC. It doesn't explain grammar or pronunciation.</div></details>
+        <details><summary>Why does it ask for my email?</summary><div class="resp">To save your level, your progress and, if you have it, your Premium, so you don't lose them if you switch computers. There's no password: you get a link, confirm it and you're in, just once on each computer. We don't send you ads.</div></details>
+        <details><summary>Which games won't it work in?</summary><div class="resp">The ones that run as administrator: Windows doesn't let a regular program see what you type in them. AllChat tells you when that happens and, if there's a Windows checkbox that fixes it, takes you to it. It also doesn't help in games without a text chat. We don't have a list of "compatible" games: we only say where we've tested it and it works.</div></details>
+        <details><summary>What about anti-cheats?</summary><div class="resp">Some anti-cheats watch for programs that read the keyboard, and AllChat is one of them. We don't know if one will ever flag it, and the risk of a ban is yours (it's point 8 of <a href="/terminos">our terms</a>, which are in Spanish). Some games' rules ban programs that type or act for you: if a game bans it, or you're not sure, don't use it there.</div></details>
+        <details><summary>Does it translate voice?</summary><div class="resp">No. AllChat translates what you type and what you read on screen (an area you point at or text you select), but it doesn't listen to your mic or to voice chat.</div></details>
+        <details><summary>What's free?</summary><div class="resp">Correcting and predicting, unlimited and forever. Translating, 25 messages a day: one message counts as one even if AllChat translates it several times while you type it. Premium removes that limit for €5.99 a month or €54.99 a year, and you can cancel anytime.</div></details>
+        <details><summary>Does my text leave my PC?</summary><div class="resp">To correct it, no: the spell checker is inside AllChat and works offline. To translate it, yes: what you ask to translate goes to our server and from there to Google Cloud Translation, gets translated and isn't stored. What AllChat learns about the way you write stays on your computer. All the details are in <a href="/privacidad">the privacy policy (in Spanish)</a>.</div></details>
+        <details><summary>How much space does it take?</summary><div class="resp">The download is about 390 MB, because it includes the spell checker so it works offline, and once installed it takes up to about 760 MB. It installs for free from the Microsoft Store and needs Windows 10 (version 2004 or later) or 11, 64-bit.</div></details>
+      </div>
+    </div>
+    <footer id="contacto" class="anima tarde">
+        <span>© 2026 AllChat</span>
+        <span>Questions or ideas? <a href="mailto:hola@allchat.es">hola@allchat.es</a></span>
+        <span class="redes">
+          <a href="https://x.com/allchat_en" target="_blank" rel="noopener"><svg class="icono-x" viewBox="0 0 24 24" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>@allchat_en</a>
+          <a href="https://x.com/allchat_es" target="_blank" rel="noopener" lang="es">En español: @allchat_es</a>
+        </span>
+        <span class="legal">
+          <a href="/privacidad">Privacy (in Spanish)</a>
+          <a href="/terminos">Terms (in Spanish)</a>
+          <span>Made in Spain for gamers all over the world 🎮</span>
+        </span>
+      </footer>
+  </div>
+</section>
+
+<script>
+  const PRECIOS = {
+    mes:  { premium: "€5.99", cada: "a month", equivale: "", plan: "mensual" },
+    anio: { premium: "€54.99", cada: "a year", equivale: "works out to €4.58 a month", plan: "anual" },
+  };
+  function periodo(cual) {
+    const p = PRECIOS[cual];
+    document.querySelectorAll("[data-periodo]").forEach(b =>
+      b.classList.toggle("activo", b.dataset.periodo === cual));
+    document.getElementById("precio-premium").textContent = p.premium;
+    document.getElementById("cada-premium").textContent = p.cada;
+    document.getElementById("equivale-premium").textContent = p.equivale;
+    document.getElementById("cta-premium").href =
+      "https://api.allchat.es/pago/ir?plan=" + p.plan;
+  }
+  document.querySelectorAll("[data-periodo]").forEach(b =>
+    b.addEventListener("click", () => periodo(b.dataset.periodo)));
+  const btnComp = document.getElementById("btn-comparacion");
+  const comp = document.getElementById("comparacion");
+  btnComp.addEventListener("click", () => {
+    const abierta = comp.classList.toggle("abierta");
+    btnComp.setAttribute("aria-expanded", abierta ? "true" : "false");
+    btnComp.textContent = abierta ? "Hide the comparison ▴" : "See the full comparison ▾";
+  });
+
+  /* ---------- LA VISITA, CONTADA SIN COOKIES (05/09) ----------
+     Un aviso al servidor de AllChat por carga de la portada y uno por
+     clic en Descargar o en Discord, para el panel de fundador. Va lo
+     justo: el país (se le pregunta a Cloudflare aquí mismo, en
+     /cdn-cgi/trace, porque api.allchat.es no pasa por Cloudflare), de
+     dónde se llega (el referer, o utm_source si el enlace lo trae, y
+     utm_campaign si lleva campaña) y qué se pulsa, con el mismo país
+     (03/11, para el mapa del panel). Ni cookie, ni identificador, ni IP
+     guardada: el servidor suma por día y tira lo demás. Hazte premium no avisa: ese
+     clic ya llega al servidor por /pago/ir. Si algo falla, la web sigue
+     igual. */
+  /* ---------- DESCARGAR = INSTALAR (08/09): el Web Installer de la Store ----------
+     En Windows, los botones Descargar no llevan a la ficha de la Store:
+     bajan el instalador que genera el propio servicio de la Store para
+     AllChat (un exe de menos de 1 MB firmado por Microsoft, "AllChat
+     Installer.exe") que instala con la misma API que la Store y abre la
+     app al terminar; si algo no cumple, él mismo abre la ficha. Es el
+     mismo enlace que genera el badge de Microsoft en modo Direct
+     (get.microsoft.com/installer/download/<Store ID>). Fuera de Windows
+     (móvil, Mac) y sin JavaScript, los botones siguen llevando a la
+     ficha: ahí un exe no sirve de nada. "source" es lo que la Store
+     apunta como origen de la instalación (Partner Center > Acquisitions). */
+  (function () {
+    const INSTALADOR = "https://get.microsoft.com/installer/download/9NMKD4HFR44X"
+                     + "?referrer=appbadge&source=allchat.es&cid=web-en";
+    const esWindows = /Windows NT/i.test(navigator.userAgent)
+                   || (navigator.userAgentData && navigator.userAgentData.platform === "Windows");
+    if (esWindows) {
+      document.querySelectorAll("a[data-instalar]").forEach(a => {
+        a.href = INSTALADOR;
+        a.removeAttribute("target");   // una descarga no necesita pestaña nueva
+        a.title = "Downloads a small installer signed by Microsoft; open it and AllChat installs itself";
+      });
+    }
+  })();
+
+  (function () {
+    // solo cuenta la web de verdad: abierta en local (o copiada en otro
+    // dominio) mandaba visitas falsas al panel, sin país (17/09)
+    if (location.hostname !== "allchat.es") return;
+    const AVISO = "https://api.allchat.es/visita";
+    function avisar(datos) {
+      // la inglesa (05/11, votado por él): el panel la contará aparte
+      datos.pagina = "en";
+      try {
+        const cuerpo = JSON.stringify(datos);
+        if (navigator.sendBeacon && navigator.sendBeacon(AVISO, cuerpo)) return;
+        fetch(AVISO, { method: "POST", body: cuerpo, keepalive: true,
+                       mode: "cors", credentials: "omit" }).catch(() => {});
+      } catch (e) {}
+    }
+    async function pais() {
+      try {
+        const r = await fetch("/cdn-cgi/trace", { cache: "no-store" });
+        const m = /(?:^|\n)loc=([A-Z]{2})/.exec(await r.text());
+        return m ? m[1] : "";
+      } catch (e) { return ""; }
+    }
+    let loc = "";   // el país, preguntado una vez: los clics lo llevan también
+    const enlace = new URLSearchParams(location.search);
+    pais().then(p => { loc = p; avisar({
+      que: "visita", pais: p, origen: document.referrer || "",
+      utm: enlace.get("utm_source") || "", campana: enlace.get("utm_campaign") || "" }); });
+    // Descargar: la ficha de la Store (móvil, Mac, sin JS) o el instalador
+    // directo de get.microsoft.com (Windows); los dos cuentan igual
+    document.querySelectorAll('a[href*="apps.microsoft.com"], a[href*="get.microsoft.com"]').forEach(a =>
+      a.addEventListener("click", () => avisar({ que: "descargar", pais: loc })));
+    document.querySelectorAll('a[href*="discord.gg"]').forEach(a =>
+      a.addEventListener("click", () =>
+        avisar({ que: "discord", pais: loc, donde: a.dataset.donde || "" })));
+  })();
+
+
+  /* ================================================================
+     EL CARRUSEL HORIZONTAL
+     Reglas, y son las que hacen que no repita el fallo del vertical:
+     no toca el scroll de la página ni una línea; se para al pulsar y
+     vuelve solo a los 20 segundos; con el ratón encima se espera, para
+     poder leer; con "menos animación" no avanza nunca solo; y sin
+     JavaScript las siete quedan una debajo de otra, que eso es CSS.
+     ================================================================ */
+  const menosMovimiento = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const RITMO = 5000;    // lo que dura cada diapositiva
+  const VUELTA = 20000;  // lo que tarda en volver a andar sola tras pararla
+  const pista = document.getElementById("pista");
+  const diapos = [...pista.querySelectorAll(".diapo")];
+  const zonaSeg = document.getElementById("segmentos");
+  const btnPausa = document.getElementById("btn-pausa");
+  const iconoPausa = document.getElementById("icono-pausa");
+  const avisoPausa = document.getElementById("aviso-pausa");
+  const contador = document.getElementById("contador");
+  const nombreDiapo = document.getElementById("nombre-diapo");
+  const ICONO_PAUSA = '<rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/>';
+  const ICONO_SEGUIR = '<path d="M8 5l11 7-11 7z"/>';
+
+  let actual = 0, reloj = null, relojVuelta = null;
+  let paradoAMano = false, ratonEncima = false;
+
+  diapos.forEach((d, i) => {
+    const s = document.createElement("button");
+    s.type = "button"; s.className = "segmento";
+    s.setAttribute("aria-label", "Go to " + d.dataset.nombre);
+    s.innerHTML = "<i></i>";
+    s.addEventListener("click", () => { irA(i); pararAMano(true); });
+    zonaSeg.appendChild(s);
+  });
+  const segmentos = [...zonaSeg.children];
+
+  function pintar() {
+    segmentos.forEach((s, i) => {
+      s.classList.toggle("pasado", i < actual);
+      s.classList.remove("activo");
+    });
+    diapos.forEach((d, i) => d.classList.toggle("activa", i === actual));
+    // reiniciar la cuenta atrás: hay que forzar el repintado o el
+    // navegador reutiliza la animación y la barra no vuelve a empezar
+    const barra = segmentos[actual].querySelector("i");
+    barra.style.animation = "none"; void barra.offsetWidth; barra.style.animation = "";
+    segmentos[actual].classList.add("activo");
+    contador.textContent = (actual + 1) + " of " + diapos.length;
+    nombreDiapo.textContent = diapos[actual].dataset.nombre;
+  }
+
+  function llevarLaPista(instantaneo) {
+    const d = diapos[actual];
+    const destino = d.offsetLeft - (pista.clientWidth - d.offsetWidth) / 2;
+    if (instantaneo) {
+      const antes = pista.style.scrollBehavior;
+      pista.style.scrollBehavior = "auto";
+      pista.scrollLeft = destino;
+      pista.style.scrollBehavior = antes;
+    } else {
+      pista.scrollTo({ left: destino, behavior: menosMovimiento ? "auto" : "smooth" });
+    }
+  }
+
+  function irA(i, instantaneo) {
+    actual = Math.max(0, Math.min(diapos.length - 1, i));
+    llevarLaPista(instantaneo);
+    pintar();
+    programar();
+  }
+
+  /* volver del final al principio se hace de un corte con un parpadeo
+     corto: un viaje suave de siete pantallas se hace eterno */
+  function alPrincipio() {
+    if (menosMovimiento) { actual = 0; llevarLaPista(true); pintar(); programar(); return; }
+    pista.style.opacity = "0";
+    setTimeout(() => {
+      actual = 0; llevarLaPista(true); pintar(); programar();
+      pista.style.opacity = "1";
+    }, 180);
+  }
+  function siguiente() { if (actual >= diapos.length - 1) alPrincipio(); else irA(actual + 1); }
+
+  function enPausa() { return paradoAMano || ratonEncima || menosMovimiento; }
+  function programar() {
+    clearTimeout(reloj);
+    document.body.classList.toggle("pausado", enPausa());
+    if (enPausa()) return;
+    reloj = setTimeout(siguiente, RITMO);
+  }
+  function pararAMano(si) {
+    paradoAMano = si;
+    iconoPausa.innerHTML = si ? ICONO_SEGUIR : ICONO_PAUSA;
+    btnPausa.setAttribute("aria-label", si ? "Play" : "Pause");
+    avisoPausa.textContent = si ? "paused" : "";
+    clearTimeout(relojVuelta);
+    if (si) relojVuelta = setTimeout(() => pararAMano(false), VUELTA);
+    programar();
+  }
+
+  btnPausa.addEventListener("click", () => pararAMano(!paradoAMano));
+  document.getElementById("flecha-izq").addEventListener("click", () => {
+    irA(actual === 0 ? diapos.length - 1 : actual - 1); pararAMano(true);
+  });
+  document.getElementById("flecha-der").addEventListener("click", () => {
+    if (actual >= diapos.length - 1) alPrincipio(); else irA(actual + 1);
+    pararAMano(true);
+  });
+  /* pulsar la diapositiva para en seco */
+  pista.addEventListener("click", e => {
+    if (e.target.closest("a, button")) return;
+    pararAMano(!paradoAMano);
+  });
+  /* con el ratón encima se espera, para poder leer sin que salte */
+  pista.addEventListener("mouseenter", () => { ratonEncima = true; programar(); });
+  pista.addEventListener("mouseleave", () => { ratonEncima = false; programar(); });
+  pista.addEventListener("focusin", () => { ratonEncima = true; programar(); });
+  pista.addEventListener("focusout", () => { ratonEncima = false; programar(); });
+  pista.addEventListener("keydown", e => {
+    if (e.key === "ArrowRight") { e.preventDefault(); irA(Math.min(actual + 1, diapos.length - 1)); pararAMano(true); }
+    if (e.key === "ArrowLeft")  { e.preventDefault(); irA(Math.max(actual - 1, 0)); pararAMano(true); }
+  });
+  /* arrastrar o deslizar a lo ancho: manda el visitante */
+  let relojArrastre = null;
+  pista.addEventListener("scroll", () => {
+    clearTimeout(relojArrastre);
+    relojArrastre = setTimeout(() => {
+      const centro = pista.scrollLeft + pista.clientWidth / 2;
+      let cerca = 0, mejor = Infinity;
+      diapos.forEach((d, i) => {
+        const dist = Math.abs(d.offsetLeft + d.offsetWidth / 2 - centro);
+        if (dist < mejor) { mejor = dist; cerca = i; }
+      });
+      if (cerca !== actual) { actual = cerca; pintar(); pararAMano(true); }
+    }, 130);
+  }, { passive: true });
+  window.addEventListener("resize", () => llevarLaPista(true));
+  /* un enlace a #atajo lleva a esa diapositiva, no a ningún sitio raro */
+  function porElHash() {
+    const i = diapos.findIndex(d => "#" + d.id === location.hash);
+    if (i >= 0) { irA(i, true); pararAMano(true); document.getElementById("comofunciona").scrollIntoView(); }
+  }
+  window.addEventListener("hashchange", porElHash);
+  porElHash();
+  pintar();
+  programar();
+
+  /* la barra pegajosa mide lo que mide, y de ahí sale el hueco que deja
+     al saltar a un ancla */
+  function medirNav() {
+    const alto = document.querySelector("nav").getBoundingClientRect().height;
+    document.documentElement.style.setProperty("--alto-nav", alto + "px");
+  }
+  medirNav();
+  window.addEventListener("resize", medirNav);
+  if (window.ResizeObserver) new ResizeObserver(medirNav).observe(document.querySelector("nav"));
+
+  /* ---------- entradas animadas: cada sección entra al llegar ---------- */
+  const ojo = new IntersectionObserver(entradas => {
+    entradas.forEach(en => { if (en.isIntersecting) en.target.classList.add("visto"); });
+  }, { threshold: 0.18 });
+  document.querySelectorAll(".bloque").forEach(b => ojo.observe(b));
+
+
+  document.querySelectorAll(".demo-visual > *").forEach(x => x.classList.add("baila"));
+  document.querySelectorAll(".demo-texto, .sobre .lado-texto").forEach(x =>
+    x.classList.add("baila", "baila-texto"));
+
+  if (!menosMovimiento) {
+    document.querySelectorAll(".baila").forEach(t => {
+      const esTexto = t.classList.contains("baila-texto");
+      const grados = esTexto ? 3.5 : 7;   // el texto, la mitad: torcido se lee peor
+      const viaje = esTexto ? 11 : 15;
+      t.addEventListener("mousemove", e => {
+        const c = t.getBoundingClientRect();
+        const x = (e.clientX - c.left) / c.width;
+        const y = (e.clientY - c.top) / c.height;
+        t.style.setProperty("--px", ((x - 0.5) * viaje).toFixed(1) + "px");
+        t.style.setProperty("--py", ((y - 0.5) * viaje).toFixed(1) + "px");
+        t.style.transform = "perspective(1000px) rotateX(" + ((0.5 - y) * grados).toFixed(2) +
+          "deg) rotateY(" + ((x - 0.5) * grados).toFixed(2) + "deg) translateY(" +
+          (esTexto ? -3 : -6) + "px) scale(" + (esTexto ? 1.006 : 1.015) + ")";
+        t.classList.add("tocada");
+      });
+      t.addEventListener("mouseleave", () => {
+        t.style.transform = "";
+        t.style.setProperty("--px", "0px");
+        t.style.setProperty("--py", "0px");
+        t.classList.remove("tocada");
+      });
+    });
+  }
+
+  /* las cifras suben contando la primera vez que se ven */
+  const ojoCifras = new IntersectionObserver(entradas => {
+    entradas.forEach(en => {
+      if (!en.isIntersecting) return;
+      ojoCifras.unobserve(en.target);
+      const hasta = parseInt(en.target.dataset.hasta, 10);
+      if (menosMovimiento || hasta === 0) { en.target.textContent = hasta; return; }
+      let n = 0;
+      const t = setInterval(() => {
+        en.target.textContent = ++n;
+        if (n >= hasta) clearInterval(t);
+      }, 220);
+    });
+  }, { threshold: 0.9 });
+  document.querySelectorAll(".cifra[data-hasta]").forEach(c => ojoCifras.observe(c));
+
+  /* ---------- demos animadas ---------- */
+  function escribir(el, texto, ms, cb) {
+    let i = 0;
+    const t = setInterval(() => {
+      el.textContent = texto.slice(0, ++i);
+      if (i >= texto.length) { clearInterval(t); cb && cb(); }
+    }, ms);
+  }
+  function espera(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+  /* 01: frase traductora en Discord */
+  async function demoFrase() {
+    const entrada = document.getElementById("entrada-frase");
+    const tarjeta = document.getElementById("tarjeta-frase");
+    const tarjetaTexto = document.getElementById("tarjeta-texto-frase");
+    const chip = document.getElementById("chip-frase");
+    const chat = document.getElementById("chat-frase");
+    while (true) {
+      entrada.textContent = ""; tarjeta.classList.remove("visible"); chip.classList.remove("visible");
+      await espera(900);
+      await new Promise(fin => escribir(entrada, "hey im in, lets go ranked now", 55, fin));
+      chip.classList.add("visible");
+      await espera(1500);
+      chip.classList.remove("visible");
+      tarjetaTexto.textContent = "¡Hola! Me apunto, vamos a ranked ya.";
+      tarjeta.classList.add("visible");
+      await espera(2200);
+      tarjeta.classList.remove("visible");
+      entrada.textContent = "";
+      const msj = document.createElement("div");
+      msj.className = "msj";
+      msj.innerHTML = '<div class="avatar" style="background:#23a559">Y</div>' +
+        '<div><div class="autor" style="color:#4be1c3">You</div>' +
+        '<div class="texto" lang="es">¡Hola! Me apunto, vamos a ranked ya.</div></div>';
+      chat.appendChild(msj);
+      await espera(2600);
+      if (chat.children.length > 1) chat.removeChild(chat.lastChild);
+    }
+  }
+
+  /* 02: Ctrl+Alt+A en el juego */
+  async function demoAtajo() {
+    const teclas = document.getElementById("teclas-atajo");
+    const t = [document.getElementById("tecla-ctrl"), document.getElementById("tecla-alt"), document.getElementById("tecla-a")];
+    const texto = document.getElementById("texto-atajo");
+    while (true) {
+      texto.textContent = ""; teclas.classList.remove("visible");
+      t.forEach(x => x.classList.remove("pulsada"));
+      await espera(700);
+      texto.removeAttribute("lang");
+      await new Promise(fin => escribir(texto, "chill guys its fine we can still win", 50, fin));
+      await espera(800);
+      teclas.classList.add("visible");
+      for (const x of t) { x.classList.add("pulsada"); await espera(200); }
+      await espera(300);
+      texto.lang = "es";
+      texto.textContent = "Tranquilos, todo bien, ¡aún podemos ganar!";
+      texto.style.color = "#4be1c3";
+      await espera(2600);
+      texto.style.color = "";
+    }
+  }
+
+  /* 03: corrección sin traducir (WhatsApp) */
+  async function demoCorreccion() {
+    const entrada = document.getElementById("entrada-corr");
+    const tarjeta = document.getElementById("tarjeta-corr");
+    const tarjetaTexto = document.getElementById("tarjeta-texto-corr");
+    const chip = document.getElementById("chip-corr");
+    const conversacion = document.getElementById("conversacion-corr");
+    while (true) {
+      entrada.textContent = ""; tarjeta.classList.remove("visible"); chip.classList.remove("visible");
+      await espera(1100);
+      await new Promise(fin => escribir(entrada, "yes mom im definately coming", 65, fin));
+      chip.classList.add("visible");
+      await espera(1500);
+      chip.classList.remove("visible");
+      tarjetaTexto.textContent = "Yes, Mom, I'm definitely coming.";
+      tarjeta.classList.add("visible");
+      await espera(2200);
+      tarjeta.classList.remove("visible");
+      entrada.textContent = "";
+      const burbuja = document.createElement("div");
+      burbuja.className = "burbuja tuya";
+      burbuja.textContent = "Yes, Mom, I'm definitely coming.";
+      conversacion.appendChild(burbuja);
+      await espera(2600);
+      if (conversacion.children.length > 1) conversacion.removeChild(conversacion.lastChild);
+    }
+  }
+
+  /* 04: predicción junto al caret */
+  async function demoPrediccion() {
+    const entrada = document.getElementById("entrada-pred");
+    const chips = document.getElementById("chips-pred");
+    const opciones = chips.querySelectorAll("span:not(.pista-tab)");
+    while (true) {
+      entrada.textContent = ""; chips.classList.remove("visible");
+      opciones.forEach(x => x.classList.remove("elegida"));
+      await espera(800);
+      await new Promise(fin => escribir(entrada, "fine, but with a str", 70, fin));
+      chips.classList.add("visible");
+      await espera(1000);
+      opciones[0].classList.add("elegida");
+      await espera(900);
+      chips.classList.remove("visible");
+      const base = "fine, but with a strategy ";
+      entrada.textContent = base;
+      await espera(900);
+      const resto = "this time";
+      await new Promise(fin => {
+        let i = 0;
+        const t = setInterval(() => {
+          entrada.textContent = base + resto.slice(0, ++i);
+          if (i >= resto.length) { clearInterval(t); fin(); }
+        }, 45);
+      });
+      entrada.textContent = base + resto + " 😅";
+      await espera(2600);
+    }
+  }
+
+  /* 06: estilos de tarjeta y colores */
+  async function demoEstilos() {
+    const muestra = document.getElementById("muestra-tarjeta");
+    const etiqueta = document.getElementById("etiqueta-estilo");
+    const colores = document.getElementById("paleta").children;
+    const acentos = ["#4be1c3", "#a78bfa", "#f5a35c"];
+    let paso = 0;
+    while (true) {
+      const color = paso % 3;
+      const minimo = (Math.floor(paso / 3) % 2) === 1;
+      [...colores].forEach((c, i) => c.classList.toggle("activa", i === color));
+      muestra.style.setProperty("--acento", acentos[color]);
+      muestra.classList.toggle("estilo-minimo", minimo);
+      muestra.classList.toggle("estilo-tarjeta", !minimo);
+      etiqueta.textContent = "style: " + (minimo ? "Simple" : "Detailed");
+      paso++;
+      await espera(1700);
+    }
+  }
+
+  /* 05: aprende de ti (el susurro sopla lo aprendido) */
+  async function demoAprende() {
+    const entrada = document.getElementById("entrada-aprende");
+    const pastilla = document.getElementById("pastilla-aprende");
+    const sello = document.getElementById("sello-aprende");
+    const tab = document.getElementById("tab-aprende");
+    while (true) {
+      entrada.textContent = "";
+      pastilla.classList.remove("visible");
+      sello.classList.remove("visible");
+      tab.classList.remove("pulsada");
+      await espera(900);
+      await new Promise(fin => escribir(entrada, "hi ", 95, fin));
+      await espera(300);
+      pastilla.classList.add("visible");
+      sello.classList.add("visible");
+      await espera(1500);
+      tab.classList.add("pulsada");
+      await espera(240);
+      pastilla.classList.remove("visible");
+      sello.classList.remove("visible");
+      const base = "hi Bea ";
+      entrada.textContent = base;
+      await espera(450);
+      await new Promise(fin => {
+        const resto = "how was your weekend?";
+        let i = 0;
+        const t = setInterval(() => {
+          entrada.textContent = base + resto.slice(0, ++i);
+          if (i >= resto.length) { clearInterval(t); fin(); }
+        }, 60);
+      });
+      await espera(3000);
+    }
+  }
+
+  /* 07: leer chats seleccionando */
+  async function demoLeer() {
+    const sel = document.getElementById("texto-sel");
+    const globo = document.getElementById("globo-leer");
+    while (true) {
+      sel.classList.remove("seleccion"); globo.classList.remove("visible");
+      await espera(1500);
+      sel.classList.add("seleccion");
+      await espera(700);
+      globo.classList.add("visible");
+      await espera(3000);
+    }
+  }
+
+  demoFrase(); demoAtajo(); demoCorreccion(); demoPrediccion();
+  demoAprende(); demoEstilos(); demoLeer();
+</script>
+</body>
+</html>
