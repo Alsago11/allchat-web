@@ -217,6 +217,10 @@
   .demo-texto h2 .tealino { color: var(--teal); }
   .demo-texto p { color: var(--atenuado); font-size: 1.02rem; }
   .demo-texto p + p { margin-top: 10px; }
+  /* la línea de quien aprende un idioma (05/11, elegida la C de
+     propuestas_idiomas.html): raya teal, solo la pregunta en teal */
+  .demo-texto p.aprende-linea { margin-top: 14px; padding: 2px 0 2px 14px; border-left: 3px solid var(--teal); }
+  .demo-texto p.aprende-linea .tealino { color: var(--teal); font-weight: 700; }
   .demo-texto .atajo {
     display: inline-block; margin-top: 14px; font-family: Consolas, monospace;
     border: 1px solid var(--borde); border-radius: 8px; padding: 4px 12px;
@@ -1179,6 +1183,7 @@
         <p>Y si escribir te cuesta porque vas despacio, con un dedo o
         las letras se te bailan, AllChat la termina por ti. En casa lo van
         a querer hasta los que "no son de ordenadores".</p>
+        <p class="aprende-linea"><span class="tealino">¿Aprendiendo algún idioma?</span> Ponlo como tu idioma y AllChat te sopla la palabra que no te sale, mientras chateas de verdad.</p>
         <span class="atajo">200.000 palabras por idioma · Tab para completar</span>
       </div>
       <div class="demo-visual anima tarde">
@@ -1550,6 +1555,7 @@
       </div>
       <div class="faq-a anima tarde">
         <details><summary>¿Funciona en la app de Discord o solo en la web?</summary><div class="resp">En las dos. AllChat no vive dentro de Discord: trabaja con el teclado de Windows, así que funciona en la app de escritorio de Discord, en Discord en el navegador y en casi cualquier sitio donde escribas en tu PC. Lo que no hay es versión para el móvil ni para Mac: AllChat es solo para Windows.</div></details>
+        <details><summary>¿Me sirve si estoy aprendiendo un idioma?</summary><div class="resp">Te ayuda a practicar mientras chateas, no te da clases. Elige ese idioma como el tuyo (inglés, francés, alemán, portugués, italiano o español) y el modo que quieras: la predicción, desde la segunda letra, te sopla la palabra que buscas y cómo se escribe, o la corrección te enseña tu frase bien escrita antes de enviarla, gratis y sin que tu texto salga de tu PC. No explica la gramática ni la pronunciación.</div></details>
         <details><summary>¿Por qué me pide un correo?</summary><div class="resp">Para guardar tu nivel, tu progreso y, si lo tienes, tu Premium, y que no se pierdan si cambias de ordenador. No hay contraseña: te llega un enlace, lo confirmas y ya estás dentro, una sola vez en cada ordenador. No te mandamos publicidad.</div></details>
         <details><summary>¿En qué juegos no funciona?</summary><div class="resp">En los que van como administrador: Windows no deja que un programa normal vea lo que escribes en ellos. AllChat te avisa cuando pasa y, si hay una casilla de Windows que lo arregla, te lleva a ella. Tampoco sirve en juegos sin chat de texto. No tenemos una lista de juegos "compatibles": solo decimos dónde lo hemos probado y funciona.</div></details>
         <details><summary>¿Y los anticheats?</summary><div class="resp">Algunos anticheats vigilan los programas que leen el teclado, y AllChat es uno de ellos. No sabemos si algún día alguno lo marcará, y el riesgo de una sanción es tuyo (lo dicen <a href="/terminos">los términos</a>, en el punto 8). Algunos juegos prohíben en sus normas los programas que escriben o actúan por ti: si un juego lo prohíbe, o tienes dudas, no lo uses ahí.</div></details>
