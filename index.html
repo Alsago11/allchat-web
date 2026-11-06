@@ -834,6 +834,11 @@
     background: radial-gradient(68% 60% at 46% 50%,
                 rgba(8,11,18,.9) 0%, rgba(8,11,18,.74) 42%, rgba(8,11,18,0) 76%);
   }
+  /* P41 (06/11): en el móvil esa nube se salía 48 px por la derecha de la
+     pantalla y la página entera se arrastraba a lo ancho. Se recorta a lo
+     ancho la sección (clip, no hidden: no crea barra ni corta por arriba
+     ni por abajo); se ve igual, solo deja de arrastrarse. */
+  #nosotros { overflow-x: clip; }
 
   /* ---------- empresas, dentro de Planes ---------- */
   .empresas {
