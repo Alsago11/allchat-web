@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AllChat Privacy Policy</title>
+<meta name="description" content="What data AllChat collects, what stays on your PC, what leaves it and who gets it. Explained in plain language, with no fine print.">
+<link rel="canonical" href="https://allchat.es/privacy">
+<link rel="alternate" hreflang="es" href="https://allchat.es/privacidad">
+<link rel="alternate" hreflang="en" href="https://allchat.es/privacy">
+<link rel="alternate" hreflang="x-default" href="https://allchat.es/privacy">
+<meta name="robots" content="index, follow">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="AllChat">
+<meta property="og:locale" content="en_US">
+<meta property="og:url" content="https://allchat.es/privacy">
+<meta property="og:title" content="AllChat Privacy Policy">
+<meta property="og:description" content="What stays on your PC, what leaves it and who gets it. No fine print.">
+<meta property="og:image" content="https://allchat.es/og-imagen-en.png">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="icon" type="image/png" sizes="96x96" href="/favicon-96.png">
+<link rel="icon" type="image/png" sizes="192x192" href="/favicon-192.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<style>
+  /* ESTILO SOBRIO, el mismo que terminos.html (elegido por Álvaro el
+     29/07 sobre tres propuestas: propuestas_terminos.html, opción B).
+     Las dos páginas legales van a juego a propósito: que se lean como
+     documentos, no como una página de producto, pero SIN apelmazarlas.
+     Apelmazar tiene coste real: la ley exige condiciones claras y
+     legibles, y lo que no lo es se puede declarar nulo. */
+  :root {
+    --fondo: #0c0f16;
+    --panel: #0f131b;
+    --texto: #d7dee8;
+    --titulo: #eef2f7;
+    --subtitulo: #b9c4d1;
+    --atenuado: #7d8794;
+    --enlace: #8fd9c9;
+    --borde: #232c3b;
+    --barra: #3d4757;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--fondo);
+    color: var(--texto);
+    font-family: "Segoe UI", system-ui, sans-serif;
+    font-size: .94rem; line-height: 1.62;
+  }
+  .envoltorio { max-width: 760px; margin: 0 auto; padding: 0 22px 80px; }
+
+  header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 22px 0 34px; gap: 16px; flex-wrap: wrap;
+  }
+  .marca { display: flex; align-items: center; gap: 10px;
+           text-decoration: none; color: var(--titulo); }
+  .marca svg { width: 30px; height: 30px; }
+  .marca span { font-weight: 600; font-size: 1.05rem; letter-spacing: .3px; }
+  .volver { color: var(--atenuado); text-decoration: none; font-size: .88rem; }
+  .volver:hover { color: var(--enlace); }
+
+  h1 {
+    font-size: 1.5rem; font-weight: 600; letter-spacing: .2px;
+    color: var(--titulo); line-height: 1.3;
+    border-bottom: 1px solid var(--borde); padding-bottom: 14px;
+  }
+  .fecha { color: var(--atenuado); font-size: .84rem;
+           margin: 10px 0 26px; }
+
+  h2 { font-size: 1.02rem; font-weight: 600; margin: 30px 0 8px;
+       color: var(--titulo); letter-spacing: .2px; }
+  h3 { font-size: .95rem; font-weight: 600; margin: 20px 0 5px;
+       color: var(--subtitulo); }
+  p { margin-bottom: 12px; }
+  a { color: var(--enlace); }
+  strong { color: var(--titulo); font-weight: 600; }
+
+  .resumen {
+    background: var(--panel); border: 1px solid var(--borde);
+    border-radius: 4px; padding: 16px 18px; margin-bottom: 8px;
+  }
+  .resumen h2 { margin-top: 0; }
+  .resumen ul { margin: 0; padding-left: 20px; }
+  .resumen li { margin-bottom: 6px; }
+
+  .tabla { width: 100%; border-collapse: collapse; margin: 16px 0 20px;
+           font-size: .88rem; }
+  .tabla th, .tabla td {
+    border: 1px solid var(--borde); padding: 8px 11px;
+    text-align: left; vertical-align: top;
+  }
+  .tabla th { background: var(--panel); font-weight: 600;
+              color: var(--titulo); }
+  .envuelve-tabla { overflow-x: auto; }
+
+  /* Los avisos siguen separados del cuerpo, con barra gris: sin
+     colorines, como en los términos. */
+  .aviso, .bien {
+    border-left: 2px solid var(--barra); background: none;
+    padding: 2px 0 2px 16px; margin: 16px 0;
+  }
+
+  ul { padding-left: 20px; margin-bottom: 12px; }
+  li { margin-bottom: 5px; }
+
+  footer {
+    border-top: 1px solid var(--borde); margin-top: 46px; padding-top: 20px;
+    color: var(--atenuado); font-size: .85rem;
+  }
+  footer a { color: var(--atenuado); }
+  footer a:hover { color: var(--enlace); }
+</style>
+</head>
+<body>
+<div class="envoltorio">
+
+  <header>
+    <a class="marca" href="/en">
+      <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <rect x="6" y="10" width="52" height="38" rx="12"
+              fill="none" stroke="url(#g)" stroke-width="3.2"/>
+        <path d="M22 48 L20 58 L32 48 Z" fill="url(#g)"/>
+        <text x="32" y="35" text-anchor="middle" font-size="15"
+              font-family="Segoe UI, sans-serif" font-weight="700"
+              fill="url(#g)">ALL</text>
+        <defs>
+          <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#4be1c3"/>
+            <stop offset="1" stop-color="#a78bfa"/>
+          </linearGradient>
+        </defs>
+      </svg>
+      <span>AllChat</span>
+    </a>
+    <a class="volver" href="/en">Back to the home page</a>
+  </header>
+
+  <h1>AllChat Privacy Policy</h1>
+  <p class="fecha">Last updated: 6 November 2026<br>
+  This is an English translation for your convenience. If it ever differs
+  from the Spanish version, the Spanish version prevails.
+  <a href="/privacidad" hreflang="es">Read it in Spanish</a></p>
+
+  <div class="resumen">
+    <h2>The key points, in six lines</h2>
+    <ul>
+      <li>What AllChat <strong>learns from you</strong>, your dictionary and your
+          settings live in files on your PC and never leave it.</li>
+      <li><strong>Correction</strong> is done by an engine installed on your
+          computer. If that engine doesn't start, AllChat would rather not
+          correct than let your text leave your computer: it only leaves if you
+          turn on correction over the internet in Settings, and it comes
+          turned off.</li>
+      <li><strong>Translation</strong> does use the internet: the text you
+          translate goes to our server, which sends it to Google Cloud
+          Translation to be translated. The server doesn't store it: it only
+          records how many translations you make, never which ones.</li>
+      <li>From your account we keep <strong>your email</strong> and your progress.
+          We never keep your sentences, only how many there were.</li>
+      <li>If you pay for Premium, <strong>Stripe handles the payment</strong>:
+          only Stripe sees your card. We know which email paid, which
+          plan and until when, and nothing else.</li>
+      <li>We don't sell your data to anyone, there are no ads and there's no profiling.</li>
+    </ul>
+  </div>
+
+  <h2>Who the data controller is</h2>
+  <p>The controller of your data is
+  <strong>Álvaro Sánchez Gómez</strong>, an individual (natural person)
+  domiciled in Spain, creator and owner of AllChat.</p>
+  <p>For anything related to your data, write to
+  <a href="mailto:hola@allchat.es">hola@allchat.es</a>. You'll get an answer
+  from us, not from a form.</p>
+
+  <h2>What NEVER leaves your computer</h2>
+  <p>This is AllChat's central promise and it's written into the code, not
+  just here:</p>
+  <ul>
+    <li><strong>What AllChat learns from the way you write.</strong> It lives
+        in a file on your PC. You can see how many word pairs it has
+        learned and erase it entirely from Settings, whenever you want.</li>
+    <li><strong>Your personal dictionary</strong> and the words you
+        teach it.</li>
+    <li><strong>Your settings</strong>: colors, shortcuts, modes, language and who
+        you choose to keep you company.</li>
+    <li><strong>The app log</strong> (registro.log). It stays
+        on your PC. It only leaves if <em>you</em> decide to attach it to report a
+        bug, and since version 0.49 that file no longer stores what
+        you type: it records how many words there were, not which ones, and
+        your email appears redacted.</li>
+  </ul>
+
+  <h2>What leaves your computer, where it goes and what for</h2>
+
+  <div class="envuelve-tabla">
+  <table class="tabla">
+    <thead>
+      <tr><th>What</th><th>Where to</th><th>What for</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Your email address</td>
+        <td>Our server (api.allchat.es) and Resend, which is the one that
+            sends the message</td>
+        <td>Creating your account and sending you the link to verify it</td>
+      </tr>
+      <tr>
+        <td>If you subscribe to Premium: your email, your country and your
+            card details</td>
+        <td>Stripe's payment page. The card stays with Stripe: all that
+            comes back to our server is the email you paid with, the plan
+            and how long it lasts</td>
+        <td>Charging the subscription and turning on Premium in your account</td>
+      </tr>
+      <tr>
+        <td>If you connect your Discord (it's optional): your Discord user ID
+            and your username</td>
+        <td>From Discord to our server, when you press "Authorize" on the
+            Discord page. We only ask to know who you are: not your Discord
+            email, not your messages, not your servers</td>
+        <td>Giving you the Member or Premium role on the AllChat Discord
+            server without you having to ask, and keeping it up to date when
+            your Premium changes</td>
+      </tr>
+      <tr>
+        <td>The name you gave your PC</td>
+        <td>Our server</td>
+        <td>Telling your devices apart within your account, so your laptop
+            and your desktop can coexist</td>
+      </tr>
+      <tr>
+        <td>Your IP address</td>
+        <td>Our server</td>
+        <td>Preventing someone from requesting thousands of links in a row.
+            It's deleted after one hour</td>
+      </tr>
+      <tr>
+        <td>How many sentences AllChat has corrected and translated for you</td>
+        <td>Our server, in batches every few minutes</td>
+        <td>Calculating your level and your experience. Numbers travel, never sentences</td>
+      </tr>
+      <tr>
+        <td>The text you translate</td>
+        <td>Our server, and from there Google Cloud Translation</td>
+        <td>Translating it. Without this there's no translation. The server
+            doesn't store the text: it only counts how many translations you
+            make per day, which is how the free plan's cap is enforced</td>
+      </tr>
+      <tr>
+        <td>The text you correct, <em>only if you turn on correction
+            over the internet</em> (it comes turned off)</td>
+        <td>LanguageTool's public API</td>
+        <td>Being able to correct you when the engine on your PC doesn't
+            start. If you don't turn it on, nothing leaves</td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+
+  <div class="aviso">
+    <p><strong>About correction and the local engine.</strong> AllChat installs
+    a correction engine on your computer that works without internet, and it's
+    the one that's always used. If that engine can't start on your device,
+    AllChat doesn't correct and tells you so: your text stays on your computer. In
+    Settings, under Modes, there's a switch to allow correction over the
+    internet in that case; <strong>it comes turned off</strong> and only you
+    turn it on. If you turn it on, the text you correct will travel to
+    LanguageTool's public API for as long as the engine on your PC still
+    fails to start.</p>
+  </div>
+
+  <div class="bien">
+    <p>What we <strong>never</strong> do with your text: store it on our
+    server, use it to train anything, sell it or hand it over to anyone
+    for advertising. Our server never stores a sentence of yours: the one you ask
+    to translate passes through it on its way to Google and isn't kept.</p>
+  </div>
+
+  <h2>What we keep on our server and for how long</h2>
+  <div class="envuelve-tabla">
+  <table class="tabla">
+    <thead>
+      <tr><th>Data</th><th>How long</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Your email, your sign-up date, your level, your experience, your
+            streak, how many days you've written, whether you've already seen
+            the invitation to the community, the gift translations you have
+            left, and whether you have premium and until when</td>
+        <td>As long as you have an account. If you ask us to delete it, it's deleted</td>
+      </tr>
+      <tr>
+        <td>Which version of AllChat you use (your app tells our server each
+            time it talks to it) and the first and last day we saw it with
+            each version. It's used to know how many people have updated</td>
+        <td>As long as you have an account. If you ask us to delete it, it's deleted</td>
+      </tr>
+      <tr>
+        <td>A fingerprint (hash) of your session and the name of your device</td>
+        <td>As long as the session remains active. We keep the fingerprint,
+            not the session: with what's in the database, no one can get
+            into your account</td>
+      </tr>
+      <tr>
+        <td>From visits to this website, only daily totals: how many visits,
+            to which version (the Spanish or the English one), from which
+            country (Cloudflare tells us), which page they come from or the
+            tag the link carried (utm_source and utm_campaign), how many
+            clicks there are on Download and on Discord, with their country,
+            and how many on the shortcuts allchat.es/tt and allchat.es/yt. No
+            cookies, no IP address and nothing that says who you are:
+            we don't know whether two visits come from the same person</td>
+        <td>They're kept: they're totals that say nothing about anyone</td>
+      </tr>
+      <tr>
+        <td>Sign-in attempts, with your IP</td>
+        <td>Deleted after one hour</td>
+      </tr>
+      <tr>
+        <td>Experience batches</td>
+        <td>Deleted after 7 days</td>
+      </tr>
+      <tr>
+        <td>If you've paid for Premium: the email you paid with, the plan,
+            until when, whether it renews, the identifiers Stripe gives
+            your subscription and your customer record (they're not your card
+            and can't be used to charge you), the redemption key and, if you
+            canceled, the reason you chose when you did</td>
+        <td>As long as the subscription exists, to recognize your Premium and
+            handle refunds. If you ask us to delete your account, it's
+            deleted too; Stripe keeps the invoice for as long as the law
+            requires it to</td>
+      </tr>
+      <tr>
+        <td>The notifications Stripe sends our server about your
+            subscription (sign-up, renewal, cancellation), with their identifier</td>
+        <td>Deleted after 30 days. They're only used to avoid applying
+            the same notification twice</td>
+      </tr>
+      <tr>
+        <td>If you connect your Discord: your Discord user ID, your
+            username and since when. The permission Discord gives us is
+            used only once, to know who you are, and isn't stored</td>
+        <td>Until you disconnect it from Settings, under Premium (it's deleted
+            immediately), or until your account is deleted</td>
+      </tr>
+      <tr>
+        <td>If your Discord received the gift translations: a fingerprint (hash)
+            of its ID, not the ID itself, with nothing else next to it.
+            It's only used to know that that Discord has already received the gift</td>
+        <td>It's kept even if you disconnect your Discord, so that the gift is
+            given only once per Discord</td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+  <p>We don't store passwords because AllChat doesn't use passwords: you sign
+  in with a link we send to your email.</p>
+
+  <h2>Who data is shared with</h2>
+  <p>Only with what's essential for the app to work. None of
+  these services receives data for advertising:</p>
+  <ul>
+    <li><strong>Google Cloud Translation</strong> (Google): receives the text
+        you translate through our server, to translate it. It's Google's
+        translation service under contract, not the free translator on
+        the web.</li>
+    <li><strong>LanguageTool</strong>: receives the text you correct only if
+        you've turned on correction over the internet and the engine on your
+        PC doesn't start. With the switch off, which is how it comes, it
+        receives nothing.</li>
+    <li><strong>Stripe</strong> (Stripe Payments Europe, Ireland): charges the
+        Premium subscription and acts as the seller of that purchase, so it
+        processes your email, your country, your card and your invoices
+        <strong>as a controller in its own right</strong>, under its own
+        <a href="https://stripe.com/privacy" target="_blank"
+        rel="noopener">privacy policy</a>. We don't receive or
+        store your card number. Stripe notifies us of your sign-ups,
+        renewals and cancellations so that Premium turns on and off in your
+        account.</li>
+    <li><strong>Discord</strong>: only if you connect your Discord from Settings.
+        Discord tells us your ID and your username, and our
+        bot adds or removes your role on the AllChat Discord server. We
+        don't send Discord your email or anything from your account.</li>
+    <li><strong>Resend</strong>: sends the email with your sign-in link, and
+        needs your address to do so.</li>
+    <li><strong>Hetzner</strong>: it's where our server lives, in Germany
+        (European Union).</li>
+    <li><strong>Cloudflare</strong>: serves this website and sees the IP address of
+        whoever visits it.</li>
+    <li><strong>GitHub</strong>: hosts the channel from which AllChat downloads
+        its updates, so it sees your device's IP when it checks
+        for a new version.</li>
+  </ul>
+
+  <h2>Legal basis</h2>
+  <p>We process your data because it's necessary to provide the service
+  you've asked us for (Article 6(1)(b) of the GDPR): without your email there's
+  no account, and without an account there's no progress to save or premium to
+  recognize. Your Premium subscription data is also necessary for the
+  contract (6(1)(b)): without it we wouldn't know whom to turn Premium on for
+  or whom to refund a charge to. We process the IP address of sign-in attempts
+  on the basis of our legitimate interest in protecting the service from
+  abuse (Article 6(1)(f)).</p>
+
+  <h2>Your rights</h2>
+  <p>You can exercise your rights of access, rectification, erasure,
+  restriction, portability and objection at any time. Write to
+  <a href="mailto:hola@allchat.es">hola@allchat.es</a> from your account's
+  email and we'll sort it out.</p>
+  <p>Deleting your account deletes your email, your progress and your sessions
+  from our server. What AllChat learned from you doesn't need to be deleted by
+  us: we never had it, it's on your PC and you erase it yourself from Settings.</p>
+  <p>If you think we haven't done things right, you can file a complaint with
+  the <a href="https://www.aepd.es" target="_blank" rel="noopener">Spanish
+  Data Protection Agency</a> (<span lang="es">Agencia Española de Protección
+  de Datos</span>, AEPD), which is Spain's data protection authority.</p>
+
+  <h2>Minors</h2>
+  <p>AllChat is not aimed at minors under the age of 14, and we don't knowingly
+  collect data from people of that age.</p>
+
+  <h2>Changes to this policy</h2>
+  <p>If we change something important, we'll change the date above and
+  tell you about it in the app's What's new. AllChat is in beta and growing
+  fast: when a new feature touches data, this page is updated before
+  the feature reaches your computer.</p>
+
+  <footer>
+    <p>AllChat &middot; <a href="/en">allchat.es</a> &middot;
+    <a href="mailto:hola@allchat.es">hola@allchat.es</a> &middot;
+    <a href="/terms">Terms and conditions</a></p>
+  </footer>
+
+</div>
+</body>
+</html>

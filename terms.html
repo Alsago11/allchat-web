@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AllChat terms and conditions</title>
+<meta name="description" content="The rules for using AllChat: what you can expect, what we don't guarantee and what happens with your account. In plain language and with no tricks.">
+<link rel="canonical" href="https://allchat.es/terms">
+<link rel="alternate" hreflang="es" href="https://allchat.es/terminos">
+<link rel="alternate" hreflang="en" href="https://allchat.es/terms">
+<link rel="alternate" hreflang="x-default" href="https://allchat.es/terms">
+<meta name="robots" content="index, follow">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="AllChat">
+<meta property="og:locale" content="en_US">
+<meta property="og:locale:alternate" content="es_ES">
+<meta property="og:url" content="https://allchat.es/terms">
+<meta property="og:title" content="AllChat terms and conditions">
+<meta property="og:description" content="The rules for using AllChat. In plain language and with no tricks.">
+<meta property="og:image" content="https://allchat.es/og-imagen-en.png">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="icon" type="image/png" sizes="96x96" href="/favicon-96.png">
+<link rel="icon" type="image/png" sizes="192x192" href="/favicon-192.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<style>
+  /* ESTILO SOBRIO, elegido por Álvaro el 29/07 sobre tres propuestas
+     (propuestas_terminos.html, opción B, "tal cual está, sin la caja
+     naranja"). La idea: que parezca un documento legal y no una página
+     de producto, pero SIN apelmazarlo. Lo de apelmazar tiene un coste
+     real: la ley de consumidores exige condiciones claras y legibles, y
+     una cláusula que no lo es se puede declarar nula, así que esconder
+     el texto dejaría sin efecto justo las cláusulas que protegen. */
+  :root {
+    --fondo: #0c0f16;
+    --panel: #0f131b;
+    --texto: #d7dee8;
+    --titulo: #eef2f7;
+    --subtitulo: #b9c4d1;
+    --atenuado: #7d8794;
+    --enlace: #8fd9c9;
+    --borde: #232c3b;
+    --barra: #3d4757;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--fondo);
+    color: var(--texto);
+    font-family: "Segoe UI", system-ui, sans-serif;
+    font-size: .94rem; line-height: 1.62;
+  }
+  .envoltorio { max-width: 760px; margin: 0 auto; padding: 0 22px 80px; }
+
+  header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 22px 0 34px; gap: 16px; flex-wrap: wrap;
+  }
+  .marca { display: flex; align-items: center; gap: 10px;
+           text-decoration: none; color: var(--titulo); }
+  .marca svg { width: 30px; height: 30px; }
+  .marca span { font-weight: 600; font-size: 1.05rem; letter-spacing: .3px; }
+  .volver { color: var(--atenuado); text-decoration: none; font-size: .88rem; }
+  .volver:hover { color: var(--enlace); }
+
+  h1 {
+    font-size: 1.5rem; font-weight: 600; letter-spacing: .2px;
+    color: var(--titulo); line-height: 1.3;
+    border-bottom: 1px solid var(--borde); padding-bottom: 14px;
+  }
+  .fecha { color: var(--atenuado); font-size: .84rem;
+           margin: 10px 0 26px; }
+
+  h2 { font-size: 1.02rem; font-weight: 600; margin: 30px 0 8px;
+       color: var(--titulo); letter-spacing: .2px; }
+  h3 { font-size: .95rem; font-weight: 600; margin: 20px 0 5px;
+       color: var(--subtitulo); }
+  p { margin-bottom: 12px; }
+  a { color: var(--enlace); }
+  strong { color: var(--titulo); font-weight: 600; }
+
+  .resumen {
+    background: var(--panel); border: 1px solid var(--borde);
+    border-radius: 4px; padding: 16px 18px; margin-bottom: 8px;
+  }
+  .resumen h2 { margin-top: 0; }
+  .resumen ul { margin: 0; padding-left: 20px; }
+  .resumen li { margin-bottom: 6px; }
+
+  /* Los dos avisos que importan (juegos y lo que no se excluye) siguen
+     separados del cuerpo, pero con una barra gris: sin colorines. */
+  .aviso, .bien {
+    border-left: 2px solid var(--barra); background: none;
+    padding: 2px 0 2px 16px; margin: 16px 0;
+  }
+
+  ul { padding-left: 20px; margin-bottom: 12px; }
+  li { margin-bottom: 5px; }
+
+  footer {
+    border-top: 1px solid var(--borde); margin-top: 46px; padding-top: 20px;
+    color: var(--atenuado); font-size: .85rem;
+  }
+  footer a { color: var(--atenuado); }
+  footer a:hover { color: var(--enlace); }
+</style>
+</head>
+<body>
+<div class="envoltorio">
+
+  <header>
+    <a class="marca" href="/en">
+      <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <rect x="6" y="10" width="52" height="38" rx="12"
+              fill="none" stroke="url(#g)" stroke-width="3.2"/>
+        <path d="M22 48 L20 58 L32 48 Z" fill="url(#g)"/>
+        <text x="32" y="35" text-anchor="middle" font-size="15"
+              font-family="Segoe UI, sans-serif" font-weight="700"
+              fill="url(#g)">ALL</text>
+        <defs>
+          <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#4be1c3"/>
+            <stop offset="1" stop-color="#a78bfa"/>
+          </linearGradient>
+        </defs>
+      </svg>
+      <span>AllChat</span>
+    </a>
+    <a class="volver" href="/en">Back to the home page</a>
+  </header>
+
+  <h1>AllChat terms and conditions</h1>
+  <p class="fecha">Version 1.1 &middot; in force since 7 September 2026
+  (version 1.0 was in force from 29 July 2026)<br>
+  Corrected on 22 September 2026, without changing any right or
+  obligation: how the charge appears on your bank statement and where the
+  subscription is managed (point 11).</p>
+
+  <div class="aviso">
+    <p style="margin:0">This is an English translation for your convenience,
+    published on 6 November 2026. If it ever differs from the Spanish
+    version, the Spanish version prevails.
+    <a href="/terminos" hreflang="es">Read it in Spanish</a></p>
+  </div>
+
+  <div class="resumen">
+    <h2>The important bits, in seven lines</h2>
+    <ul>
+      <li>AllChat helps you write, but <strong>you're the one who sends your
+      messages</strong>. Always check what's about to go out.</li>
+      <li>Correction and translation are automatic: <strong>they make
+      mistakes</strong>. Don't use them for texts where a mistake would have
+      serious consequences.</li>
+      <li>In online games, use it at your own risk. Some anti-cheats don't
+      allow programs that read the keyboard.</li>
+      <li>We're in beta: it may fail, change or stop.</li>
+      <li>What you write is yours. We don't look at it or claim it.</li>
+      <li>Correcting is free forever. <strong>Premium renews automatically and
+      you can cancel it whenever you want</strong>: if you cancel, you keep it
+      until the end of what you've already paid for.</li>
+      <li>If you're a consumer, <strong>your legal rights take precedence
+      over this text</strong>, and nothing written here takes them away from
+      you.</li>
+    </ul>
+  </div>
+
+  <h2>1. Who is behind AllChat</h2>
+  <p>The owner of the service is <strong>Álvaro Sánchez Gómez</strong>,
+  a private individual, domiciled in Spain. You can write to us at
+  <a href="mailto:hola@allchat.es">hola@allchat.es</a> about anything,
+  including complaints. A person answers, not a form.</p>
+  <p>AllChat is the name of the computer program and of the associated
+  service, which is distributed from <a href="https://allchat.es/en">allchat.es</a>.</p>
+
+  <h2>2. What you accept by using AllChat</h2>
+  <p>By installing or using AllChat you accept these terms. If you don't
+  agree with something written here, the solution is simple: don't
+  install it, or uninstall it.</p>
+  <p>These terms go together with the
+  <a href="/privacy">privacy policy</a>, which explains what stays
+  on your computer and what leaves it. If you take part in the closed beta and
+  accepted a beta tester agreement, that agreement remains in force as regards
+  not handing out your copy while the beta lasts.</p>
+
+  <h2>3. What AllChat is and what it isn't</h2>
+  <p>AllChat is a <strong>writing aid</strong>: it corrects, predicts and
+  translates while you type in other applications. It works by suggesting
+  changes that you apply.</p>
+  <p>AllChat <strong>is not</strong>:</p>
+  <ul>
+    <li>A professional or sworn translation service.</li>
+    <li>A guarantee that your text is correct, appropriate or polite.</li>
+    <li>A spell checker fit for legal, medical or official academic
+    documents, contracts or any text where a changed word has
+    consequences.</li>
+  </ul>
+
+  <h2>4. Who can use it</h2>
+  <p>You need to be at least <strong>14 years old</strong>. If you're under 18
+  and one day sign up for the paid version, you need permission from your
+  parent or guardian.</p>
+  <p>AllChat reads what you type on your computer so it can correct it. So:
+  <strong>only install it on computers that are yours, or on which you have
+  permission to do so</strong>. Installing it on someone else's computer
+  without them knowing may be illegal, and that would be on you, not on us.</p>
+
+  <h2>5. Your account</h2>
+  <p>To use AllChat you need an account, and to have one all it takes is an
+  email address: we send you a link and that gets you in. There are no
+  passwords.</p>
+  <ul>
+    <li>Give a real email address that's yours. Whoever controls that email
+    can get into your account, so look after it.</li>
+    <li>An account belongs to one person. Don't share it or sell it.</li>
+    <li>You can use it on several of your computers.</li>
+    <li>We may suspend or close accounts that make abusive use of what is
+    explained in point 10, always giving notice whenever possible.</li>
+  </ul>
+
+  <h2>6. What you write is yours</h2>
+  <div class="bien">
+    <p style="margin:0">We claim no rights over what you write with AllChat.
+    Not over your texts, not over your translations, and not over what the
+    program learns from the way you write, which also lives on your own
+    computer. We don't use it to train anything and we don't sell it to
+    anyone.</p>
+  </div>
+
+  <h2>7. What we give you and what we don't guarantee</h2>
+  <p>We give you a personal license to use AllChat on your computers. The
+  program is still ours: you may not resell, rent or distribute it, or try to
+  extract its source code, beyond what the law expressly allows you to do.</p>
+
+  <h3>Correction can get it wrong</h3>
+  <p>The spell checker is automatic. Sometimes it will swap one word for
+  another, miss a joke, lose a nuance or correct a proper name that was
+  fine. <strong>Before you send a message, read it.</strong> You're
+  responsible for what you send, just as if you had written it without
+  help.</p>
+
+  <h3>Translation goes through our server and a third party</h3>
+  <p>Correction works inside your computer, but
+  <strong>translating needs internet</strong>: the text you translate travels
+  to our server and from there to Google Cloud Translation, which is what
+  translates it. Our server doesn't store what you translate: it only counts
+  how many translations you make, because the free plan has a daily cap. We
+  don't control Google's service and we're not liable for its quality, or for
+  its availability. It's explained in detail in the
+  <a href="/privacy">privacy policy</a>.</p>
+
+  <h3>Your antivirus may be suspicious</h3>
+  <p>To correct while you type, AllChat needs to read the keyboard. That's
+  also what some malicious programs do, so an antivirus may warn you about it
+  or block it. We can't prevent that and we're not liable for what your
+  antivirus decides.</p>
+
+  <h2>8. Online games</h2>
+  <div class="aviso">
+    <p><strong>Read this even if you don't read the rest.</strong> Many games
+    with an anti-cheat system watch the programs that read the keyboard.
+    AllChat is one of those programs.</p>
+    <p style="margin:0">Using it while you play is <strong>your decision and
+    your risk</strong>. We don't guarantee that it works in any particular
+    game, and
+    <strong>we're not liable for penalties, suspensions or account closures</strong>
+    imposed by the game's company. If you have doubts about a game, don't
+    use it there.</p>
+  </div>
+
+  <h2>9. AllChat is in beta</h2>
+  <p>Today AllChat is a beta. That means, plainly:</p>
+  <ul>
+    <li>It may fail, close on its own or behave strangely.</li>
+    <li>It may change from one version to another, and a feature may
+    disappear.</li>
+    <li>Your account data may be lost, such as your level or
+    progress.</li>
+    <li>We don't promise that the service will be available at all hours.</li>
+  </ul>
+  <p>The good part, and it's on purpose: <strong>AllChat corrects without
+  depending on our server</strong>. If one day it goes down, or if we shut
+  down, the program you have installed keeps correcting on your computer.</p>
+
+  <h2>10. Acceptable use</h2>
+  <p>With AllChat you may not:</p>
+  <ul>
+    <li>Use it to harass, threaten, impersonate someone or send spam.</li>
+    <li>Use it to prepare or spread illegal content.</li>
+    <li>Try to take down, overload or break into our servers, or look for
+    security flaws in them without permission.</li>
+    <li>Automate the application or our API for purposes other than doing
+    your own writing.</li>
+    <li>Manipulate the account, the level or the experience by any means
+    other than using the program.</li>
+  </ul>
+  <p>If you find a security flaw and tell us about it in good faith at
+  <a href="mailto:hola@allchat.es">hola@allchat.es</a>, we'll thank you and
+  we won't retaliate.</p>
+
+  <h2>11. Premium subscription</h2>
+  <p>AllChat has a free plan, which is free forever, and a paid subscription
+  called <strong>Premium</strong>. This section explains how the
+  subscription works, with no fine print.</p>
+
+  <h3>What it includes and what it doesn't</h3>
+  <ul>
+    <li>With the free plan you get correction, prediction, what AllChat
+    learns from you and a limited number of translations a day. You can see
+    that number on the website and inside the application, in Settings, and
+    it may go up without notice and go down only with notice.</li>
+    <li>With Premium you translate without that daily limit, through any of
+    the application's routes, and you unlock what the website advertises as
+    exclusive to Premium. There is a technical daily cap, far above what a
+    person types, which only serves to stop automated use
+    (point 10).</li>
+    <li>Premium is tied to your account, not to a computer: it works on
+    <strong>up to three of your computers at once</strong>. If you sign in on a
+    fourth, Premium stays on the three oldest until you sign out on one of
+    them from Settings.</li>
+  </ul>
+
+  <h3>Price and who charges you</h3>
+  <ul>
+    <li>Premium costs <strong>€5.99 a month</strong> or
+    <strong>€54.99 a year</strong>. Prices include VAT: the price you see on
+    the payment page is the one you're charged, with no surprises at the
+    end. If you pay from outside Spain, the payment page may show you the
+    price in your currency and with your country's tax, always before you
+    confirm.</li>
+    <li>Payment is handled by <strong>Stripe</strong> through
+    <strong>Link</strong>, its payment service, which acts as the official
+    seller for this purchase: on the payment page and on the receipt you'll
+    see that the purchase is “<em>Sold through Link</em>”. It's Stripe
+    that charges you, sends you the receipt and the invoice from Link, applies
+    your country's taxes and handles refunds and payment disputes. On your
+    statement you'll see the charge as <strong>LINK.COM* ALLCHAT.ES</strong>.
+    We don't see or store your card: we only know which email paid and
+    until when.</li>
+    <li>You pay on Stripe's payment page, which you reach from
+    <a href="https://allchat.es/en#planes">allchat.es</a> or from the
+    application. If you pay with an email different from the one on your
+    AllChat account, when the payment is done we give you a
+    <strong>redemption key</strong> that you paste in Settings &gt; Premium,
+    and the subscription moves to your account.</li>
+    <li>If you're under 18, you need permission from your parent or
+    guardian to sign up for Premium (point 4).</li>
+  </ul>
+
+  <h3>It renews automatically, and this is what that means</h3>
+  <div class="aviso">
+    <p style="margin:0"><strong>Premium is a subscription with automatic
+    renewal.</strong> The monthly plan is charged every month and the yearly
+    plan is charged <strong>in full in advance</strong> and charged again every
+    year, on the same date you signed up, until you cancel it. There's no
+    minimum term: canceling is free and has no penalty.</p>
+  </div>
+  <ul>
+    <li>If a renewal charge fails (expired card, insufficient funds),
+    Stripe retries it for a few days and lets you know by email. If it still
+    doesn't go through, Premium switches off and your account stays on the
+    free plan, without losing any of your stuff.</li>
+    <li>If we ever change the price, we'll tell you by email and inside
+    the application <strong>at least 30 days before</strong> it affects you,
+    and you'll be able to cancel before you're charged the new price. We will
+    never charge you a price different from the one you accepted without that
+    notice.</li>
+  </ul>
+
+  <h3>Cancel whenever you want</h3>
+  <ul>
+    <li>You can cancel at any time, without giving reasons, from
+    two places: from the application, in Settings &gt; Premium, with the
+    «Manage my subscription» button, which opens the <strong>Stripe customer
+    portal</strong> (that's also where you change your card and download your
+    invoices); or at <a href="https://link.com">link.com</a>, signing in with
+    the email you paid with, where you can also see your purchases.</li>
+    <li>If something isn't working for you, write to us at
+    <a href="mailto:hola@allchat.es">hola@allchat.es</a> and we'll cancel it
+    for you. A person answers.</li>
+    <li>Canceling <strong>doesn't cut off Premium on the spot</strong>: you
+    keep it until the end of the period you've already paid for (the month or
+    the year) and from then on you're not charged any more. If you canceled
+    the yearly plan halfway through the year, the remaining part isn't
+    refunded, except for what the next point says.</li>
+    <li>If you change your mind, you can reactivate it from the portal in the
+    application before the paid period ends.</li>
+  </ul>
+
+  <h3>Right of withdrawal and refunds</h3>
+  <ul>
+    <li>If you're a consumer, you have by law <strong>14 days</strong> from your
+    first purchase to withdraw. Premium starts working the moment you pay,
+    with your consent, and even so we make it simple: if you write to us
+    within those 14 days from your first purchase,
+    <strong>we refund the full amount</strong>, no questions asked. The
+    refund is made by Stripe to the same card, and it usually takes a few days
+    to show up.</li>
+    <li>Renewals don't open a new withdrawal period, because they're the
+    continuation of the same subscription. To avoid paying for the next one,
+    just cancel before the renewal date.</li>
+    <li>If Premium stops working through our fault for more than a few
+    days, or if we remove something we advertised as included, we refund you
+    the proportional part of the affected time, or we make it up to you with
+    more Premium time if you prefer.</li>
+    <li>All of this is in addition to the legal guarantee you're entitled to
+    as a consumer. Nothing here takes it away from you.</li>
+  </ul>
+
+  <h3>If we stop providing the service</h3>
+  <p>If one day AllChat shuts down or stops offering Premium, we'll give
+  advance notice, stop charging and refund the proportional part of what
+  you've already paid that you have yet to enjoy.</p>
+
+  <h3>The Plus plan</h3>
+  <p>The website advertises a Plus plan as "coming soon". Until it exists it
+  can't be purchased and nothing is charged for it. When it's available, this
+  section will be updated with its price and what it includes before anyone
+  can pay for it.</p>
+
+  <h2>12. Our liability</h2>
+  <p>AllChat is provided "as is". To the extent the law allows, we're not
+  liable for:</p>
+  <ul>
+    <li>What you send using the program, or the consequences of a badly
+    corrected or badly translated text.</li>
+    <li>What third parties decide: a game's company, your antivirus, Google
+    Cloud Translation or your email provider.</li>
+    <li>Indirect losses, such as loss of profits, loss of opportunities or
+    reputational damage.</li>
+  </ul>
+  <div class="bien">
+    <p style="margin:0"><strong>What is never excluded</strong>, because the
+    law doesn't allow it and we don't want to either: damage caused by willful
+    misconduct or gross negligence, damage to life or health, and the rights
+    you're entitled to as a consumer. If you've paid for AllChat, you also have
+    the legal guarantee that the service works as advertised.</p>
+  </div>
+  <p>Where liability can be limited, it's limited to the amount you've paid
+  us in the previous twelve months. If you've never paid anything, that
+  amount is zero, and even so what the previous paragraph says still
+  stands.</p>
+
+  <h2>13. Changes to these terms</h2>
+  <p>We may change these terms: the product is growing. If the change
+  is significant, we'll change the date at the top and tell you about it in
+  What's new in the application before it affects you. If you don't like a
+  change, you can stop using AllChat and, if you had a subscription, cancel
+  it.</p>
+
+  <h2>14. If you want to leave</h2>
+  <p>You can uninstall AllChat whenever you want, without giving reasons.
+  Write to us at <a href="mailto:hola@allchat.es">hola@allchat.es</a> if you
+  also want us to delete your account and what we store about it. How to do
+  it and what gets deleted is in the <a href="/privacy">privacy policy</a>.</p>
+  <p>We can close your account if you break point 10 or if we stop
+  providing the service, giving advance notice whenever possible.</p>
+
+  <h2>15. Governing law and complaints</h2>
+  <p>These terms are governed by <strong>Spanish law</strong>.</p>
+  <p>If you're a consumer, this doesn't take away a single right: you keep
+  the protection of the rules of your country of residence in the European
+  Union and you can bring a claim before the courts where you live. Before
+  that, write to us: almost everything gets sorted out by answering an
+  email.</p>
+
+  <footer>
+    <p>AllChat &middot; <a href="/en">allchat.es</a> &middot;
+    <a href="mailto:hola@allchat.es">hola@allchat.es</a> &middot;
+    <a href="/privacy">Privacy policy</a></p>
+  </footer>
+
+</div>
+</body>
+</html>

@@ -19,16 +19,16 @@
 <!-- La imagen al compartir el enlace (propuesta A elegida por Álvaro
      27/07). URL ABSOLUTA a propósito: Open Graph no admite rutas
      relativas, y sin ella Discord y WhatsApp no la encuentran. -->
-<meta property="og:image" content="https://allchat.es/og-imagen.png">
+<meta property="og:image" content="https://allchat.es/og-imagen-en.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:type" content="image/png">
-<meta property="og:image:alt" content="AllChat logo with its headline in Spanish (it says: language won't hold you back).">
+<meta property="og:image:alt" content="AllChat: language won't hold you back. A Discord chat where you type in English and AllChat offers your sentence corrected and translated into Spanish.">
 <!-- summary_large_image, no summary: con summary la imagen sale
      pequeña y recortada en cuadrado -->
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://allchat.es/og-imagen.png">
-<meta name="twitter:image:alt" content="AllChat logo with its headline in Spanish (it says: language won't hold you back).">
+<meta name="twitter:image" content="https://allchat.es/og-imagen-en.png">
+<meta name="twitter:image:alt" content="AllChat: language won't hold you back. A Discord chat where you type in English and AllChat offers your sentence corrected and translated into Spanish.">
 <meta name="twitter:title" content="AllChat: language won't hold you back">
 <meta name="twitter:description" content="Corrects and translates what you type in games and chats on Windows, without leaving the window. Prediction learns from you, 100% on your PC.">
 <script type="application/ld+json">
@@ -1423,7 +1423,7 @@
             <li>Drako, the dragon exclusive to your PixelCrew</li>
             <li>Up to 3 computers with your account</li>
           </ul>
-          <a class="cta" id="cta-premium" href="https://api.allchat.es/pago/ir?plan=mensual">Go premium</a>
+          <a class="cta" id="cta-premium" href="https://api.allchat.es/pago/ir?idioma=en&amp;plan=mensual">Go premium</a>
           <div class="nota-plan">Secure payment in your browser. Cancel anytime.</div>
         </div>
 
@@ -1623,10 +1623,10 @@
         <details><summary>Does it help if I'm learning a language?</summary><div class="resp">It helps you practice while you chat; it doesn't give you lessons. Pick that language as “Your language” (Spanish, French, German, Portuguese, Italian or English) and the mode you want: Prediction, from the second letter, feeds you the word you're looking for and how it's spelled, or Correction shows you your sentence written correctly before you send it, free and without your text leaving your PC. It doesn't explain grammar or pronunciation.</div></details>
         <details><summary>Why does it ask for my email?</summary><div class="resp">To save your level, your progress and, if you have it, your Premium, so you don't lose them if you switch computers. There's no password: you get a link, confirm it and you're in, just once on each computer. We don't send you ads.</div></details>
         <details><summary>Which games won't it work in?</summary><div class="resp">The ones that run as administrator: Windows doesn't let a regular program see what you type in them. AllChat tells you when that happens and, if there's a Windows checkbox that fixes it, takes you to it. It also doesn't help in games without a text chat. We don't have a list of "compatible" games: we only say where we've tested it and it works.</div></details>
-        <details><summary>What about anti-cheats?</summary><div class="resp">Some anti-cheats watch for programs that read the keyboard, and AllChat is one of them. We don't know if one will ever flag it, and the risk of a ban is yours (it's point 8 of <a href="/terminos">our terms</a>, which are in Spanish). Some games' rules ban programs that type or act for you: if a game bans it, or you're not sure, don't use it there.</div></details>
+        <details><summary>What about anti-cheats?</summary><div class="resp">Some anti-cheats watch for programs that read the keyboard, and AllChat is one of those programs. We don't know if one will ever flag it, and the risk of a ban is yours (it's point 8 of <a href="/terms">our terms</a>). Some games' rules ban programs that type or act for you: if a game bans it, or you're not sure, don't use it there.</div></details>
         <details><summary>Does it translate voice?</summary><div class="resp">No. AllChat translates what you type and what you read on screen (an area you point at or text you select), but it doesn't listen to your mic or to voice chat.</div></details>
         <details><summary>What's free?</summary><div class="resp">Correcting and predicting, unlimited and forever. Translating, 25 messages a day: one message counts as one even if AllChat translates it several times while you type it. Premium removes that limit for €5.99 a month or €54.99 a year, and you can cancel anytime.</div></details>
-        <details><summary>Does my text leave my PC?</summary><div class="resp">To correct it, no: the spell checker is inside AllChat and works offline. To translate it, yes: what you ask to translate goes to our server and from there to Google Cloud Translation, gets translated and isn't stored. What AllChat learns about the way you write stays on your computer. All the details are in <a href="/privacidad">the privacy policy (in Spanish)</a>.</div></details>
+        <details><summary>Does my text leave my PC?</summary><div class="resp">To correct it, no: the spell checker is inside AllChat and works offline. To translate it, yes: what you ask to translate goes to our server and from there to Google Cloud Translation, gets translated and isn't stored. What AllChat learns about the way you write stays on your computer. All the details are in <a href="/privacy">the privacy policy</a>.</div></details>
         <details><summary>How much space does it take?</summary><div class="resp">The download is about 390 MB, because it includes the spell checker so it works offline, and once installed it takes up to about 760 MB. It installs for free from the Microsoft Store and needs Windows 10 (version 2004 or later) or 11, 64-bit.</div></details>
       </div>
     </div>
@@ -1638,8 +1638,8 @@
           <a href="https://x.com/allchat_es" target="_blank" rel="noopener" lang="es">En español: @allchat_es</a>
         </span>
         <span class="legal">
-          <a href="/privacidad">Privacy (in Spanish)</a>
-          <a href="/terminos">Terms (in Spanish)</a>
+          <a href="/privacy">Privacy</a>
+          <a href="/terms">Terms</a>
           <span>Made in Spain for gamers all over the world 🎮</span>
         </span>
       </footer>
@@ -1659,7 +1659,7 @@
     document.getElementById("cada-premium").textContent = p.cada;
     document.getElementById("equivale-premium").textContent = p.equivale;
     document.getElementById("cta-premium").href =
-      "https://api.allchat.es/pago/ir?plan=" + p.plan;
+      "https://api.allchat.es/pago/ir?idioma=en&plan=" + p.plan;
   }
   document.querySelectorAll("[data-periodo]").forEach(b =>
     b.addEventListener("click", () => periodo(b.dataset.periodo)));
