@@ -16,5 +16,12 @@
 # video y se escriben en el PC. Pasan por el servidor, que cuenta el clic
 # (por dia, sin IP) y lleva directo al instalador de la Store con su cid
 # (tt-video o yt-video). Ningun atajo mas sin su OK.
+# 12/11 (votado el 10/11 y cambiado por el el 11/11): /ig igual, con
+# ig-video; y los ingleses /en/tt, /en/yt y /en/ig, que el servidor cuenta
+# y lleva a allchat.es/en con su etiqueta (tt-video-en...), no a la Store.
 /tt https://api.allchat.es/ir/tt 302
 /yt https://api.allchat.es/ir/yt 302
+/ig https://api.allchat.es/ir/ig 302
+/en/tt https://api.allchat.es/ir/en/tt 302
+/en/yt https://api.allchat.es/ir/en/yt 302
+/en/ig https://api.allchat.es/ir/en/ig 302
