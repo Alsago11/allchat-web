@@ -1027,6 +1027,111 @@
     nav .enlaces { display: none; }
   }
 
+
+  /* ================================================================
+     EL SELLO DE MICROSOFT STORE Y LAS REDES (19/11, la D votada por él)
+     ================================================================ */
+  /* la insignia oficial de Microsoft, oscura (la eligió él), alojada aquí
+     tal cual (ms-store-es.svg y ms-store-en.svg, misma huella que las de
+     get.microsoft.com). No es un enlace (pedido suyo): sin sombra, sin
+     recolorear y sin animar (normas de Microsoft) */
+  .insignia-ms { display: inline-block; line-height: 0; flex: none; }
+  .insignia-ms img { display: block; width: 200px; height: auto; aspect-ratio: 161 / 44; }
+  /* la nota de marcas que piden las normas generales de Microsoft */
+  footer .nota-marcas { flex: 1 0 100%; text-align: center; font-size: .74rem; color: var(--atenuado); opacity: .85; }
+  /* los iconos de las redes: blancos, YouTube en su rojo (lo eligió él) y
+     el realce al pasar el ratón en el fondo del botón, nunca en el icono */
+  .red svg, .red-nombre svg { display: block; flex: none; fill: #fff; }
+  .red img, .red-nombre img { display: block; flex: none; width: 29px; height: auto; }
+  .red:focus-visible, .red-nombre:focus-visible { outline: 2px solid var(--teal); outline-offset: 2px; }
+  /* la cabecera: las cuatro donde estaba la X. 29 px (el mínimo de
+     Instagram; la X a 25). Por debajo de 1040 de ancho no caben sin partir
+     la fila de enlaces: allí quedan la tira del cierre */
+  nav .enlaces { align-items: center; }
+  nav .enlaces .redes-cabecera { display: inline-flex; align-items: center; gap: 2px; margin: -8px 0 -8px -4px; }
+  nav .enlaces a.red {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 40px; height: 40px; border-radius: 9px; border: 1px solid transparent;
+    transition: background .18s ease, border-color .18s ease;
+  }
+  nav .enlaces a.red:hover { background: rgba(255,255,255,.07); border-color: var(--borde); }
+  nav .enlaces a.red svg { width: 29px; height: 29px; }
+  nav .enlaces a.red[data-red="x"] svg { width: 25px; height: 25px; }
+  @media (max-width: 1039px) {
+    nav .enlaces .redes-cabecera { display: none; }
+  }
+  /* la portada: la insignia y la frase, bajo la línea del regalo */
+  .sello-store {
+    display: flex; align-items: center; justify-content: center; gap: 20px;
+    margin: 28px auto 0; max-width: 640px; text-align: left;
+  }
+  .sello-store .insignia-ms img { width: 176px; }
+  .sello-store .sello-frase {
+    margin: 0; max-width: 340px; padding-left: 20px; border-left: 1px solid var(--borde);
+    color: var(--atenuado); font-size: .86rem; line-height: 1.45;
+  }
+  .sello-store .sello-frase b { color: var(--texto); font-weight: 600; }
+  html[lang="en"] .sello-store .sello-frase { max-width: 400px; }
+  @media (max-width: 560px) {
+    .sello-store { flex-direction: column; gap: 12px; text-align: center; }
+    .sello-store .sello-frase, html[lang="en"] .sello-store .sello-frase { padding-left: 0; border-left: 0; max-width: 340px; }
+  }
+  @media (max-width: 480px) {
+    .sello-store { margin-top: 20px; }
+    .sello-store .insignia-ms img { width: 161px; }
+    .sello-store .sello-frase, html[lang="en"] .sello-store .sello-frase { max-width: 300px; font-size: .8rem; }
+  }
+  /* el cierre: la tarjeta (la insignia y debajo el botón teal) y la tira
+     de redes bajo el Discord */
+  .sello-tarjeta {
+    margin-top: 30px; text-align: left; background: var(--panel);
+    border: 1px solid var(--borde); border-radius: 16px; padding: 22px 26px;
+    display: flex; gap: 28px; align-items: center;
+  }
+  .sello-tarjeta .sello-col { display: flex; flex-direction: column; align-items: center; gap: 12px; flex: none; }
+  .sello-tarjeta .cta-sello {
+    width: 200px; text-align: center; padding: 11px 0; font-size: 1rem;
+    box-shadow: 0 8px 24px rgba(75,225,195,.22);
+  }
+  .sello-tarjeta .texto { flex: 1 1 300px; }
+  .sello-tarjeta h3 { font-size: 1.08rem; margin-bottom: 6px; }
+  .sello-tarjeta ul { list-style: none; display: grid; gap: 4px; }
+  .sello-tarjeta li { position: relative; padding-left: 22px; color: var(--atenuado); font-size: .9rem; }
+  .sello-tarjeta li::before { content: "\2713"; position: absolute; left: 0; top: 0; color: var(--teal); font-weight: 700; }
+  .sello-tarjeta + .discord { margin-top: 16px; }
+  .siguenos {
+    margin-top: 16px; text-align: left; background: var(--panel);
+    border: 1px solid var(--borde); border-radius: 16px; padding: 20px 26px;
+    display: flex; gap: 16px 26px; align-items: center; flex-wrap: wrap;
+  }
+  .siguenos .texto { flex: 1 1 240px; }
+  .siguenos h3 { font-size: 1.08rem; }
+  .siguenos p { color: var(--atenuado); font-size: .9rem; margin-top: 3px; }
+  .siguenos .botones-red { display: flex; gap: 10px; flex-wrap: wrap; }
+  .red-nombre {
+    display: inline-flex; align-items: center; gap: 16px; height: 52px; min-width: 140px; padding: 0 18px 0 14px;
+    background: rgba(255,255,255,.03); color: var(--texto);
+    border: 1px solid var(--borde); border-radius: 12px;
+    font-size: 1.05rem; font-weight: 600; text-decoration: none; white-space: nowrap;
+    transition: border-color .18s ease, background .18s ease;
+  }
+  .red-nombre:hover { border-color: #56627a; background: var(--panel2); }
+  .red-nombre svg { width: 29px; height: 29px; }
+  .red-nombre[data-red="x"] svg { width: 25px; height: 25px; margin: 0 2px; }
+  @media (max-width: 760px) {
+    .sello-tarjeta { flex-direction: column; align-items: flex-start; gap: 16px; }
+    .sello-tarjeta .sello-col { align-self: center; }
+    .sello-tarjeta .texto { flex: none; }
+    .siguenos { flex-direction: column; align-items: stretch; padding: 20px 18px; }
+    .siguenos .texto { flex: none; }
+    .siguenos .botones-red { display: grid; grid-template-columns: 1fr 1fr; }
+    .red-nombre { min-width: 0; padding: 0 8px; font-size: .9rem; }
+  }
+  /* en los teléfonos más estrechos los nombres no caben de dos en dos */
+  @media (max-width: 379px) {
+    .siguenos .botones-red { grid-template-columns: 1fr; }
+  }
+
 </style>
 </head>
 <body>
@@ -1085,7 +1190,7 @@
       <a href="#planes">Planes</a>
       <a href="#nosotros">Sobre nosotros</a>
       <a href="#preguntas">Preguntas</a>
-      <a class="enlace-x" href="https://x.com/allchat_es" target="_blank" rel="noopener" title="AllChat en X" aria-label="AllChat en X"><svg class="icono-x" viewBox="0 0 24 24" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+      <span class="redes-cabecera"><a class="red" data-red="tiktok" data-donde="barra" href="https://www.tiktok.com/@allchat_es" target="_blank" rel="noopener" aria-label="AllChat en TikTok" title="AllChat en TikTok"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg></a><a class="red" data-red="youtube" data-donde="barra" href="https://www.youtube.com/@allchat_es" target="_blank" rel="noopener" aria-label="AllChat en YouTube" title="AllChat en YouTube"><img src="/youtube-icono.png" width="120" height="84" alt=""></a><a class="red" data-red="instagram" data-donde="barra" href="https://www.instagram.com/allchat_es/" target="_blank" rel="noopener" aria-label="AllChat en Instagram" title="AllChat en Instagram"><svg viewBox="0 0 1000 1000" aria-hidden="true"><path transform="translate(-2.5 -2.5)" d="M295.42,6c-53.2,2.51-89.53,11-121.29,23.48-32.87,12.81-60.73,30-88.45,57.82S40.89,143,28.17,175.92c-12.31,31.83-20.65,68.19-23,121.42S2.3,367.68,2.56,503.46,3.42,656.26,6,709.6c2.54,53.19,11,89.51,23.48,121.28,12.83,32.87,30,60.72,57.83,88.45S143,964.09,176,976.83c31.8,12.29,68.17,20.67,121.39,23s70.35,2.87,206.09,2.61,152.83-.86,206.16-3.39S799.1,988,830.88,975.58c32.87-12.86,60.74-30,88.45-57.84S964.1,862,976.81,829.06c12.32-31.8,20.69-68.17,23-121.35,2.33-53.37,2.88-70.41,2.62-206.17s-.87-152.78-3.4-206.1-11-89.53-23.47-121.32c-12.85-32.87-30-60.7-57.82-88.45S862,40.87,829.07,28.19c-31.82-12.31-68.17-20.7-121.39-23S637.33,2.3,501.54,2.56,348.75,3.4,295.42,6m5.84,903.88c-48.75-2.12-75.22-10.22-92.86-17-23.36-9-40-19.88-57.58-37.29s-28.38-34.11-37.5-57.42c-6.85-17.64-15.1-44.08-17.38-92.83-2.48-52.69-3-68.51-3.29-202s.22-149.29,2.53-202c2.08-48.71,10.23-75.21,17-92.84,9-23.39,19.84-40,37.29-57.57s34.1-28.39,57.43-37.51c17.62-6.88,44.06-15.06,92.79-17.38,52.73-2.5,68.53-3,202-3.29s149.31.21,202.06,2.53c48.71,2.12,75.22,10.19,92.83,17,23.37,9,40,19.81,57.57,37.29s28.4,34.07,37.52,57.45c6.89,17.57,15.07,44,17.37,92.76,2.51,52.73,3.08,68.54,3.32,202s-.23,149.31-2.54,202c-2.13,48.75-10.21,75.23-17,92.89-9,23.35-19.85,40-37.31,57.56s-34.09,28.38-57.43,37.5c-17.6,6.87-44.07,15.07-92.76,17.39-52.73,2.48-68.53,3-202.05,3.29s-149.27-.25-202-2.53m407.6-674.61a60,60,0,1,0,59.88-60.1,60,60,0,0,0-59.88,60.1M245.77,503c.28,141.8,115.44,256.49,257.21,256.22S759.52,643.8,759.25,502,643.79,245.48,502,245.76,245.5,361.22,245.77,503m90.06-.18a166.67,166.67,0,1,1,167,166.34,166.65,166.65,0,0,1-167-166.34"/></svg></a><a class="red" data-red="x" data-donde="barra" href="https://x.com/allchat_es" target="_blank" rel="noopener" aria-label="AllChat en X" title="AllChat en X"><svg viewBox="0 0 1200 1227" aria-hidden="true"><path d="M714.163 519.284L1160.89 0H1055.03L667.137 450.887L357.328 0H0L468.492 681.821L0 1226.37H105.866L515.491 750.218L842.672 1226.37H1200L714.137 519.284H714.163ZM569.165 687.828L521.697 619.934L144.011 79.6944H306.615L611.412 515.685L658.88 583.579L1055.08 1150.3H892.476L569.165 687.854V687.828Z"/></svg></a></span>
     </div>
     <div class="acciones-barra">
       <details class="idioma" data-selector-idioma>
@@ -1130,6 +1235,10 @@
         <a class="cta-discord" data-nuevo-discord data-donde="portada" href="https://discord.gg/A5E4XJdwbV" target="_blank" rel="noopener" aria-label="Únete al Discord: 50 traducciones de regalo al conectar tu Discord desde AllChat"><svg class="logo-discord" viewBox="0 2.85 24 18.3" aria-hidden="true"><path fill="#5865f2" d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></svg><span><span class="solo-ancho">Únete al </span>Discord</span><span class="regalo-discord">50 de regalo</span></a>
       </div>
       <p class="linea-regalo anima mas-tarde"><span class="lr-largo">Entra en la comunidad y conecta tu Discord desde AllChat: <strong>te regalamos 50 traducciones.</strong></span><span class="lr-corto">Conecta tu Discord en AllChat: <strong>50 traducciones de regalo.</strong></span></p>
+      <div class="sello-store">
+        <span class="insignia-ms"><img src="/ms-store-es.svg" width="161" height="44" alt="Insignia de Microsoft Store"></span>
+        <p class="sello-frase">Al pulsar <b>Descargar gratis</b>, AllChat se instala desde Microsoft Store: pasa todos sus controles, con análisis de virus y malware.</p>
+      </div>
     </div>
   </div>
 </section>
@@ -1562,9 +1671,23 @@
           <a class="cta grande" href="https://apps.microsoft.com/detail/9NMKD4HFR44X" data-instalar target="_blank" rel="noopener">Descargar AllChat</a>
         </div>
         <div class="chips-descarga">
-          <span class="chip-dato"><b>Microsoft Store</b> · Windows 10 y 11</span>
+          <span class="chip-dato">Windows 10 y 11</span>
           <span class="chip-dato">gratis, <b>sin tarjeta</b></span>
           <span class="chip-dato">lleva el corrector dentro</span>
+        </div>
+
+        <div class="sello-tarjeta">
+          <div class="sello-col">
+            <span class="insignia-ms"><img src="/ms-store-es.svg" width="161" height="44" alt="Insignia de Microsoft Store"></span>
+            <a class="cta cta-sello" href="https://apps.microsoft.com/detail/9NMKD4HFR44X" data-instalar target="_blank" rel="noopener">Descargar gratis</a>
+          </div>
+          <div class="texto">
+            <h3>Qué pasa antes de que lo descargues</h3>
+            <ul>
+              <li>Pasa la revisión de Microsoft Store antes de publicarse: virus, malware y pruebas técnicas.</li>
+              <li>El paquete de la app va firmado por Microsoft, para que nadie pueda cambiarlo por el camino.</li>
+            </ul>
+          </div>
         </div>
 
         <div class="discord" id="discord">
@@ -1589,6 +1712,18 @@
             </div>
           </div>
           <a class="btn-discord" data-donde="cierre" href="https://discord.gg/A5E4XJdwbV" target="_blank" rel="noopener">Entrar al Discord</a>
+        </div>
+        <div class="siguenos">
+          <div class="texto">
+            <h3>Síguenos en las redes</h3>
+            <p>Vídeos cortos de AllChat en acción y el día a día del proyecto.</p>
+          </div>
+          <div class="botones-red">
+            <a class="red-nombre" data-red="tiktok" data-donde="cierre" href="https://www.tiktok.com/@allchat_es" target="_blank" rel="noopener" aria-label="AllChat en TikTok" title="AllChat en TikTok"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg><span>TikTok</span></a>
+            <a class="red-nombre" data-red="youtube" data-donde="cierre" href="https://www.youtube.com/@allchat_es" target="_blank" rel="noopener" aria-label="AllChat en YouTube" title="AllChat en YouTube"><img src="/youtube-icono.png" width="120" height="84" alt=""><span>YouTube</span></a>
+            <a class="red-nombre" data-red="instagram" data-donde="cierre" href="https://www.instagram.com/allchat_es/" target="_blank" rel="noopener" aria-label="AllChat en Instagram" title="AllChat en Instagram"><svg viewBox="0 0 1000 1000" aria-hidden="true"><path transform="translate(-2.5 -2.5)" d="M295.42,6c-53.2,2.51-89.53,11-121.29,23.48-32.87,12.81-60.73,30-88.45,57.82S40.89,143,28.17,175.92c-12.31,31.83-20.65,68.19-23,121.42S2.3,367.68,2.56,503.46,3.42,656.26,6,709.6c2.54,53.19,11,89.51,23.48,121.28,12.83,32.87,30,60.72,57.83,88.45S143,964.09,176,976.83c31.8,12.29,68.17,20.67,121.39,23s70.35,2.87,206.09,2.61,152.83-.86,206.16-3.39S799.1,988,830.88,975.58c32.87-12.86,60.74-30,88.45-57.84S964.1,862,976.81,829.06c12.32-31.8,20.69-68.17,23-121.35,2.33-53.37,2.88-70.41,2.62-206.17s-.87-152.78-3.4-206.1-11-89.53-23.47-121.32c-12.85-32.87-30-60.7-57.82-88.45S862,40.87,829.07,28.19c-31.82-12.31-68.17-20.7-121.39-23S637.33,2.3,501.54,2.56,348.75,3.4,295.42,6m5.84,903.88c-48.75-2.12-75.22-10.22-92.86-17-23.36-9-40-19.88-57.58-37.29s-28.38-34.11-37.5-57.42c-6.85-17.64-15.1-44.08-17.38-92.83-2.48-52.69-3-68.51-3.29-202s.22-149.29,2.53-202c2.08-48.71,10.23-75.21,17-92.84,9-23.39,19.84-40,37.29-57.57s34.1-28.39,57.43-37.51c17.62-6.88,44.06-15.06,92.79-17.38,52.73-2.5,68.53-3,202-3.29s149.31.21,202.06,2.53c48.71,2.12,75.22,10.19,92.83,17,23.37,9,40,19.81,57.57,37.29s28.4,34.07,37.52,57.45c6.89,17.57,15.07,44,17.37,92.76,2.51,52.73,3.08,68.54,3.32,202s-.23,149.31-2.54,202c-2.13,48.75-10.21,75.23-17,92.89-9,23.35-19.85,40-37.31,57.56s-34.09,28.38-57.43,37.5c-17.6,6.87-44.07,15.07-92.76,17.39-52.73,2.48-68.53,3-202.05,3.29s-149.27-.25-202-2.53m407.6-674.61a60,60,0,1,0,59.88-60.1,60,60,0,0,0-59.88,60.1M245.77,503c.28,141.8,115.44,256.49,257.21,256.22S759.52,643.8,759.25,502,643.79,245.48,502,245.76,245.5,361.22,245.77,503m90.06-.18a166.67,166.67,0,1,1,167,166.34,166.65,166.65,0,0,1-167-166.34"/></svg><span>Instagram</span></a>
+            <a class="red-nombre" data-red="x" data-donde="cierre" href="https://x.com/allchat_es" target="_blank" rel="noopener" aria-label="AllChat en X" title="AllChat en X"><svg viewBox="0 0 1200 1227" aria-hidden="true"><path d="M714.163 519.284L1160.89 0H1055.03L667.137 450.887L357.328 0H0L468.492 681.821L0 1226.37H105.866L515.491 750.218L842.672 1226.37H1200L714.137 519.284H714.163ZM569.165 687.828L521.697 619.934L144.011 79.6944H306.615L611.412 515.685L658.88 583.579L1055.08 1150.3H892.476L569.165 687.854V687.828Z"/></svg><span>@allchat_es</span></a>
+          </div>
         </div>
       </div>
       <div class="privacidad anima tarde">
@@ -1639,6 +1774,7 @@
           <a href="/terminos">Términos y condiciones</a>
           <span>Hecho en España para gamers de todo el mundo 🎮</span>
         </span>
+        <span class="nota-marcas">Microsoft y Microsoft Store son marcas comerciales del grupo de empresas Microsoft.</span>
       </footer>
   </div>
 </section>
@@ -1736,6 +1872,10 @@
     document.querySelectorAll('a[href*="discord.gg"]').forEach(a =>
       a.addEventListener("click", () =>
         avisar({ que: "discord", pais: loc, donde: a.dataset.donde || "" })));
+    // las redes (19/11): cuál y desde dónde; sin país, que no hace falta
+    document.querySelectorAll("a[data-red]").forEach(a =>
+      a.addEventListener("click", () =>
+        avisar({ que: "red", red: a.dataset.red, donde: a.dataset.donde || "" })));
   })();
 
 

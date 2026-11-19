@@ -2,12 +2,12 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://allchat.es/</loc>
-    <lastmod>2026-11-06</lastmod>
+    <lastmod>2026-11-19</lastmod>
     <changefreq>weekly</changefreq>
   </url>
   <url>
     <loc>https://allchat.es/en</loc>
-    <lastmod>2026-11-16</lastmod>
+    <lastmod>2026-11-19</lastmod>
     <changefreq>weekly</changefreq>
   </url>
   <url>
@@ -22,12 +22,12 @@
   </url>
   <url>
     <loc>https://allchat.es/privacidad</loc>
-    <lastmod>2026-11-12</lastmod>
+    <lastmod>2026-11-19</lastmod>
     <changefreq>yearly</changefreq>
   </url>
   <url>
     <loc>https://allchat.es/privacy</loc>
-    <lastmod>2026-11-12</lastmod>
+    <lastmod>2026-11-19</lastmod>
     <changefreq>yearly</changefreq>
   </url>
 </urlset>
